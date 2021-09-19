@@ -94,7 +94,6 @@ export const refreshToken = (req, res) => {
 
     jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) return res.status(400).json({ msg: "Please Login" });
-
       const accessToken = createAccessToken({ id: user.id });
 
       res.json({ accessToken });
