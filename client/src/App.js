@@ -6,6 +6,7 @@ import { lightTheme, darkTheme } from "./styles/theme";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Header from "./components/Header";
 import NewsFeedPage from "./pages/NewsFeedPage";
+import Signup from "./pages/Signup";
 
 function App() {
   const context = useContext(ThemeContext);
@@ -20,6 +21,7 @@ function App() {
 
           <Switch>
             <Route exact path="/" component={NewsFeedPage} />
+            <Route exact path="/signup" component={Signup} />
           </Switch>
         </>
       </ThemeProvider>
