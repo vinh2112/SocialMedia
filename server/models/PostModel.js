@@ -19,10 +19,12 @@ const schema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    likes: {
-      type: Array,
-      default: [],
-    },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     isPaymentRequired: {
       type: Boolean,
       default: false,

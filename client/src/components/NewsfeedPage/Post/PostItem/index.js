@@ -52,7 +52,7 @@ const PostItem = ({ post }) => {
             )}
           </Description>
         </PostAuthor>
-        <PostImage src={post.download_url} />
+        <PostImage loading="lazy" src={post.download_url} />
       </PostTop>
       <ListAction
         isShowComment={isShowComment}

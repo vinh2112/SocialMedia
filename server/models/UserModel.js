@@ -33,25 +33,21 @@ const schema = new mongoose.Schema(
       trim: true,
     },
     creditCard: {
-      type: Number,
+      type: String,
       trim: true,
     },
-    postCount: {
-      type: Number,
-      default: 0,
-    },
-    likeCount: {
-      type: Number,
-      default: 0,
-    },
-    followers: {
-      type: Array,
-      default: [],
-    },
-    followings: {
-      type: Array,
-      default: [],
-    },
+    followers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    followings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     isAdmin: {
       type: Boolean,
       default: false,
