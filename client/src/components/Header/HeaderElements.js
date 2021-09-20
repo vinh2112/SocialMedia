@@ -55,17 +55,51 @@ const roundButton = css`
   font-size: 1.2rem;
   color: ${({ theme }) => theme.textColor};
   background-color: ${({ theme }) => theme.contrastColor};
+  transition: all 0.15s ease-in-out 0s;
 `;
 
 export const RoundButton = styled.label`
   cursor: pointer;
   user-select: none;
   ${roundButton}
-`;
 
-export const RoundButtonLink = styled(Link)`
-  ${roundButton}
-  text-decoration: none;
+  &:hover {
+    background-color: ${({ theme }) => theme.hoverColor};
+  }
 `;
 
 // -----------------
+
+export const RoundButtonLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  border-radius: 20px;
+  text-decoration: none;
+  background-color: ${({ theme }) => theme.contrastColor};
+  padding: 5px;
+  transition: all 0.15s ease-in-out 0s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.hoverColor};
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`;
+
+export const Avatar = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+export const UserName = styled.div`
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0 5px 0 8px;
+  color: ${({ theme }) => theme.textColor};
+`;

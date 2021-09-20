@@ -6,6 +6,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import users from "./routers/users.js";
 import posts from "./routers/posts.js";
+import comments from "./routers/comments.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(cors());
 
 app.use("/user", users);
 app.use("/api", posts);
+app.use("/api", comments);
 
 mongoose
   .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })

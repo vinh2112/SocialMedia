@@ -7,6 +7,8 @@ import {
   SideBarContainer,
   RoundButton,
   RoundButtonLink,
+  Avatar,
+  UserName,
 } from "./HeaderElements";
 import SideBar from "./SideBar";
 import { Icon } from "@iconify/react";
@@ -40,11 +42,11 @@ const Header = () => {
 
         <HeaderLeft>
           <RoundButtonLink to="#">
-            <Icon icon="bx:bx-search" />
-          </RoundButtonLink>
-
-          <RoundButtonLink to="#">
-            <Icon icon="bx:bx-news" />
+            <Avatar
+              src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg"
+              alt="Photo"
+            />
+            <UserName>Vương Quốc Vinh</UserName>
           </RoundButtonLink>
 
           <SideBarContainer ref={domNode}>

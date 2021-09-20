@@ -24,8 +24,9 @@ export const Container = styled.div`
   border-radius: 5px;
   padding: 8px;
   background-color: ${({ theme }) => theme.primary};
-  box-shadow: 0 5px 20px 0 rgba(0 0 0 / 7%);
+  box-shadow: 0 0 20px 0 rgba(0 0 0 / 7%);
   transition: right 0.2s ease-in-out 0s, top 0.1s linear 0s;
+  opacity: 0.97;
 
   @media (max-width: 1024px) {
     position: fixed;
@@ -43,7 +44,13 @@ export const Container = styled.div`
 `;
 
 export const Top = styled.div`
-  display: flex;
+  display: none;
+
+  &.md {
+    @media (max-width: 1024px) {
+      display: flex;
+    }
+  }
 `;
 
 // MenuItem
@@ -53,7 +60,7 @@ const menuItem = css`
   align-items: center;
   color: ${({ theme }) => theme.textColor};
   border-radius: 5px;
-  min-width: 300px;
+  min-width: 250px;
   padding: 8px;
   transition: all 0.2s ease-out 0s;
 
@@ -110,6 +117,14 @@ export const Separate = styled.div`
   height: 1px;
   margin: 8px 0;
   background-color: ${({ theme }) => theme.contrastColor};
+
+  &.md {
+    display: none;
+
+    @media (max-width: 1024px) {
+      display: flex;
+    }
+  }
 `;
 
 export const MenuIcon = styled.div`

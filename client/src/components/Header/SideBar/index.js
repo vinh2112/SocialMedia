@@ -20,7 +20,7 @@ const SideBar = ({ isOpen, setIsOpen }) => {
   return (
     <OverLay isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
       <Container className="side-bar" isOpen={isOpen}>
-        <Top>
+        <Top className="md">
           <MenuItemLink to="#">
             <UserInfo>
               <Avatar src="https://th.bing.com/th/id/R.305f7a45bb74eca1f4c48310a1d46092?rik=xG0UEmbeySS8KQ&pid=ImgRaw&r=0" />
@@ -32,7 +32,7 @@ const SideBar = ({ isOpen, setIsOpen }) => {
           </MenuItemLink>
         </Top>
 
-        <Separate />
+        <Separate className="md" />
 
         <MenuItemLink to="#">
           <MenuIcon>
