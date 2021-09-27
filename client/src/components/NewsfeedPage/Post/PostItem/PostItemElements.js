@@ -13,14 +13,11 @@ export const PostContainer = styled.div`
   overflow: hidden;
 
   @media (max-width: 700px) {
-    box-shadow: none;
-    border-radius: 0;
     margin-bottom: 8px;
   }
 `;
 
 export const PostTop = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -49,6 +46,7 @@ export const AuthorInfo = styled.div`
 export const AvatarLink = styled(Link)`
   display: flex;
   margin-right: 8px;
+  text-decoration: none;
 `;
 
 export const Avatar = styled.img`
@@ -57,6 +55,19 @@ export const Avatar = styled.img`
   border-radius: 50%;
   object-fit: cover;
 `;
+
+export const AvatarLetter = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: 700;
+  background-color: var(--primary-color);
+`;
+
 export const RightSide = styled.div`
   flex: 1;
 `;
@@ -67,6 +78,10 @@ export const AuthorName = styled(Link)`
   color: #fff;
   text-decoration: none;
   color: ${({ theme }) => theme.textColor};
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const PostCreated = styled.div`
@@ -79,19 +94,16 @@ export const Description = styled.div`
   color: #fff;
   margin: 8px 0 12px;
   padding: 0 16px;
-  line-height: 1.3rem;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 400;
   color: ${({ theme }) => theme.textColor};
-  height: ${({ isShow }) => (isShow ? "auto" : "3rem")};
 
-  & .post-desc {
-    margin: 0;
-    width: ${({ isShow }) => (isShow ? "100%" : "100px")};
-    white-space: ${({ isShow }) => (isShow ? "wrap" : "nowrap")};
+  & .post__desc {
+    display: block;
+    line-height: 1.2rem;
+    width: 100%;
+    max-height: ${({ isShow }) => (isShow ? "" : "2.4rem")};
     overflow: ${({ isShow }) => (isShow ? "visible" : "hidden")};
-    text-overflow: ellipsis;
-    height: auto;
   }
 `;
 
@@ -103,4 +115,8 @@ export const ToggleButton = styled.div`
   cursor: pointer;
   user-select: none;
   display: inline-block;
+
+  ${Description} .post__desc:hidden {
+    display: none;
+  }
 `;

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import PostList from "./Post";
 
 const NewsFeedContainer = styled.div`
+  display: flex;
   max-width: var(--max-width);
   width: 100%;
   padding: 80px 16px 0;
@@ -17,7 +18,7 @@ const NewsFeedContainer = styled.div`
 const NewsFeed = () => {
   return (
     <NewsFeedContainer>
-      <PostList />
+      <PostList direction="left" />
       <UserSuggestion />
     </NewsFeedContainer>
   );

@@ -47,9 +47,22 @@ export const Comment = styled.span`
   line-height: 20px;
 `;
 
-export const Time = styled.div`
+export const BottomComment = styled.div`
+  display: flex;
+  align-items: center;
   margin-top: 12px;
+`;
+
+export const Time = styled.div`
   font-size: 0.7rem;
   font-weight: 300;
   color: ${({ theme }) => theme.subTextColor};
+`;
+
+export const ReplyButton = styled.div`
+  margin-left: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: ${({ theme }) => theme.subTextColor};
+  cursor: pointer;
 `;

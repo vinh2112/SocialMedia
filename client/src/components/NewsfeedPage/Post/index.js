@@ -1,39 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, PostTopTitle } from "./PostElements";
 import PostItem from "./PostItem";
+import PostUpdate from "./PostUpdate";
+import { useSelector } from "react-redux";
+import { postState$ } from "../../../redux/selectors";
 
-const Posts = () => {
-  const [postList, setPostList] = useState([]);
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const URL = "https://picsum.photos/v2/list?page=7&limit=10";
-        const response = await fetch(URL);
-        const responseJSON = await response.json();
-        console.log(responseJSON);
-
-        setPostList(responseJSON);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchPost();
-  }, []);
+const Posts = ({ direction }) => {
+  const posts = useSelector(postState$);
 
   return (
     <>
-      <Container>
+      <Container direction={direction}>
+        <PostUpdate />
+
         <PostTopTitle>
           <h3>Hoạt động gần đây</h3>
           <span></span>
         </PostTopTitle>
 
-        {postList &&
-          postList.map((post) => {
-            return <PostItem key={post.id} post={post} />;
-          })}
+        {posts.data.map((post) => (
+          <PostItem key={post._id} post={post} />
+        ))}
       </Container>
     </>
   );

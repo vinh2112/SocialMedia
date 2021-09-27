@@ -16,20 +16,26 @@ import {
 import ToggleSwitch from "./ToggleSwitch";
 import { Icon } from "@iconify/react";
 
-const SideBar = ({ isOpen, setIsOpen }) => {
+const SideBar = ({ isOpen, handleSideBar, user }) => {
   return (
-    <OverLay isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+    <OverLay isOpen={isOpen} onClick={handleSideBar}>
       <Container className="side-bar" isOpen={isOpen}>
         <Top className="md">
-          <MenuItemLink to="#">
-            <UserInfo>
-              <Avatar src="https://th.bing.com/th/id/R.305f7a45bb74eca1f4c48310a1d46092?rik=xG0UEmbeySS8KQ&pid=ImgRaw&r=0" />
-              <User>
-                <UserName>Vương Quốc Vinh</UserName>
-                <div className="side-bar__view">Xem trang cá nhân của bạn</div>
-              </User>
-            </UserInfo>
-          </MenuItemLink>
+          {user.currentUser ? (
+            <MenuItemLink to="/18110396">
+              <UserInfo>
+                <Avatar src="https://th.bing.com/th/id/R.305f7a45bb74eca1f4c48310a1d46092?rik=xG0UEmbeySS8KQ&pid=ImgRaw&r=0" />
+                <User>
+                  <UserName>Vương Quốc Vinh</UserName>
+                  <div className="side-bar__view">View your profile</div>
+                </User>
+              </UserInfo>
+            </MenuItemLink>
+          ) : (
+            <MenuItemLink className="justify__center lg" to="#">
+              <MenuTitle>Sign in</MenuTitle>
+            </MenuItemLink>
+          )}
         </Top>
 
         <Separate className="md" />
@@ -39,7 +45,7 @@ const SideBar = ({ isOpen, setIsOpen }) => {
             <Icon icon="bx:bx-search" />
           </MenuIcon>
 
-          <MenuTitle>Tìm kiếm</MenuTitle>
+          <MenuTitle>Search</MenuTitle>
         </MenuItemLink>
 
         <MenuItemLink to="#">
@@ -47,7 +53,7 @@ const SideBar = ({ isOpen, setIsOpen }) => {
             <Icon icon="bx:bx-news" />
           </MenuIcon>
 
-          <MenuTitle>News Feed</MenuTitle>
+          <MenuTitle>Newsfeed</MenuTitle>
         </MenuItemLink>
 
         <MenuItem htmlFor="switchSideBar">
@@ -55,20 +61,24 @@ const SideBar = ({ isOpen, setIsOpen }) => {
             <Icon icon="ic:outline-dark-mode" />
           </MenuIcon>
 
-          <MenuTitle>Dark Mode</MenuTitle>
+          <MenuTitle>Dark mode</MenuTitle>
 
           <ToggleSwitch idCheckBox="switchSideBar" />
         </MenuItem>
 
-        <Separate />
+        {user.currentUser ? (
+          <>
+            <Separate />
 
-        <MenuItem>
-          <MenuIcon>
-            <Icon icon="mdi:exit-to-app" />
-          </MenuIcon>
+            <MenuItem>
+              <MenuIcon>
+                <Icon icon="mdi:exit-to-app" />
+              </MenuIcon>
 
-          <MenuTitle>Đăng xuất</MenuTitle>
-        </MenuItem>
+              <MenuTitle>Log out</MenuTitle>
+            </MenuItem>
+          </>
+        ) : null}
       </Container>
     </OverLay>
   );

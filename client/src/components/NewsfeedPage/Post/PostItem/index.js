@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ListAction from "./ListAction";
 import ListComment from "./ListComment";
 import {
@@ -9,57 +9,88 @@ import {
   AuthorInfo,
   AvatarLink,
   Avatar,
+  AvatarLetter,
   RightSide,
   AuthorName,
   PostCreated,
   Description,
   ToggleButton,
 } from "./PostItemElements";
+import moment from "moment";
+
+const getFirstLetter = (name) => {
+  return name.charAt(0).toUpperCase();
+};
+
+const isOverflow = (e) => {
+  return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
+};
 
 const PostItem = ({ post }) => {
-  const [isShow, setIsShow] = useState(false);
+  const [isDescShow, setIsDescShow] = useState(false);
+  const [overflow, setOverflow] = useState(false);
   const [isShowComment, setIsShowComment] = useState(false);
+  const postDesc = useRef();
+
+  useEffect(() => {
+    if (isOverflow(postDesc.current)) {
+      setOverflow(true);
+      return;
+    }
+
+    setOverflow(false);
+  }, [setOverflow]);
 
   return (
-    <PostContainer>
-      <PostTop>
-        <PostAuthor>
-          <AuthorInfo>
-            <AvatarLink to="#">
-              <Avatar src={post.download_url} />
-            </AvatarLink>
-            <RightSide>
-              <AuthorName to="#">{post.author}</AuthorName>
-              <PostCreated>Vừa mới xong</PostCreated>
-            </RightSide>
-          </AuthorInfo>
-          <Description isShow={isShow}>
-            <p className="post-desc">
-              Công bố iPad 10.2 inch 2021 Đây là thế hệ iPad Gen 9 hoàn toàn
-              mới, kế nhiệm iPad Gen 8 đã ra mắt từ năm ngoái Bộ xử lý A13
-              Bionic Camera trước 12MP Ultra Wide, FaceTime với Center Stage
-              Camera sau 8MP Màn hình 10.2 inch chuẩn Retina, hỗ trợ TrueTone
-              Tương thích phụ kiện Smart Keyboard và Apple Pencil Giá khởi điểm
-              từ 329$, tức khoảng 7.4 triệu đồng (tương đương iPad 8 năm ngoái)
-            </p>
+    <div>
+      <PostContainer>
+        <PostTop>
+          <PostAuthor>
+            <AuthorInfo>
+              <AvatarLink to="#">
+                {post.userId.avatar ? (
+                  <Avatar src={post.userId.avatar} />
+                ) : (
+                  <AvatarLetter>
+                    {post.userId.name
+                      ? getFirstLetter(post.userId.name)
+                      : getFirstLetter(post.userId.email)}
+                  </AvatarLetter>
+                )}
+              </AvatarLink>
+              <RightSide>
+                <AuthorName to="#">
+                  @{post.userId.name ? post.userId.name : post.userId.email}
+                </AuthorName>
+                <PostCreated>
+                  {moment(post.createdAt).fromNow().toUpperCase()}
+                </PostCreated>
+              </RightSide>
+            </AuthorInfo>
+            <Description isShow={isDescShow}>
+              <pre className="post__desc" ref={postDesc}>
+                {post.desc}
+              </pre>
 
-            {isShow ? (
-              <></>
-            ) : (
-              <ToggleButton onClick={() => setIsShow(!isShow)}>
-                Xem thêm
-              </ToggleButton>
-            )}
-          </Description>
-        </PostAuthor>
-        <PostImage loading="lazy" src={post.download_url} />
-      </PostTop>
-      <ListAction
-        isShowComment={isShowComment}
-        setIsShowComment={setIsShowComment}
-      />
-      {isShowComment && <ListComment />}
-    </PostContainer>
+              {isDescShow || !overflow ? (
+                <></>
+              ) : (
+                <ToggleButton onClick={() => setIsDescShow(!isDescShow)}>
+                  Load more
+                </ToggleButton>
+              )}
+            </Description>
+          </PostAuthor>
+          <PostImage src={post.image} />
+        </PostTop>
+        <ListAction
+          isShowComment={isShowComment}
+          setIsShowComment={setIsShowComment}
+          post={post}
+        />
+        {isShowComment && <ListComment />}
+      </PostContainer>
+    </div>
   );
 };
 

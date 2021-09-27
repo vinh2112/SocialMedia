@@ -10,9 +10,11 @@ export const getPosts = async (req, res) => {
       .populate({
         path: "likes",
         select: "name email avatar",
-      });
+      })
+      .sort("-createdAt")
+      .limit(5);
 
-    res.json({ total: posts.length, posts });
+    res.json(posts);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -27,7 +29,8 @@ export const getPost = async (req, res) => {
     .populate({
       path: "likes",
       select: "name email avatar",
-    });
+    })
+    .sort("-createdAt");
 
   if (!post) return res.status(400).json({ msg: "Post not found" });
 
@@ -43,7 +46,8 @@ export const getProfilePost = async (req, res) => {
     .populate({
       path: "likes",
       select: "name email avatar",
-    });
+    })
+    .sort("-createdAt");
 
   res.status(200).json({
     total: posts.length,
@@ -62,11 +66,17 @@ export const createPost = async (req, res) => {
       userId: req.userId,
       desc,
       category,
+      image,
       isPaymentRequired,
     });
     await newPost.save();
 
-    res.status(200).json({ success: true, newPost });
+    await PostModel.populate(newPost, {
+      path: "userId",
+      select: "name email avatar",
+    });
+
+    res.status(200).json(newPost);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -80,11 +90,43 @@ export const reactPost = async (req, res) => {
     if (!post) return res.status(400).json({ msg: "Post does not exist." });
 
     if (!post.likes.includes(req.userId)) {
-      await post.updateOne({ $push: { likes: req.userId } });
-      res.status(200).json({ msg: "The post has been liked" });
+      const newPost = await PostModel.findOneAndUpdate(
+        { _id: post._id },
+        {
+          $push: { likes: req.userId },
+        },
+        { new: true }
+      )
+        .populate({
+          path: "userId",
+          select: "name email avatar",
+        })
+        .populate({
+          path: "likes",
+          select: "name email avatar",
+        })
+        .exec();
+
+      return res.status(200).json(newPost);
     } else {
-      await post.updateOne({ $pull: { likes: req.userId } });
-      res.status(200).json({ msg: "The post has been disliked" });
+      const newPost = await PostModel.findOneAndUpdate(
+        { _id: post._id },
+        {
+          $pull: { likes: req.userId },
+        },
+        { new: true }
+      )
+        .populate({
+          path: "userId",
+          select: "name email avatar",
+        })
+        .populate({
+          path: "likes",
+          select: "name email avatar",
+        })
+        .exec();
+
+      return res.status(200).json(newPost);
     }
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -99,7 +141,7 @@ export const updatePost = async (req, res) => {
       const { desc, isPaymentRequired } = req.body;
 
       await post.updateOne({ desc, isPaymentRequired });
-      res.status(200).json({ msg: "Update Post Successfully." });
+      res.status(200).json(post);
     } else {
       res.status(400).json({ msg: "This is not your post." });
     }

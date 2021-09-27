@@ -73,6 +73,16 @@ const Switch = styled.div`
 const ToggleSwitch = ({ idCheckBox }) => {
   const { toggleTheme } = useThemeContext();
 
+  React.useEffect(() => {
+    const checkTheme = () => {
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark") {
+        document.getElementById(idCheckBox).checked = true;
+      }
+    };
+    checkTheme();
+  }, [idCheckBox]);
+
   return (
     <>
       <Switch>

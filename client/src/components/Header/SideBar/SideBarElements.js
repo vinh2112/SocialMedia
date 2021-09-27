@@ -2,18 +2,18 @@ import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
 export const OverLay = styled.div`
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
   transition: all 0.1s ease-out 0s;
 
   @media (max-width: 1024px) {
     position: fixed;
-    transition: all 0.3s ease-out 0s;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    transition: all 0.25s ease-out 0s;
   }
 `;
 
@@ -61,6 +61,7 @@ const menuItem = css`
   color: ${({ theme }) => theme.textColor};
   border-radius: 5px;
   min-width: 250px;
+  width: 100%;
   padding: 8px;
   transition: all 0.2s ease-out 0s;
 
@@ -79,6 +80,14 @@ export const MenuItemLink = styled(Link)`
   display: flex;
   text-decoration: none;
   ${menuItem}
+
+  &.justify__center {
+    justify-content: center;
+  }
+
+  &.lg {
+    height: 50px;
+  }
 `;
 
 //-----------

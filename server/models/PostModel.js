@@ -15,7 +15,7 @@ const schema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    images: {
+    image: {
       type: String,
       trim: true,
     },

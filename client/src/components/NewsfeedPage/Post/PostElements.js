@@ -1,10 +1,29 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: ${({ direction }) =>
+    direction === "left" ? "0 20px 0 0" : "0 0 0 20px"}
+  width: calc((var(--max-width) * 1.9 / 3) - 20px);
+  z-index: 99;
+
+  @media (max-width: 1024px) {
+    padding: 0;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
 export const PostTopTitle = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 
   & > h3 {
     display: inline-block;
@@ -18,29 +37,13 @@ export const PostTopTitle = styled.div`
     display: block;
     height: 1.8px;
     width: 100%;
-    opacity: 0.3;
-    background-color: ${({ theme }) => theme.subTextColor};
+    opacity: 1;
+    background-color: ${({ theme }) => theme.hoverColor};
     user-select: none;
   }
 
   @media (max-width: 700px) {
     padding: 0 8px;
-    margin-bottom: 8px;
-  }
-`;
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: calc((var(--max-width) * 2 / 3) - 20px);
-  padding-right: 20px;
-
-  @media (max-width: 1024px) {
-    padding: 0;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 700px) {
-    width: 100%;
+    margin: 16px 0;
   }
 `;

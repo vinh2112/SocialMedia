@@ -40,6 +40,52 @@ export const CommentAction = styled.div`
 
 export const MoreAction = styled.div`
   ${Action}
+  position: relative;
 `;
 
 // ------------
+
+export const ActionMenu = styled.ul`
+  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+  position: absolute;
+  bottom: 110%;
+  right: 5px;
+  min-width: 150px;
+  padding: 5px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.2);
+  background-color: ${({ theme }) => theme.primary};
+`;
+
+export const MenuItem = styled.li`
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 5px;
+  transition: all 0.1s ease-in-out;
+
+  &.danger {
+    color: #ed4956;
+  }
+
+  & .iconify {
+    font-size: 1.2rem;
+    margin-right: 8px;
+  }
+
+  & .iconify:last-child {
+    position: absolute;
+    right: 0px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.contrastColor};
+  }
+`;
+
+export const Title = styled.div`
+  font-weight: 500;
+  font-size: 0.8rem;
+`;

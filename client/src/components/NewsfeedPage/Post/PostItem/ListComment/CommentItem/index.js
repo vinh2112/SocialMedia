@@ -8,6 +8,8 @@ import {
   CommentContent,
   Name,
   Comment,
+  BottomComment,
+  ReplyButton,
   Time,
 } from "./CommentItemElements";
 
@@ -16,7 +18,7 @@ const CommentItem = () => {
     <Container>
       <LeftSide>
         <AvatarLink to="">
-          <Avatar src="https://picsum.photos/200/300?random=1" />
+          <Avatar src="https://s.ws.pho.to/img/index/ai/source.jpg" />
         </AvatarLink>
       </LeftSide>
 
@@ -25,7 +27,10 @@ const CommentItem = () => {
           <Name to="">Alejandro Escamilla</Name>
           <Comment>come here with me 🥺</Comment>
         </CommentContent>
-        <Time>1h</Time>
+        <BottomComment>
+          <Time>1h</Time>
+          <ReplyButton>Reply</ReplyButton>
+        </BottomComment>
       </RightSide>
     </Container>
   );

@@ -15,7 +15,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ msg: "Email format is incorrect." });
 
     const user = await UserModel.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "User does not exist." });
+    if (!user) return res.status(403).json({ msg: "User does not exist." });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ msg: "Incorrect Password." });
@@ -199,7 +199,7 @@ export const interactUser = async (req, res) => {
 // -------- Create Token Function ------------
 
 const createAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "600s" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
 };
 
 const createRefreshToken = (user) => {

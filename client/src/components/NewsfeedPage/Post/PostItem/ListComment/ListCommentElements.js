@@ -21,7 +21,8 @@ export const CommentArea = styled.textarea`
   color: ${({ theme }) => theme.textColor};
   transition: border 0.15s ease-out 0s;
 
-  &:focus {
+  &:focus,
+  &:not(:placeholder-shown) {
     border-bottom: 2px solid ${({ theme }) => theme.subTextColor};
   }
 `;
