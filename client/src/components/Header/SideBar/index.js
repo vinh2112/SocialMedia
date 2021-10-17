@@ -13,6 +13,7 @@ import {
   MenuIcon,
   MenuTitle,
 } from "./SideBarElements";
+import DefaultAvatar from "images/DefaultAvatar.png";
 import ToggleSwitch from "./ToggleSwitch";
 import { Icon } from "@iconify/react";
 
@@ -22,11 +23,17 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
       <Container className="side-bar" isOpen={isOpen}>
         <Top className="md">
           {user.currentUser ? (
-            <MenuItemLink to="/18110396">
+            <MenuItemLink to={`/${user.currentUser._id}`}>
               <UserInfo>
-                <Avatar src="https://th.bing.com/th/id/R.305f7a45bb74eca1f4c48310a1d46092?rik=xG0UEmbeySS8KQ&pid=ImgRaw&r=0" />
+                <Avatar
+                  src={
+                    user.currentUser.avatar
+                      ? user.currentUser.avatar
+                      : DefaultAvatar
+                  }
+                />
                 <User>
-                  <UserName>Vương Quốc Vinh</UserName>
+                  <UserName>@{user.currentUser.name}</UserName>
                   <div className="side-bar__view">View your profile</div>
                 </User>
               </UserInfo>

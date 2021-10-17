@@ -9,7 +9,7 @@ export const PostContainer = styled.div`
   border-radius: 5px;
   background-color: ${({ theme }) => theme.primary};
   margin-bottom: 20px;
-  box-shadow: 0 0 5px 0 rgba(0 0 0 / 10%);
+  box-shadow: var(--box-shadow);
   overflow: hidden;
 
   @media (max-width: 700px) {
@@ -86,7 +86,7 @@ export const AuthorName = styled(Link)`
 
 export const PostCreated = styled.div`
   margin-top: 6px;
-  font-size: 0.7rem;
+  font-size: 12px;
   color: ${({ theme }) => theme.subTextColor};
 `;
 

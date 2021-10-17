@@ -1,49 +1,48 @@
-import React, { useState } from "react";
-import {
-  Container,
-  CommentForm,
-  CommentArea,
-  RightSide,
-  SubmitButton,
-  TextCount,
-} from "./ListCommentElements";
-import { Icon } from "@iconify/react";
+import React, { useState, useEffect } from "react";
+import { Container, LoadingSection } from "./ListCommentElements";
 import CommentItem from "./CommentItem";
+import BoxComment from "./BoxComment";
+import CommentAPI from "api/comments";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchComments } from "redux/actions";
+import { commentState$ } from "redux/selectors";
 
-const ListComment = () => {
-  const [value, setValue] = useState("");
+const ListComment = ({ boxComment, postId }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { data } = useSelector(commentState$);
 
-  const handleTextarea = (e) => {
-    if (e.target.value.length <= 250) {
-      setValue(e.target.value);
-    }
-  };
+  useEffect(() => {
+    const fetchCommentsByPostId = async () => {
+      const res = await CommentAPI.fetchComments(postId);
 
-  const handleSubmit = (e) => {
-    console.log("asda");
-  };
+      if (res.status === 200) {
+        dispatch(fetchComments.fetchCommentsSuccess(res.data));
+      }
+      setIsLoading(false);
+    };
+
+    fetchCommentsByPostId();
+  }, [dispatch, setIsLoading, postId]);
+
   return (
     <Container>
-      <CommentForm>
-        <CommentArea
-          placeholder="Nhập bình luận ..."
-          onChange={handleTextarea}
-          value={value}
-        />
-        <RightSide>
-          <SubmitButton
-            className={value.length > 0 ? "" : "disable"}
-            disabled={value.length > 0 ? false : true}
-            onClick={handleSubmit}
-          >
-            <Icon icon="fluent:send-16-regular" />
-          </SubmitButton>
-          <TextCount>{value.length}/250</TextCount>
-        </RightSide>
-      </CommentForm>
+      {isLoading ? (
+        <LoadingSection />
+      ) : (
+        <>
+          <BoxComment boxComment={boxComment} postId={postId} />
 
-      <CommentItem />
-      <CommentItem />
+          {data &&
+            data.map((comment) => {
+              return (
+                comment.postId === postId && (
+                  <CommentItem key={comment._id} comment={comment} />
+                )
+              );
+            })}
+        </>
+      )}
     </Container>
   );
 };

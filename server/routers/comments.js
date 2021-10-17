@@ -15,9 +15,9 @@ const router = express.Router();
 // @desc Get comment in post
 router.get("/comment/:postId", getCommentPost);
 
-// @router POST /api/comment/:postId
+// @router POST /api/comment
 // @desc Create new comment
-router.post("/comment/:postId", verifyToken, createComment);
+router.post("/comment", verifyToken, createComment);
 
 // @router PUT /api/comment/:commentId
 // @desc Update comment

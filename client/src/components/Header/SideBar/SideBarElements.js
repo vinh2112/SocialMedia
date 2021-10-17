@@ -24,7 +24,7 @@ export const Container = styled.div`
   border-radius: 5px;
   padding: 8px;
   background-color: ${({ theme }) => theme.primary};
-  box-shadow: 0 0 20px 0 rgba(0 0 0 / 7%);
+  box-shadow: var(--box-shadow);
   transition: right 0.2s ease-in-out 0s, top 0.1s linear 0s;
   opacity: 0.97;
 
@@ -33,9 +33,9 @@ export const Container = styled.div`
     top: 0;
     bottom: 0;
     right: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
-    width: 320px;
+    width: 280px;
     border-radius: 0;
-    transition: right 0.5s ease-in-out 0s, top 0.1s linear 0s;
+    transition: right 0.4s ease-in-out 0s, top 0.1s linear 0s;
   }
 
   @media (max-width: 480px) {
@@ -86,7 +86,7 @@ export const MenuItemLink = styled(Link)`
   }
 
   &.lg {
-    height: 50px;
+    height: 40px;
   }
 `;
 
@@ -141,10 +141,10 @@ export const MenuIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   margin-right: 12px;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 
   &:before {
     content: "";

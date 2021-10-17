@@ -18,7 +18,7 @@ import SideBar from "./SideBar";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
-import { authState$, modalState$, postState$ } from "redux/selectors";
+import { authState$, modalState$ } from "redux/selectors";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +26,6 @@ const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector(authState$);
   const { isShow } = useSelector(modalState$);
-  const { data } = useSelector(postState$);
 
   const handleSideBar = () => {
     setIsOpen(!isOpen);
@@ -66,10 +65,6 @@ const Header = () => {
     dispatch(actions.logout.logoutRequest());
   }, [dispatch]);
 
-  const handleShowValue = () => {
-    console.log(user);
-  };
-
   return (
     <HeaderContainer>
       <HeaderWrapper>
@@ -83,17 +78,13 @@ const Header = () => {
           ) : (
             <button onClick={handleLogout}>Log out</button>
           )}
-
-          <button onClick={handleShowValue}>User Info</button>
-
-          <button onClick={() => console.log(data)}>Posts</button>
         </HeaderRight>
 
         {user.isLoading && <p>Loading...</p>}
 
         <HeaderLeft>
           {user.currentUser ? (
-            <RoundButtonLink to="/18110396">
+            <RoundButtonLink to={`/${user.currentUser._id}`}>
               <Avatar src={user.currentUser.avatar} alt="Photo" />
               <UserName>@{user.currentUser.name}</UserName>
             </RoundButtonLink>

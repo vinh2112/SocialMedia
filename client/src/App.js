@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { GlobalStyles } from "./styles/global";
 import { ThemeProvider } from "styled-components";
 import { ThemeContext } from "./context/themeContext";
@@ -8,10 +8,22 @@ import Header from "./components/Header";
 import NewsFeedPage from "./pages/NewsFeedPage";
 import NotFoundPage from "pages/NotFoundPage";
 import ProfilePage from "pages/ProfilePage";
+import Toast from "./components/Toast";
+import { useSelector } from "react-redux";
+import { toastState$ } from "redux/selectors";
+import handleToast from "components/Toast/HandleToast";
 
 function App() {
   const context = useContext(ThemeContext);
   const { theme } = context;
+
+  const toast = useSelector(toastState$);
+
+  useEffect(() => {
+    if (toast.message !== "") {
+      handleToast(toast);
+    }
+  }, [toast]);
 
   return (
     <BrowserRouter>
@@ -25,6 +37,8 @@ function App() {
             <Route exact path="/:userId" component={ProfilePage} />
             <Route component={NotFoundPage} />
           </Switch>
+
+          <Toast />
         </>
       </ThemeProvider>
     </BrowserRouter>

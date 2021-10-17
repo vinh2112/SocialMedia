@@ -3,22 +3,28 @@ import { Container, PostTopTitle } from "./PostElements";
 import PostItem from "./PostItem";
 import PostUpdate from "./PostUpdate";
 import { useSelector } from "react-redux";
-import { postState$ } from "../../../redux/selectors";
+import { authState$, postState$ } from "../../../redux/selectors";
+import { useParams } from "react-router";
 
 const Posts = ({ direction }) => {
-  const posts = useSelector(postState$);
+  const { data } = useSelector(postState$);
+  const { currentUser } = useSelector(authState$);
+
+  const { userId } = useParams();
 
   return (
     <>
       <Container direction={direction}>
-        <PostUpdate />
+        {userId
+          ? [userId === currentUser?._id && <PostUpdate key="0" />]
+          : [currentUser && <PostUpdate key="1" />]}
 
         <PostTopTitle>
           <h3>Hoạt động gần đây</h3>
           <span></span>
         </PostTopTitle>
 
-        {posts.data.map((post) => (
+        {data.map((post) => (
           <PostItem key={post._id} post={post} />
         ))}
       </Container>

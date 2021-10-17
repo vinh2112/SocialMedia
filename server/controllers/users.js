@@ -171,19 +171,65 @@ export const interactUser = async (req, res) => {
         const currentUser = await UserModel.findById(req.userId);
 
         if (!user.followers.includes(req.userId)) {
-          await user.updateOne({ $push: { followers: req.userId } });
-          await currentUser.updateOne({
-            $push: { followings: req.params.userId },
-          });
+          const newUser = await UserModel.findOneAndUpdate(
+            { _id: user._id },
+            { $push: { followers: req.userId } },
+            { new: true }
+          )
+            .populate({
+              path: "followers",
+              select: "name email avatar",
+            })
+            .populate({
+              path: "followings",
+              select: "name email avatar",
+            });
 
-          res.status(200).json({ msg: "User has been followed." });
+          const newCurrentUser = await UserModel.findOneAndUpdate(
+            { _id: currentUser._id },
+            { $push: { followings: req.params.userId } },
+            { new: true }
+          )
+            .populate({
+              path: "followers",
+              select: "name email avatar",
+            })
+            .populate({
+              path: "followings",
+              select: "name email avatar",
+            });
+
+          res.status(200).json(newUser);
         } else {
-          await user.updateOne({ $pull: { followers: req.userId } });
-          await currentUser.updateOne({
-            $pull: { followings: req.params.userId },
-          });
+          const newUser = await UserModel.findOneAndUpdate(
+            { _id: user._id },
+            { $pull: { followers: req.userId } },
+            { new: true }
+          )
+            .populate({
+              path: "followers",
+              select: "name email avatar",
+            })
+            .populate({
+              path: "followings",
+              select: "name email avatar",
+            });
 
-          res.status(200).json({ msg: "User has been unfollowed." });
+          const newCurrentUser = await UserModel.findOneAndUpdate(
+            { _id: currentUser._id },
+            { $pull: { followings: req.params.userId } },
+            { new: true }
+          )
+            .populate({
+              path: "followers",
+              select: "name email avatar",
+            })
+            .populate({
+              path: "followings",
+              select: "name email avatar",
+            });
+
+          res.status(200).json(newUser);
         }
       } catch (error) {
         res.status(500).json({ msg: error.message });

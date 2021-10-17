@@ -34,7 +34,7 @@ const initial_post = {
   image: "",
 };
 
-const PostUpdateModal = () => {
+const PostUpdateModal = ({ user }) => {
   const overlayRef = useRef();
   const dispatch = useDispatch();
   const { isShow } = useSelector(modalState$);
@@ -99,12 +99,9 @@ const PostUpdateModal = () => {
         <Content>
           <UserWrapper>
             <AvatarWrapper>
-              <Avatar
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvyGhZ2XZ2g5GMdJ77A7r1poypRUq1o2zLRSbBMYdxqg3aDJkmgW5wg9jd4Iq3jaq9qhc&usqp=CAU"
-                alt="photo"
-              />
+              <Avatar src={user.avatar} alt="avatar" />
             </AvatarWrapper>
-            <Name>Vương Quốc Vinh</Name>
+            <Name>@{user.name}</Name>
           </UserWrapper>
           <DescArea
             className="desc-area"

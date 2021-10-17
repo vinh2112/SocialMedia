@@ -29,6 +29,11 @@ export const Avatar = styled.img`
   height: 110px;
   border-radius: 50%;
   object-fit: cover;
+  transition: all 0.1s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
 `;
 
 export const EditButton = styled.div`
@@ -85,9 +90,11 @@ export const Desc = styled.div`
 export const Details = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: ${({ isYourAccount }) =>
+    isYourAccount ? "repeat(2, 1fr)" : "repeat(3, 1fr)"};
+  grid-row-gap: 12px;
   width: 100%;
-  margin-top: 8px;
+  margin-top: 12px;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(4, 1fr);
@@ -100,7 +107,6 @@ export const DetailItem = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
 
   ${Details} &:nth-child(3) {
     grid-column: span 3/4;
@@ -147,17 +153,26 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   width: 100%;
   border: 1px solid var(--primary-color);
   border-radius: 5px;
-  padding: 8px 20px;
-  text-transform: uppercase;
-  background: var(--primary-color);
-  color: #fff;
+  padding: 8px 16px;
+  text-transform: capitalize;
+  background: ${({ isFollowed }) =>
+    isFollowed ? "transparent" : "var(--primary-color)"};
+  color: ${({ isFollowed, theme }) => (isFollowed ? theme.textColor : "#fff")};
   transition: all 0.1s ease-in-out;
   cursor: pointer;
 
   &:hover {
     filter: brightness(0.9);
+  }
+
+  & .iconify {
+    font-size: 16px;
   }
 `;

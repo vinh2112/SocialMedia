@@ -24,6 +24,10 @@ const schema = new mongoose.Schema(
           type: String,
           max: 200,
         },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
       },
     ],
   },

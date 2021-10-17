@@ -1,4 +1,5 @@
 import { PostModel } from "../models/PostModel.js";
+import { UserModel } from "../models/UserModel.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -38,6 +39,19 @@ export const getPost = async (req, res) => {
 };
 
 export const getProfilePost = async (req, res) => {
+  const user = await UserModel.findOne({ _id: req.params.userId })
+    .select("-password")
+    .populate({
+      path: "followers",
+      select: "name email avatar",
+    })
+    .populate({
+      path: "followings",
+      select: "name email avatar",
+    });
+
+  if (!user) return res.status(500).json({ msg: "Not found" });
+
   const posts = await PostModel.find({ userId: req.params.userId })
     .populate({
       path: "userId",
@@ -49,10 +63,51 @@ export const getProfilePost = async (req, res) => {
     })
     .sort("-createdAt");
 
-  res.status(200).json({
-    total: posts.length,
-    posts,
-  });
+  res.status(200).json({ user, posts });
+};
+
+export const getPostsTimeline = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ _id: req.userId });
+
+    let posts = [];
+    user.followings.forEach(async (following, index) => {
+      const userPosts = await PostModel.find({ userId: following.toString() })
+        .limit(3)
+        .populate({
+          path: "userId",
+          select: "name email avatar",
+        })
+        .populate({
+          path: "likes",
+          select: "name email avatar",
+        })
+        .sort("-createdAt");
+      posts = [...posts, ...userPosts];
+
+      if (index === user.followings.length - 1) {
+        const newPosts = await PostModel.find({})
+          .limit(2)
+          .populate({
+            path: "userId",
+            select: "name email avatar",
+          })
+          .populate({
+            path: "likes",
+            select: "name email avatar",
+          })
+          .sort("-createdAt");
+        posts = [...posts, ...newPosts];
+        return res.json(
+          posts.sort((a, b) => {
+            return b.createdAt - a.createdAt;
+          })
+        );
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
 };
 
 export const createPost = async (req, res) => {

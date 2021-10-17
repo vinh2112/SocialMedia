@@ -4,6 +4,7 @@ import {
   getPost,
   getPosts,
   getProfilePost,
+  getPostsTimeline,
   reactPost,
   updatePost,
   deletePost,
@@ -11,6 +12,10 @@ import {
 import { verifyToken } from "../middlewares/auth.js";
 
 const router = express.Router();
+
+//@router GET api/post/timeline
+//@desc Get timeline posts
+router.get("/post/timeline", verifyToken, getPostsTimeline);
 
 // @router GET api/post
 // @desc Get all posts

@@ -1,5 +1,7 @@
+import AuthAPI from "./auth";
+import UserAPI from "./users";
 import PostAPI from "./posts";
-import UserAPI from "./auth";
-import { uploadImage } from "./upload";
+import UPLOAD from "./upload";
+import CommentAPI from "./comments";
 
-export { PostAPI, UserAPI, uploadImage };
+export { AuthAPI, UserAPI, PostAPI, UPLOAD, CommentAPI };

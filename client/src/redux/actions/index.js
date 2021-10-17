@@ -1,37 +1,38 @@
-import { createAction, createActions } from "redux-actions";
+import { createAction } from "redux-actions";
+import { login, logout } from "./auth";
+import { interactUser } from "./users";
+import { getPosts, getProfilePosts, createPost, reactPost } from "./posts";
+import {
+  showBoxComment,
+  fetchComments,
+  createComment,
+  deleteComment,
+  createReply,
+  deleteReply,
+} from "./comments";
+import { toast } from "./toast";
 
 export const getType = (reduxAction) => {
   return reduxAction().type;
 };
 
-export const login = createActions({
-  loginRequest: (payload) => payload,
-  loginSuccess: (payload) => payload,
-  loginFailure: (err) => err,
-});
-
-export const logout = createActions({
-  logoutRequest: undefined,
-  logoutSuccess: undefined,
-});
-
-export const getPosts = createActions({
-  getPostsRequest: undefined,
-  getPostsSuccess: (payload) => payload,
-  getPostsFailure: (err) => err,
-});
-
-export const createPost = createActions({
-  createPostRequest: (payload) => payload,
-  createPostSuccess: (payload) => payload,
-  createPostFailure: (err) => err,
-});
-
-export const reactPost = createActions({
-  reactPostRequest: (payload) => payload,
-  reactPostSuccess: (payload) => payload,
-  reactPostFailure: (err) => err,
-});
-
 export const showModal = createAction("SHOW_CREATE_POST_MODAL");
+
 export const hideModal = createAction("HIDE_CREATE_POST_MODAL");
+
+export {
+  toast,
+  login,
+  logout,
+  interactUser,
+  getPosts,
+  getProfilePosts,
+  createPost,
+  reactPost,
+  showBoxComment,
+  fetchComments,
+  createComment,
+  deleteComment,
+  createReply,
+  deleteReply,
+};

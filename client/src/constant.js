@@ -7,8 +7,19 @@ export const INIT_STATE = {
   posts: {
     isLoading: false,
     data: [],
+    profile: undefined,
+  },
+  comments: {
+    isLoading: false,
+    data: [],
+    commentId: undefined,
   },
   modal: {
     isShow: false,
+  },
+  toast: {
+    message: "",
+    type: "",
+    duration: 2000,
   },
 };

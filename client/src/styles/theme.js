@@ -18,6 +18,8 @@ export const lightTheme = {
   hoverColor: "#dfdfdf",
   textColor: "#333",
   subTextColor: "#999",
+  borderColor: "#ddd",
+  toastColor: "#fff",
   ...globalTheme,
 };
 
@@ -28,5 +30,7 @@ export const darkTheme = {
   hoverColor: "#505050",
   textColor: "#fff",
   subTextColor: "#666",
+  borderColor: "#444",
+  toastColor: "#181818",
   ...globalTheme,
 };

@@ -11,7 +11,7 @@ export const OverLay = styled.div`
   opacity: ${({ isShow }) => (isShow ? "1" : "0")};
   visibility: ${({ isShow }) => (isShow ? "visible" : "hidden")};
   transition: all 0.2s ease-in-out;
-  z-index: 1;
+  z-index: 49;
 `;
 
 export const Container = styled.div`
@@ -24,7 +24,7 @@ export const Container = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 5px;
-  box-shadow: 0 0 10px 0 rgba(0 0 0 / 20%);
+  box-shadow: var(--box-shadow);
   transition: all 0.1s linear 0.1s;
   overflow: hidden;
 `;

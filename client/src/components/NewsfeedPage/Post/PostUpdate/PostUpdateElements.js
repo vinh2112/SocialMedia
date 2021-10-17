@@ -5,9 +5,10 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   padding: 12px 16px;
+  margin-bottom: 20px;
   width: 100%;
   height: auto;
-  box-shadow: 0 0 5px 0 rgba(0 0 0 / 10%);
+  box-shadow: var(--box-shadow);
   border-radius: 5px;
   background-color: ${({ theme }) => theme.primary};
 `;

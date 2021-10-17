@@ -4,8 +4,8 @@ import * as actions from "redux/actions";
 
 export function* loginSaga(payload) {
   try {
-    yield call(api.UserAPI.login, payload);
-    const res = yield call(api.UserAPI.getUserInfo);
+    yield call(api.AuthAPI.login, payload);
+    const res = yield call(api.AuthAPI.getUserInfo);
     yield put(actions.login.loginSuccess(res.data));
   } catch (err) {
     yield put(actions.login.loginFailure(err.response.data.msg));
@@ -14,7 +14,7 @@ export function* loginSaga(payload) {
 
 export function* logoutSaga() {
   try {
-    yield call(api.UserAPI.logout);
+    yield call(api.AuthAPI.logout);
     localStorage.removeItem("access_token");
     yield put(actions.logout.logoutSuccess());
   } catch (err) {
@@ -26,7 +26,7 @@ export function* watchUser() {
   try {
     const access_token = localStorage.getItem("access_token");
     if (access_token) {
-      const res = yield call(api.UserAPI.getUserInfo);
+      const res = yield call(api.AuthAPI.getUserInfo);
       yield put(actions.login.loginSuccess(res.data));
     }
   } catch (error) {

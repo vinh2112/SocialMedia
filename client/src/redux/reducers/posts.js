@@ -1,5 +1,12 @@
 import { INIT_STATE } from "../../constant";
-import { createPost, getPosts, getType, reactPost } from "../actions";
+import {
+  createPost,
+  getPosts,
+  getProfilePosts,
+  getType,
+  reactPost,
+  interactUser,
+} from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
   switch (action.type) {
@@ -18,6 +25,25 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
+      };
+    case getType(getProfilePosts.getProfilePostsRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(getProfilePosts.getProfilePostsSuccess):
+      return {
+        ...state,
+        isLoading: false,
+        data: action.payload.posts,
+        profile: action.payload.user,
+      };
+    case getType(getProfilePosts.getProfilePostsFailure):
+      return {
+        ...state,
+        isLoading: false,
+        data: [],
+        profile: undefined,
       };
     case getType(createPost.createPostRequest):
       return {
@@ -39,12 +65,10 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(reactPost.reactPostRequest):
       return {
         ...state,
-        isLoading: true,
       };
     case getType(reactPost.reactPostSuccess):
       return {
         ...state,
-        isLoading: false,
         data: state.data.map((post) =>
           post._id === action.payload._id ? action.payload : post
         ),
@@ -53,6 +77,19 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
+      };
+    case getType(interactUser.interactUserRequest):
+      return {
+        ...state,
+      };
+    case getType(interactUser.interactUserSuccess):
+      return {
+        ...state,
+        profile: action.payload,
+      };
+    case getType(interactUser.interactUserFailure):
+      return {
+        ...state,
       };
     default:
       return state;

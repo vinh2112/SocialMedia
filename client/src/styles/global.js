@@ -1,6 +1,15 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+    html {
+        scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0;  /* Remove scrollbar space */
+        background: transparent;  /* Optional: just make scrollbar invisible */
+    }
+
     *, *::after, *::before{
         box-sizing: border-box;
         margin: 0;
@@ -28,9 +37,12 @@ export const GlobalStyles = createGlobalStyle`
         word-wrap: break-word;   
     }
 
-    ::-webkit-scrollbar {
-        width: 0;  /* Remove scrollbar space */
-        background: transparent;  /* Optional: just make scrollbar invisible */
+    button {
+        border: 0;
+        outline: 0;
     }
 
+    ul {
+        list-style: none;
+    }
 `;

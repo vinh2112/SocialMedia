@@ -12,21 +12,15 @@ export const getCommentPost = async (req, res) => {
       })
       .populate({
         path: "userId",
-        select: "name email",
+        select: "name email avatar",
       })
-      .populate({
-        path: "postId",
-        select: "userId",
-      });
+      .sort("-createdAt");
 
     if (!comments.length) {
       return res.status(403).json({ msg: "This post has had comment yet" });
     }
 
-    return res.status(200).json({
-      total: comments.length,
-      comments,
-    });
+    return res.status(200).json(comments);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -34,13 +28,18 @@ export const getCommentPost = async (req, res) => {
 
 export const createComment = async (req, res) => {
   try {
-    const { comment } = req.body;
+    const { comment, postId } = req.body;
     const newComment = new CommentModel({
-      comment: comment,
       userId: req.userId,
-      postId: req.params.postId,
+      postId,
+      comment,
     });
     await newComment.save();
+
+    await CommentModel.populate(newComment, {
+      path: "userId",
+      select: "name email avatar",
+    });
 
     res.status(200).json(newComment);
   } catch (error) {
@@ -68,7 +67,17 @@ export const deleteComment = async (req, res) => {
     if (!comment) return res.status(403).json({ msg: "Comment not found" });
     if (comment.userId.toString() === req.userId) {
       await comment.deleteOne();
-      res.status(200).json({ msg: "Delete Comment Succesfully" });
+
+      await CommentModel.populate(comment, {
+        path: "userId",
+        select: "name email avatar",
+      });
+      await CommentModel.populate(comment, {
+        path: "reply.user",
+        select: "name email avatar",
+      });
+
+      res.status(200).json(comment);
     } else {
       res.status(400).json({ msg: "You can't delete the other's comment" });
     }
@@ -80,20 +89,27 @@ export const deleteComment = async (req, res) => {
 export const replyComment = async (req, res) => {
   try {
     const { reply } = req.body;
-    const comment = await CommentModel.findById(req.params.commentId);
-    if (!comment) {
-      res.status(403).json({ msg: "Comment not found" });
-    } else {
-      await comment.updateOne({
+    const comment = await CommentModel.findByIdAndUpdate(
+      req.params.commentId,
+      {
         $push: {
           reply: {
             user: req.userId,
             replyComment: reply,
           },
         },
+      },
+      { new: true }
+    )
+      .populate({
+        path: "reply.user",
+        select: "name email avatar",
+      })
+      .populate({
+        path: "userId",
+        select: "name email avatar",
       });
-      res.status(200).json("Reply successfully");
-    }
+    res.status(200).json(comment);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -109,17 +125,41 @@ export const deleteReplyComment = async (req, res) => {
       const post = await PostModel.findById(comment.postId);
 
       if (post.userId.toString() === req.userId) {
-        await comment.updateOne({
-          $pull: { reply: { _id: replyId } },
-        });
-        res.status(200).json("The owner post has deleted this comment");
-      } else {
-        await comment.updateOne({
-          $pull: {
-            reply: { _id: replyId, user: req.userId },
+        const newComment = await CommentModel.findByIdAndUpdate(
+          req.params.commentId,
+          {
+            $pull: { reply: { _id: replyId } },
           },
-        });
-        res.status(200).json("The comment has been deleted");
+          { new: true }
+        )
+          .populate({
+            path: "reply.user",
+            select: "name email avatar",
+          })
+          .populate({
+            path: "userId",
+            select: "name email avatar",
+          });
+        res.status(200).json(newComment);
+      } else {
+        const newComment = await CommentModel.findByIdAndUpdate(
+          req.params.commentId,
+          {
+            $pull: {
+              reply: { _id: replyId, user: req.userId },
+            },
+          },
+          { new: true }
+        )
+          .populate({
+            path: "reply.user",
+            select: "name email avatar",
+          })
+          .populate({
+            path: "userId",
+            select: "name email avatar",
+          });
+        res.status(200).json(newComment);
       }
     }
   } catch (error) {

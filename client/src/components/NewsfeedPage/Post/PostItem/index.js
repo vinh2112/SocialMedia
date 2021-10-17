@@ -31,6 +31,7 @@ const PostItem = ({ post }) => {
   const [overflow, setOverflow] = useState(false);
   const [isShowComment, setIsShowComment] = useState(false);
   const postDesc = useRef();
+  const boxComment = useRef();
 
   useEffect(() => {
     if (isOverflow(postDesc.current)) {
@@ -41,13 +42,51 @@ const PostItem = ({ post }) => {
     setOverflow(false);
   }, [setOverflow]);
 
+  const handleShowComment = () => {
+    if (!isShowComment) {
+      setIsShowComment(true);
+    } else {
+      boxComment.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+      boxComment.current.focus({ preventScroll: true });
+    }
+  };
+
+  const handleDownload = async () => {
+    console.log("download");
+    // await fetch(post.image, {
+    //   mode: "no-cors",
+    // })
+    //   .then((res) => res.blob())
+    //   .then((blob) => {
+    //     const url = window.URL.createObjectURL(blob);
+    //     console.log(url);
+    //     // const link = document.createElement("a");
+    //     // link.href = url;
+    //     // link.setAttribute("download", `FileName.png`);
+
+    //     // // Append to html link element page
+    //     // document.body.appendChild(link);
+
+    //     // // Start download
+    //     // link.click();
+
+    //     // // Clean up and remove the link
+    //     // link.parentNode.removeChild(link);
+    //   });
+    // // saveAs(post.image, "post.png");
+  };
+
   return (
     <div>
       <PostContainer>
         <PostTop>
           <PostAuthor>
             <AuthorInfo>
-              <AvatarLink to="#">
+              <AvatarLink to={`/${post.userId._id}`}>
                 {post.userId.avatar ? (
                   <Avatar src={post.userId.avatar} />
                 ) : (
@@ -59,12 +98,10 @@ const PostItem = ({ post }) => {
                 )}
               </AvatarLink>
               <RightSide>
-                <AuthorName to="#">
+                <AuthorName to={`/${post.userId._id}`}>
                   @{post.userId.name ? post.userId.name : post.userId.email}
                 </AuthorName>
-                <PostCreated>
-                  {moment(post.createdAt).fromNow().toUpperCase()}
-                </PostCreated>
+                <PostCreated>{moment(post.createdAt).toNow(true)}</PostCreated>
               </RightSide>
             </AuthorInfo>
             <Description isShow={isDescShow}>
@@ -84,11 +121,13 @@ const PostItem = ({ post }) => {
           <PostImage src={post.image} />
         </PostTop>
         <ListAction
-          isShowComment={isShowComment}
-          setIsShowComment={setIsShowComment}
+          showComment={handleShowComment}
           post={post}
+          downloadImage={handleDownload}
         />
-        {isShowComment && <ListComment />}
+        {isShowComment && (
+          <ListComment boxComment={boxComment} postId={post._id} />
+        )}
       </PostContainer>
     </div>
   );
