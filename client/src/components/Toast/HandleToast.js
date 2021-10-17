@@ -1,8 +1,4 @@
-export default function handleToast({
-  message = "",
-  type = "",
-  duration = 2000,
-}) {
+export default function handleToast({ message = "", type = "", duration = 2000 }) {
   const main = document.getElementById("toast");
   if (main) {
     const toast = document.createElement("div");
@@ -27,7 +23,7 @@ export default function handleToast({
     toast.classList.add("toast", `toast--${type}`);
     const delay = (duration / 1000).toFixed(2);
 
-    toast.style.animation = `slideInRight 0.5s ease, dropDown 1s ease ${delay}s forwards`;
+    toast.style.animation = `slideInRight 0.5s ease, dropDown 0.5s ease ${delay}s forwards`;
     toast.innerHTML = `
         <div class="toast__icon">
             <span class="iconify" data-icon="${icon[type]}"></span>
