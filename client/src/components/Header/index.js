@@ -29,12 +29,7 @@ const Header = () => {
 
   const handleSideBar = () => {
     setIsOpen(!isOpen);
-    if (!isOpen) {
-      document.body.style.overflowY = "hidden";
-      isShow && dispatch(actions.hideModal());
-    } else {
-      document.body.style.overflowY = null;
-    }
+    if (!isOpen) isShow && dispatch(actions.hideModal());
   };
 
   useEffect(() => {
@@ -84,7 +79,7 @@ const Header = () => {
 
         <HeaderLeft>
           {user.currentUser ? (
-            <RoundButtonLink to={`/${user.currentUser._id}`}>
+            <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
               <Avatar src={user.currentUser.avatar} alt="Photo" />
               <UserName>@{user.currentUser.name}</UserName>
             </RoundButtonLink>
@@ -101,11 +96,7 @@ const Header = () => {
             </RoundButton>
             <input type="checkbox" id="activeCheckBox"></input>
 
-            <SideBar
-              isOpen={isOpen}
-              handleSideBar={handleSideBar}
-              user={user}
-            />
+            <SideBar isOpen={isOpen} handleSideBar={handleSideBar} user={user} />
           </SideBarContainer>
         </HeaderLeft>
       </HeaderWrapper>

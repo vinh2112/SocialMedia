@@ -40,7 +40,7 @@ export const PostImage = styled.img`
 
 export const AuthorInfo = styled.div`
   display: flex;
-  padding: 10px 16px 0;
+  padding: 12px 16px 0;
 `;
 
 export const AvatarLink = styled(Link)`

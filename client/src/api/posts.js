@@ -3,7 +3,7 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PostAPI = {
-  fetchPosts: () => axios.get(`${BASE_URL}/api/post`),
+  fetchPosts: (payload) => axios.get(`${BASE_URL}/api/post?page=${payload || 1}`),
   fetchPostsTimeline: () => {
     try {
       const TOKEN = localStorage.getItem("access_token");
@@ -15,8 +15,9 @@ const PostAPI = {
       return error;
     }
   },
-  fetchProfilePosts: (payload) =>
-    axios.get(`${BASE_URL}/api/profile/post/${payload}`),
+  fetchProfilePosts: (payload) => axios.get(`${BASE_URL}/api/post/profile/${payload}`),
+  searchPosts: (payload) =>
+    axios.get(`${BASE_URL}/api/post/search?query=${payload.query}&page=${payload.page}`),
   createPost: (payload) => {
     try {
       const TOKEN = localStorage.getItem("access_token");

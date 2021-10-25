@@ -23,15 +23,9 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
       <Container className="side-bar" isOpen={isOpen}>
         <Top className="md">
           {user.currentUser ? (
-            <MenuItemLink to={`/${user.currentUser._id}`}>
+            <MenuItemLink to={`/profile/${user.currentUser._id}`}>
               <UserInfo>
-                <Avatar
-                  src={
-                    user.currentUser.avatar
-                      ? user.currentUser.avatar
-                      : DefaultAvatar
-                  }
-                />
+                <Avatar src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar} />
                 <User>
                   <UserName>@{user.currentUser.name}</UserName>
                   <div className="side-bar__view">View your profile</div>
@@ -47,7 +41,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
 
         <Separate className="md" />
 
-        <MenuItemLink to="#">
+        <MenuItemLink to="/search">
           <MenuIcon>
             <Icon icon="bx:bx-search" />
           </MenuIcon>
@@ -55,7 +49,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
           <MenuTitle>Search</MenuTitle>
         </MenuItemLink>
 
-        <MenuItemLink to="#">
+        <MenuItemLink to="/">
           <MenuIcon>
             <Icon icon="bx:bx-news" />
           </MenuIcon>

@@ -36,9 +36,7 @@ const ListComment = ({ boxComment, postId }) => {
           {data &&
             data.map((comment) => {
               return (
-                comment.postId === postId && (
-                  <CommentItem key={comment._id} comment={comment} />
-                )
+                comment.postId === postId && <CommentItem key={comment._id} comment={comment} />
               );
             })}
         </>

@@ -7,6 +7,17 @@ import Profile from "components/ProfilePage";
 export default function ProfilePage() {
   const { userId } = useParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const scrollWindow = () => {
+      window.onscroll = () => {
+        console.log("456");
+      };
+    };
+
+    scrollWindow();
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     userId && dispatch(actions.getProfilePosts.getProfilePostsRequest(userId));

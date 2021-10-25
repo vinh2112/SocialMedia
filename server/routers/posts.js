@@ -8,10 +8,15 @@ import {
   reactPost,
   updatePost,
   deletePost,
+  searchPosts,
 } from "../controllers/posts.js";
 import { verifyToken } from "../middlewares/auth.js";
 
 const router = express.Router();
+
+// @router GET api/post/search
+// @desc Get posts by search value
+router.get("/post/search", searchPosts);
 
 //@router GET api/post/timeline
 //@desc Get timeline posts
@@ -25,9 +30,9 @@ router.get("/post", getPosts);
 // @desc Get a post
 router.get("/post/:postId", getPost);
 
-//@router GET api/profile/post
+//@router GET api/post/profile/:userId
 //@desc Get user's all posts
-router.get("/profile/post/:userId", getProfilePost);
+router.get("/post/profile/:userId", getProfilePost);
 
 // @router POST api/post
 // @desc Create new post

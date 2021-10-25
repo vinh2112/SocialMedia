@@ -4,7 +4,8 @@ export const ActionContainer = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 4px;
+  margin: 0 4px;
 `;
 
 // Action
@@ -13,12 +14,18 @@ const Action = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 8px;
+  padding: 6px 8px;
+  margin: 4px 0;
   white-space: nowrap;
-  max-width: 30%;
   width: 100%;
   cursor: pointer;
   user-select: none;
+  border-radius: 4px;
+  transition: background 0.1s ease;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.hoverColor};
+  }
 
   & > .iconify {
     font-size: 1.4rem;
@@ -48,7 +55,7 @@ export const MoreAction = styled.div`
 export const ActionMenu = styled.ul`
   display: ${({ isOpen }) => (isOpen ? "block" : "none")};
   position: absolute;
-  bottom: 110%;
+  bottom: 120%;
   right: 5px;
   min-width: 150px;
   padding: 5px;

@@ -16,24 +16,28 @@ import { authState$ } from "redux/selectors";
 
 const ListAction = ({ showComment, post, downloadImage }) => {
   // const history = useHistory();
-  const [isLiked, setIsLiked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const menuNode = useRef();
   const dispatch = useDispatch();
   const { currentUser } = useSelector(authState$);
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    const checkLiked = () => {
+    const initialLike = () => {
       if (currentUser) {
         const isLiked = post.likes.find((like) => {
           return like._id === currentUser._id;
         });
         if (isLiked) setIsLiked(true);
-      } else {
-        setIsLiked(false);
       }
     };
+    initialLike();
+    return () => {
+      setIsLiked(false);
+    };
+  }, [currentUser, post]);
 
+  useEffect(() => {
     const handleOutSide = (e) => {
       if (!menuNode.current.contains(e.target)) {
         setIsOpen(false);
@@ -41,11 +45,10 @@ const ListAction = ({ showComment, post, downloadImage }) => {
     };
 
     document.addEventListener("mousedown", handleOutSide);
-    checkLiked();
     return () => {
       document.removeEventListener("mousedown", handleOutSide);
     };
-  }, [setIsOpen, post, currentUser]);
+  }, [setIsOpen]);
 
   const handleReact = () => {
     // Check Log in status - if false redirect to login page
@@ -67,10 +70,7 @@ const ListAction = ({ showComment, post, downloadImage }) => {
     <ActionContainer>
       <LikeAction onClick={handleReact}>
         {isLiked ? (
-          <Icon
-            icon="ant-design:heart-filled"
-            style={{ color: "var(--primary-color)" }}
-          />
+          <Icon icon="ant-design:heart-filled" style={{ color: "var(--primary-color)" }} />
         ) : (
           <Icon icon="ant-design:heart-outlined" />
         )}

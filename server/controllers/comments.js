@@ -17,7 +17,7 @@ export const getCommentPost = async (req, res) => {
       .sort("-createdAt");
 
     if (!comments.length) {
-      return res.status(403).json({ msg: "This post has had comment yet" });
+      return res.status(200).json([]);
     }
 
     return res.status(200).json(comments);

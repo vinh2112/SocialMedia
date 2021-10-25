@@ -6,10 +6,20 @@ export const getPosts = createActions({
   getPostsFailure: (err) => err,
 });
 
+export const getPostsLoadMore = createActions({
+  getPostsLoadMoreRequest: (payload) => payload,
+  getPostsLoadMoreSuccess: (payload) => payload,
+});
+
 export const getProfilePosts = createActions({
   getProfilePostsRequest: (payload) => payload,
   getProfilePostsSuccess: (payload) => payload,
   getProfilePostsFailure: (err) => err,
+});
+
+export const searchPosts = createActions({
+  searchPostsRequest: (payload) => payload,
+  searchPostsSuccess: (payload) => payload,
 });
 
 export const createPost = createActions({

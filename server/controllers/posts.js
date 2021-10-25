@@ -3,6 +3,7 @@ import { UserModel } from "../models/UserModel.js";
 
 export const getPosts = async (req, res) => {
   try {
+    const { page } = req.query;
     const posts = await PostModel.find()
       .populate({
         path: "userId",
@@ -13,6 +14,7 @@ export const getPosts = async (req, res) => {
         select: "name email avatar",
       })
       .sort("-createdAt")
+      .skip((page - 1) * 5)
       .limit(5);
 
     res.json(posts);
@@ -87,7 +89,7 @@ export const getPostsTimeline = async (req, res) => {
 
       if (index === user.followings.length - 1) {
         const newPosts = await PostModel.find({})
-          .limit(2)
+          .limit(5)
           .populate({
             path: "userId",
             select: "name email avatar",
@@ -105,6 +107,32 @@ export const getPostsTimeline = async (req, res) => {
         );
       }
     });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const searchPosts = async (req, res) => {
+  try {
+    const { query, page } = req.query;
+    const posts = await PostModel.find({
+      $or: [
+        { category: { $regex: query, $options: "i" } },
+        { desc: { $regex: query, $options: "i" } },
+      ],
+    })
+      .limit(20)
+      .populate({
+        path: "userId",
+        select: "name email avatar",
+      })
+      .populate({
+        path: "likes",
+        select: "name email avatar",
+      })
+      .sort("-createdAt")
+      .skip((page - 1) * 20);
+    res.json(posts);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

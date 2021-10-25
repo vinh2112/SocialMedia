@@ -17,6 +17,7 @@ import {
   ToggleButton,
 } from "./PostItemElements";
 import moment from "moment";
+import { saveAs } from "file-saver";
 
 const getFirstLetter = (name) => {
   return name.charAt(0).toUpperCase();
@@ -56,28 +57,7 @@ const PostItem = ({ post }) => {
   };
 
   const handleDownload = async () => {
-    console.log("download");
-    // await fetch(post.image, {
-    //   mode: "no-cors",
-    // })
-    //   .then((res) => res.blob())
-    //   .then((blob) => {
-    //     const url = window.URL.createObjectURL(blob);
-    //     console.log(url);
-    //     // const link = document.createElement("a");
-    //     // link.href = url;
-    //     // link.setAttribute("download", `FileName.png`);
-
-    //     // // Append to html link element page
-    //     // document.body.appendChild(link);
-
-    //     // // Start download
-    //     // link.click();
-
-    //     // // Clean up and remove the link
-    //     // link.parentNode.removeChild(link);
-    //   });
-    // // saveAs(post.image, "post.png");
+    saveAs(post.image.url, `${post.image.public_id}.png`);
   };
 
   return (
@@ -86,7 +66,7 @@ const PostItem = ({ post }) => {
         <PostTop>
           <PostAuthor>
             <AuthorInfo>
-              <AvatarLink to={`/${post.userId._id}`}>
+              <AvatarLink to={`/profile/${post.userId._id}`}>
                 {post.userId.avatar ? (
                   <Avatar src={post.userId.avatar} />
                 ) : (
@@ -98,7 +78,7 @@ const PostItem = ({ post }) => {
                 )}
               </AvatarLink>
               <RightSide>
-                <AuthorName to={`/${post.userId._id}`}>
+                <AuthorName to={`/profile/${post.userId._id}`}>
                   @{post.userId.name ? post.userId.name : post.userId.email}
                 </AuthorName>
                 <PostCreated>{moment(post.createdAt).toNow(true)}</PostCreated>
@@ -112,22 +92,14 @@ const PostItem = ({ post }) => {
               {isDescShow || !overflow ? (
                 <></>
               ) : (
-                <ToggleButton onClick={() => setIsDescShow(!isDescShow)}>
-                  Load more
-                </ToggleButton>
+                <ToggleButton onClick={() => setIsDescShow(!isDescShow)}>Load more</ToggleButton>
               )}
             </Description>
           </PostAuthor>
-          <PostImage src={post.image} />
+          <PostImage src={post.image.url} />
         </PostTop>
-        <ListAction
-          showComment={handleShowComment}
-          post={post}
-          downloadImage={handleDownload}
-        />
-        {isShowComment && (
-          <ListComment boxComment={boxComment} postId={post._id} />
-        )}
+        <ListAction showComment={handleShowComment} post={post} downloadImage={handleDownload} />
+        {isShowComment && <ListComment boxComment={boxComment} postId={post._id} />}
       </PostContainer>
     </div>
   );

@@ -4,6 +4,7 @@ import Loading from "images/Loading.svg";
 export const Container = styled.div`
   border-top: 1px solid ${({ theme }) => theme.contrastColor};
   padding: 8px 12px;
+  margin: 0 4px;
 `;
 
 export const LoadingSection = styled.div`

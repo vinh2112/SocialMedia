@@ -6,6 +6,8 @@ import {
   getType,
   reactPost,
   interactUser,
+  getPostsLoadMore,
+  searchPosts,
 } from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
@@ -26,6 +28,17 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         ...state,
         isLoading: false,
       };
+    case getType(getPostsLoadMore.getPostsLoadMoreRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(getPostsLoadMore.getPostsLoadMoreSuccess):
+      return {
+        ...state,
+        isLoading: false,
+        data: [...state.data, ...action.payload],
+      };
     case getType(getProfilePosts.getProfilePostsRequest):
       return {
         ...state,
@@ -44,6 +57,17 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         isLoading: false,
         data: [],
         profile: undefined,
+      };
+    case getType(searchPosts.searchPostsRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(searchPosts.searchPostsSuccess):
+      return {
+        ...state,
+        isLoading: false,
+        data: action.payload,
       };
     case getType(createPost.createPostRequest):
       return {
@@ -69,9 +93,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(reactPost.reactPostSuccess):
       return {
         ...state,
-        data: state.data.map((post) =>
-          post._id === action.payload._id ? action.payload : post
-        ),
+        data: state.data.map((post) => (post._id === action.payload._id ? action.payload : post)),
       };
     case getType(reactPost.reactPostFailure):
       return {

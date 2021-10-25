@@ -16,8 +16,8 @@ const schema = new mongoose.Schema(
       default: [],
     },
     image: {
-      type: String,
-      trim: true,
+      type: Object,
+      required: true,
     },
     likes: [
       {

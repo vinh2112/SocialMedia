@@ -1,4 +1,4 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, delay } from "redux-saga/effects";
 import * as actions from "../actions";
 import * as api from "../../api";
 
@@ -20,7 +20,6 @@ function* fetchProfilePosts(userId) {
 export function* fetchPostsSaga() {
   try {
     const TOKEN = localStorage.getItem("access_token");
-    console.log(TOKEN);
     if (TOKEN) {
       yield fetchPostsTimeline();
     } else {
@@ -29,6 +28,17 @@ export function* fetchPostsSaga() {
   } catch (error) {
     console.log(error);
     yield put(actions.getPosts.getPostsFailure(error.response.data.msg));
+  }
+}
+
+export function* fetchPostsLoadMore(action) {
+  try {
+    const res = yield call(api.PostAPI.fetchPosts, action.payload);
+    yield delay(1000);
+    // console.log(res.data);
+    yield put(actions.getPostsLoadMore.getPostsLoadMoreSuccess(res.data));
+  } catch (error) {
+    return error;
   }
 }
 
@@ -43,19 +53,17 @@ export function* fetchProfilePostsSaga(action) {
 
 export function* createPostSaga(action) {
   try {
-    const { categories, url } = yield call(
-      api.UPLOAD.uploadImage,
-      action.payload.image
-    );
+    const { categories, image } = yield call(api.UPLOAD.uploadImage, action.payload.image);
+
     const res = yield call(api.PostAPI.createPost, {
       ...action.payload,
       category: categories,
-      image: url,
+      image,
     });
-    yield put(actions.hideModal());
     yield put(actions.createPost.createPostSuccess(res.data));
+    yield put(actions.hideModal());
   } catch (error) {
-    console.log(error.response);
+    console.log(error);
     yield put(actions.createPost.createPostFailure(error.response.data.msg));
   }
 }
@@ -75,5 +83,14 @@ export function* interactUser(action) {
     yield put(actions.interactUser.interactUserSuccess(res.data));
   } catch (error) {
     yield put(actions.interactUser.interactUserFailure);
+  }
+}
+
+export function* searchPosts(action) {
+  try {
+    const res = yield call(api.PostAPI.searchPosts, action.payload);
+    yield put(actions.searchPosts.searchPostsSuccess(res.data));
+  } catch (error) {
+    console.log(error.response);
   }
 }

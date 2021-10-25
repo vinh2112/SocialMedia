@@ -92,8 +92,8 @@ const CommentItem = ({ comment }) => {
             </CommentContent>
 
             <BottomComment>
-              <Time>{moment(comment.createdAt).toNow(true)}</Time>
               <ReplyButton onClick={handleReply}>Reply</ReplyButton>
+              <Time>{moment(comment.createdAt).toNow(true)}</Time>
             </BottomComment>
           </CommentWrapper>
 
@@ -103,17 +103,13 @@ const CommentItem = ({ comment }) => {
                 <Icon icon="akar-icons:more-horizontal" />
               </Button>
               <MenuActions isOpen={isOpen}>
-                <MenuItem onClick={handleDeleteComment}>
-                  Delete comment
-                </MenuItem>
+                <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
               </MenuActions>
             </ButtonWrapper>
           )}
         </CommentContainer>
 
         {/* Reply Comment */}
-
-        {/* ---------------------- */}
 
         {commentId === comment._id ? (
           <>
@@ -131,6 +127,8 @@ const CommentItem = ({ comment }) => {
             <BoxComment isReply={true} commentId={comment._id} />
           </>
         ) : null}
+
+        {/* ---------------------- */}
       </RightSide>
     </Container>
   );

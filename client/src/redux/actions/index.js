@@ -1,7 +1,14 @@
 import { createAction } from "redux-actions";
 import { login, logout } from "./auth";
 import { interactUser } from "./users";
-import { getPosts, getProfilePosts, createPost, reactPost } from "./posts";
+import {
+  getPosts,
+  getPostsLoadMore,
+  getProfilePosts,
+  searchPosts,
+  createPost,
+  reactPost,
+} from "./posts";
 import {
   showBoxComment,
   fetchComments,
@@ -26,7 +33,9 @@ export {
   logout,
   interactUser,
   getPosts,
+  getPostsLoadMore,
   getProfilePosts,
+  searchPosts,
   createPost,
   reactPost,
   showBoxComment,

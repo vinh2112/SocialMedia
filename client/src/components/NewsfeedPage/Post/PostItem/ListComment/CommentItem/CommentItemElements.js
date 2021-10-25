@@ -67,6 +67,7 @@ export const Comment = styled.div`
 export const BottomComment = styled.div`
   display: flex;
   align-items: center;
+  gap: 6px;
 `;
 
 export const Time = styled.div`
@@ -76,7 +77,6 @@ export const Time = styled.div`
 `;
 
 export const ReplyButton = styled.div`
-  margin-left: 4px;
   font-size: 14px;
   font-weight: 500;
   color: ${({ theme }) => theme.subTextColor};
@@ -147,4 +147,6 @@ export const MenuItem = styled.li`
   }
 `;
 
-export const ReplyWrapper = styled.div``;
+export const ReplyWrapper = styled.div`
+  margin-bottom: 8px;
+`;

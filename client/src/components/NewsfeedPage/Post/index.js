@@ -14,20 +14,22 @@ const Posts = ({ direction }) => {
 
   return (
     <>
-      <Container direction={direction}>
-        {userId
-          ? [userId === currentUser?._id && <PostUpdate key="0" />]
-          : [currentUser && <PostUpdate key="1" />]}
+      {data ? (
+        <Container direction={direction}>
+          {userId
+            ? [userId === currentUser?._id && <PostUpdate key="0" />]
+            : [currentUser && <PostUpdate key="1" />]}
 
-        <PostTopTitle>
-          <h3>Hoạt động gần đây</h3>
-          <span></span>
-        </PostTopTitle>
+          <PostTopTitle>
+            <h3>Hoạt động gần đây</h3>
+            <span></span>
+          </PostTopTitle>
 
-        {data.map((post) => (
-          <PostItem key={post._id} post={post} />
-        ))}
-      </Container>
+          {data.map((post, i) => (
+            <PostItem key={i} post={post} />
+          ))}
+        </Container>
+      ) : null}
     </>
   );
 };

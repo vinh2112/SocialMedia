@@ -6,8 +6,19 @@ export const GlobalStyles = createGlobalStyle`
     }
 
     ::-webkit-scrollbar {
-        width: 0;  /* Remove scrollbar space */
-        background: transparent;  /* Optional: just make scrollbar invisible */
+        -webkit-appearance: none;
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,.55);
+        border-radius: 10px;
+        margin: 2px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
     }
 
     *, *::after, *::before{
