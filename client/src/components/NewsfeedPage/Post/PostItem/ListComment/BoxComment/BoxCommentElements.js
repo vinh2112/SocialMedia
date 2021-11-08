@@ -52,7 +52,7 @@ export const SubmitButton = styled.button`
 export const TextCount = styled.p`
   color: ${({ theme }) => theme.subTextColor};
   margin: 4px 0 0;
-  width: 66px;
+  width: 50px;
   text-align: center;
   font-size: 0.8rem;
   user-select: none;

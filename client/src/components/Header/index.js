@@ -51,7 +51,7 @@ const Header = () => {
     dispatch(
       actions.login.loginRequest({
         email: "18110396@student.hcmute.edu.vn",
-        password: "123456",
+        password: "1234567",
       })
     );
   }, [dispatch]);

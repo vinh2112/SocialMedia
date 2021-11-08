@@ -18,7 +18,7 @@ export const Likes = styled.div`
 
 export const LikeButtonWrapper = styled.div`
   color: ${({ theme }) => theme.textColor};
-  margin-top: 4px;
+  margin: 6px 0;
 
   & > * {
     flex-shrink: 0;

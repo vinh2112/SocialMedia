@@ -1,3 +1,4 @@
+import { getTopLikedPosts } from "redux/actions/posts";
 import { INIT_STATE } from "../../constant";
 import {
   createPost,
@@ -8,6 +9,7 @@ import {
   interactUser,
   getPostsLoadMore,
   searchPosts,
+  getProfileUser,
 } from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
@@ -48,8 +50,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.posts,
-        profile: action.payload.user,
+        data: [...state.data, ...action.payload],
       };
     case getType(getProfilePosts.getProfilePostsFailure):
       return {
@@ -57,6 +58,20 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         isLoading: false,
         data: [],
         profile: undefined,
+      };
+    case getType(getTopLikedPosts.getTopLikedPostsRequest):
+      return {
+        ...state,
+      };
+    case getType(getTopLikedPosts.getTopLikedPostsSuccess):
+      return {
+        ...state,
+        topLiked: action.payload,
+      };
+    case getType(getProfileUser):
+      return {
+        ...state,
+        profile: action.payload,
       };
     case getType(searchPosts.searchPostsRequest):
       return {

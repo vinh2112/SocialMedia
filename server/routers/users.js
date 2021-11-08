@@ -7,6 +7,8 @@ import {
   logout,
   interactUser,
   updateUser,
+  getProfileUser,
+  checkPassword,
 } from "../controllers/users.js";
 import { verifyToken } from "../middlewares/auth.js";
 
@@ -15,6 +17,14 @@ const router = express.Router();
 // @route GET user/
 // @desc Check if user logged in
 router.get("/", verifyToken, getUser);
+
+// @route GET user/check_password
+// @desc Check Password
+router.get("/check_password", verifyToken, checkPassword);
+
+// @route GET user/:userId
+// @desc Get Profile User
+router.get("/:userId/profile", getProfileUser);
 
 // @route GET user/refresh_token
 // @desc Refresh new token for user's request
@@ -36,8 +46,8 @@ router.post("/register", register);
 // @desc Follow/Unfollow user
 router.put("/:userId/interact", verifyToken, interactUser);
 
-// @route PUT user/:userId
+// @route PUT user/
 // @desc Update user
-router.put("/:userId", verifyToken, updateUser);
+router.put("/", verifyToken, updateUser);
 
 export default router;

@@ -63,6 +63,7 @@ export const ActionMenu = styled.ul`
   overflow: hidden;
   box-shadow: 0px 0px 10px 0 rgba(0, 0, 0, 0.2);
   background-color: ${({ theme }) => theme.primary};
+  cursor: default;
 `;
 
 export const MenuItem = styled.li`
@@ -72,6 +73,7 @@ export const MenuItem = styled.li`
   padding: 8px;
   border-radius: 5px;
   transition: all 0.1s ease-in-out;
+  cursor: pointer;
 
   &.danger {
     color: #ed4956;

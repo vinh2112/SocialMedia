@@ -48,7 +48,7 @@ export const ModalPhotoWrapper = styled.div`
 
 export const ModalPhoto = styled.div`
   width: 100%;
-  height: 400px;
+  height: 100%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -73,11 +73,11 @@ export const ModalContentWrapper = styled.div`
   overflow-y: auto;
 
   @media (max-width: 800px) {
-    height: calc(80vh - 400px - 60px);
+    height: calc(80vh - 300px - 60px);
   }
 
   @media (max-width: 512px) {
-    height: calc(100vh - 400px - 60px);
+    height: calc(100vh - 280px - 60px);
   }
 `;
 

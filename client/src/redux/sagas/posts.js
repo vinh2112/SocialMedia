@@ -1,4 +1,4 @@
-import { call, put, delay } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 import * as actions from "../actions";
 import * as api from "../../api";
 
@@ -34,7 +34,6 @@ export function* fetchPostsSaga() {
 export function* fetchPostsLoadMore(action) {
   try {
     const res = yield call(api.PostAPI.fetchPosts, action.payload);
-    yield delay(1000);
     // console.log(res.data);
     yield put(actions.getPostsLoadMore.getPostsLoadMoreSuccess(res.data));
   } catch (error) {
@@ -48,6 +47,15 @@ export function* fetchProfilePostsSaga(action) {
   } catch (error) {
     console.log(error);
     yield put(actions.getProfilePosts.getPostsFailure());
+  }
+}
+
+export function* fetchTopLikedPosts() {
+  try {
+    const posts = yield call(api.PostAPI.fetchTopLikedPosts);
+    yield put(actions.getTopLikedPosts.getTopLikedPostsSuccess(posts.data));
+  } catch (error) {
+    return error;
   }
 }
 

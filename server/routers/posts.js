@@ -9,6 +9,7 @@ import {
   updatePost,
   deletePost,
   searchPosts,
+  getTopLikedPosts,
 } from "../controllers/posts.js";
 import { verifyToken } from "../middlewares/auth.js";
 
@@ -26,12 +27,16 @@ router.get("/post/timeline", verifyToken, getPostsTimeline);
 // @desc Get all posts
 router.get("/post", getPosts);
 
+// @router GET api/post/top_liked
+// @desc Get Top Liked Posts
+router.get("/post/top_liked", getTopLikedPosts);
+
 // @router GET api/post/:postId
 // @desc Get a post
 router.get("/post/:postId", getPost);
 
-//@router GET api/post/profile/:userId
-//@desc Get user's all posts
+// @router GET api/post/profile/:userId
+// @desc Get user's all posts
 router.get("/post/profile/:userId", getProfilePost);
 
 // @router POST api/post

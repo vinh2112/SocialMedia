@@ -17,6 +17,11 @@ export const getProfilePosts = createActions({
   getProfilePostsFailure: (err) => err,
 });
 
+export const getTopLikedPosts = createActions({
+  getTopLikedPostsRequest: undefined,
+  getTopLikedPostsSuccess: (payload) => payload,
+});
+
 export const searchPosts = createActions({
   searchPostsRequest: (payload) => payload,
   searchPostsSuccess: (payload) => payload,

@@ -1,7 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-    html {
+    /* html {
         scroll-behavior: smooth;
     }
 
@@ -19,7 +19,7 @@ export const GlobalStyles = createGlobalStyle`
 
     ::-webkit-scrollbar-track {
         background-color: transparent;
-    }
+    } */
 
     *, *::after, *::before{
         box-sizing: border-box;

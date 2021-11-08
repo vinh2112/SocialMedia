@@ -1,3 +1,4 @@
+import { Card, CardContent, Skeleton } from "@mui/material";
 import styled from "styled-components";
 
 export const AccountContainer = styled.aside`
@@ -22,5 +23,31 @@ export const AccountWrapper = styled.div`
     width: 100%;
     border-radius: 0;
     padding: 16px;
+  }
+`;
+
+export const ProfileLoadingContainer = styled.div`
+  width: 300px;
+  height: 320px;
+`;
+
+export const CustomCard = styled(Card)`
+  && {
+    background: ${({ theme }) => theme.primary};
+  }
+`;
+
+export const CustomCardContent = styled(CardContent)`
+  && {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+  }
+`;
+
+export const CustomSkeleton = styled(Skeleton)`
+  && {
+    background-color: ${({ theme }) => theme.contrastColor};
   }
 `;

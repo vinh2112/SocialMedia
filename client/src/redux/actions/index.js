@@ -1,10 +1,11 @@
 import { createAction } from "redux-actions";
 import { login, logout } from "./auth";
-import { interactUser } from "./users";
+import { interactUser, getProfileUser, getCurrentUser } from "./users";
 import {
   getPosts,
   getPostsLoadMore,
   getProfilePosts,
+  getTopLikedPosts,
   searchPosts,
   createPost,
   reactPost,
@@ -31,10 +32,13 @@ export {
   toast,
   login,
   logout,
+  getProfileUser,
+  getCurrentUser,
   interactUser,
   getPosts,
   getPostsLoadMore,
   getProfilePosts,
+  getTopLikedPosts,
   searchPosts,
   createPost,
   reactPost,

@@ -12,8 +12,11 @@ const NewsFeedPage = () => {
   useEffect(() => {
     const scrollWindow = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop ===
-        document.documentElement.offsetHeight
+        Math.abs(
+          window.innerHeight +
+            document.documentElement.scrollTop -
+            document.documentElement.offsetHeight
+        ) <= 1
       ) {
         if (!isLoading) {
           setPage(page + 1);
@@ -37,6 +40,7 @@ const NewsFeedPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(actions.getPosts.getPostsRequest());
+    dispatch(actions.getTopLikedPosts.getTopLikedPostsRequest());
   }, [dispatch]);
 
   return <NewsFeed />;

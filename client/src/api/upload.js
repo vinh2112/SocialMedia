@@ -39,6 +39,18 @@ const UPLOAD = {
       return error;
     }
   },
+  uploadAvatar: async (payload) => {
+    try {
+      const url = await axios.post(`${BASE_URL}/api/upload`, payload, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      return url;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 export default UPLOAD;

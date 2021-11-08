@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { toastState$ } from "redux/selectors";
 import handleToast from "components/Toast/HandleToast";
 import SearchPage from "pages/SearchPage";
+import EditProfilePage from "pages/EditProfilePage";
 
 function App() {
   const context = useContext(ThemeContext);
@@ -36,6 +37,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={NewsFeedPage} />
             <Route path="/search" component={SearchPage} />
+            <Route path="/setting" component={EditProfilePage} />
             <Route path="/profile/:userId" component={ProfilePage} />
             <Route path="*" component={NotFoundPage} />
           </Switch>

@@ -13,7 +13,7 @@ const PostUpdate = () => {
   }, [dispatch]);
   return (
     <Container>
-      <AvatarLink to={`/${currentUser._id}`}>
+      <AvatarLink to={`/profile/${currentUser._id}`}>
         <Avatar src={currentUser.avatar} alt="avatar" />
         <OverLay></OverLay>
       </AvatarLink>
