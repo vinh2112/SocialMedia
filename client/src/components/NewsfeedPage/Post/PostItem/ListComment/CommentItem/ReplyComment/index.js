@@ -59,7 +59,7 @@ export default function ReplyComment({ reply, commentId, currentUser }) {
   return (
     <Container>
       <LeftSide>
-        <AvatarLink to={reply.user._id}>
+        <AvatarLink to={`/profile/${reply.user._id}`}>
           <Avatar src={reply.user.avatar} alt="avatar" />
         </AvatarLink>
       </LeftSide>
@@ -68,7 +68,7 @@ export default function ReplyComment({ reply, commentId, currentUser }) {
         <CommentContainer>
           <CommentWrapper>
             <CommentContent>
-              <Name to={reply.user._id}>@{reply.user.name}</Name>
+              <Name to={`/profile/${reply.user._id}`}>@{reply.user.name}</Name>
               <Comment>{reply.replyComment}</Comment>
             </CommentContent>
             <BottomComment>
@@ -82,9 +82,7 @@ export default function ReplyComment({ reply, commentId, currentUser }) {
                 <Icon icon="akar-icons:more-horizontal" />
               </Button>
               <MenuActions isOpen={isOpen}>
-                <MenuItem onClick={handleDeleteComment}>
-                  Delete comment
-                </MenuItem>
+                <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
               </MenuActions>
             </ButtonWrapper>
           )}

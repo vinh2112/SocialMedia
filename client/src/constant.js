@@ -8,6 +8,7 @@ export const INIT_STATE = {
     isLoading: false,
     data: [],
     profile: undefined,
+    topLiked: undefined,
   },
   comments: {
     isLoading: false,

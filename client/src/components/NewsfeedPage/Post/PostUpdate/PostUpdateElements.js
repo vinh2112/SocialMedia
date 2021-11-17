@@ -40,7 +40,7 @@ export const OverLay = styled.div`
 export const DescSection = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
+  flex: 1;
   height: 40px;
   border-radius: 20px;
   margin-left: 8px;

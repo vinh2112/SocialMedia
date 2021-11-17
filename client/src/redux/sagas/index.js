@@ -7,6 +7,7 @@ import {
   interactUser,
   fetchPostsLoadMore,
   searchPosts,
+  fetchTopLikedPosts,
 } from "./posts";
 import { watchUser } from "./auth";
 import * as actions from "../actions";
@@ -17,6 +18,7 @@ function* mySaga() {
   yield takeLatest(actions.getPosts.getPostsRequest, fetchPostsSaga);
   yield takeLatest(actions.getPostsLoadMore.getPostsLoadMoreRequest, fetchPostsLoadMore);
   yield takeLatest(actions.getProfilePosts.getProfilePostsRequest, fetchProfilePostsSaga);
+  yield takeLatest(actions.getTopLikedPosts.getTopLikedPostsRequest, fetchTopLikedPosts);
   yield takeLatest(actions.searchPosts.searchPostsRequest, searchPosts);
   yield takeLatest(actions.createPost.createPostRequest, createPostSaga);
   yield takeLatest(actions.reactPost.reactPostRequest, reactPost);

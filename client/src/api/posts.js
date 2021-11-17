@@ -15,7 +15,9 @@ const PostAPI = {
       return error;
     }
   },
-  fetchProfilePosts: (payload) => axios.get(`${BASE_URL}/api/post/profile/${payload}`),
+  fetchProfilePosts: (payload) =>
+    axios.get(`${BASE_URL}/api/post/profile/${payload.userId}?page=${payload.page}`),
+  fetchTopLikedPosts: () => axios.get(`${BASE_URL}/api/post/top_liked`),
   searchPosts: (payload) =>
     axios.get(`${BASE_URL}/api/post/search?query=${payload.query}&page=${payload.page}`),
   createPost: (payload) => {

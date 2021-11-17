@@ -36,6 +36,7 @@ export const PostImage = styled.img`
   height: auto;
   object-fit: contain;
   max-height: 550px;
+  background-color: rgba(0, 0, 0, 0.1);
 `;
 
 export const AuthorInfo = styled.div`
@@ -92,7 +93,7 @@ export const PostCreated = styled.div`
 
 export const Description = styled.div`
   color: #fff;
-  margin: 8px 0 12px;
+  margin: 12px 0 8px;
   padding: 0 16px;
   font-size: 0.9rem;
   font-weight: 400;

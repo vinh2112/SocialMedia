@@ -10,6 +10,7 @@ export const Container = styled.div`
 export const SearchTitle = styled.div`
   font-size: 30px;
   font-weight: 700;
+  color: ${({ theme }) => theme.subTextColor};
 `;
 
 export const SearchBar = styled.div`
@@ -18,7 +19,7 @@ export const SearchBar = styled.div`
   max-width: 350px;
   background: ${({ theme }) => theme.contrastColor};
   padding: 12px 25px 12px 45px;
-  border-radius: 5px;
+  border-radius: 24px 24px 2px 24px;
 `;
 
 export const SearchLabel = styled.label`
@@ -44,7 +45,7 @@ export const SearchInput = styled.input`
 export const SearchClose = styled.div`
   position: absolute;
   display: none;
-  right: 4px;
+  right: 8px;
   top: 13px;
 
   ${SearchInput}:valid ~ & {

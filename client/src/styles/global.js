@@ -5,7 +5,7 @@ export const GlobalStyles = createGlobalStyle`
         scroll-behavior: smooth;
     }
 
-    ::-webkit-scrollbar {
+    /* ::-webkit-scrollbar {
         -webkit-appearance: none;
         width: 6px;
         height: 6px;
@@ -19,7 +19,7 @@ export const GlobalStyles = createGlobalStyle`
 
     ::-webkit-scrollbar-track {
         background-color: transparent;
-    }
+    } */
 
     *, *::after, *::before{
         box-sizing: border-box;

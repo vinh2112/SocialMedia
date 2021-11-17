@@ -35,11 +35,33 @@ export const getPost = async(req, res) => {
         })
         .sort("-createdAt");
 
+<<<<<<< HEAD
     if (!post) return res.status(400).json({ msg: "Post not found" });
+=======
+export const getProfilePost = async (req, res) => {
+  const { page } = req.query;
+
+  const posts = await PostModel.find({ userId: req.params.userId })
+    .populate({
+      path: "userId",
+      select: "name email avatar",
+    })
+    .populate({
+      path: "likes",
+      select: "name email avatar",
+    })
+    .sort("-createdAt")
+    .skip((page - 1) * 5)
+    .limit(5);
+
+  res.status(200).json(posts);
+};
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 
     res.status(200).json(post);
 };
 
+<<<<<<< HEAD
 export const getProfilePost = async(req, res) => {
     const user = await UserModel.findOne({ _id: req.params.userId })
         .select("-password")
@@ -56,14 +78,72 @@ export const getProfilePost = async(req, res) => {
 
     const posts = await PostModel.find({ userId: req.params.userId })
         .populate({
+=======
+    let posts = [];
+    const friendPosts = await Promise.all(
+      user.followings.map((following, index) => {
+        return PostModel.find({ userId: following.toString() })
+          .populate({
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
             path: "userId",
             select: "name email avatar",
         })
         .populate({
             path: "likes",
             select: "name email avatar",
+<<<<<<< HEAD
         })
         .sort("-createdAt");
+=======
+          })
+          .sort("-createdAt")
+          .limit(3);
+      })
+    );
+    const newPosts = await PostModel.find({})
+      .limit(5)
+      .populate({
+        path: "userId",
+        select: "name email avatar",
+      })
+      .populate({
+        path: "likes",
+        select: "name email avatar",
+      })
+      .sort("-createdAt");
+
+    posts = newPosts.concat(...friendPosts);
+
+    return res.json(
+      posts.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getTopLikedPosts = async (req, res) => {
+  try {
+    const posts = await PostModel.find()
+      .sort("-likes -createdAt")
+      .limit(6)
+      .populate({
+        path: "userId",
+        select: "name email avatar",
+      })
+      .populate({
+        path: "likes",
+        select: "name email avatar",
+      });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 
     res.status(200).json({ user, posts });
 };

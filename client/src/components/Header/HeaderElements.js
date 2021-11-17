@@ -132,10 +132,10 @@ export const SignIn = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: ${({ theme }) => theme.textColor};
-  height: 35px;
+  height: 32px;
   padding: 0 16px;
   background-color: ${({ theme }) => theme.contrastColor};
-  border-radius: 20px;
+  border-radius: 16px;
   transition: all 0.1s ease-in-out 0s;
 
   &:hover {

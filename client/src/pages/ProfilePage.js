@@ -1,27 +1,62 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as actions from "redux/actions";
 import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Profile from "components/ProfilePage";
+import { postState$ } from "redux/selectors";
+import { UserAPI } from "api";
 
 export default function ProfilePage() {
   const { userId } = useParams();
+  const [page, setPage] = useState(1);
+  const { isLoading } = useSelector(postState$);
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const scrollWindow = () => {
-      window.onscroll = () => {
-        console.log("456");
-      };
-    };
-
-    scrollWindow();
-  }, []);
+    userId && dispatch(actions.getProfilePosts.getProfilePostsRequest({ userId, page }));
+  }, [dispatch, userId, page]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-    userId && dispatch(actions.getProfilePosts.getProfilePostsRequest(userId));
-  }, [dispatch, userId]);
+    const scrollWindow = () => {
+      if (
+        Math.abs(
+          window.innerHeight +
+            document.documentElement.scrollTop -
+            document.documentElement.offsetHeight
+        ) <= 200
+      ) {
+        if (!isLoading) {
+          setPage(page + 1);
+        }
+      }
+    };
+    window.addEventListener("scroll", scrollWindow);
 
-  return <Profile />;
+    return () => {
+      window.removeEventListener("scroll", scrollWindow);
+    };
+  }, [isLoading, page]);
+
+  useEffect(() => {
+    dispatch(actions.resetPosts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const getProfileUser = async () => {
+      try {
+        setIsProfileLoading(true);
+        const profile = await UserAPI.getProfileUser(userId);
+        if (profile) {
+          dispatch(actions.getProfileUser(profile.data));
+          setIsProfileLoading(false);
+        }
+      } catch (error) {
+        return error;
+      }
+    };
+    getProfileUser();
+    window.scrollTo(0, 0);
+  }, [userId, dispatch]);
+  return <Profile isProfileLoading={isProfileLoading} />;
 }

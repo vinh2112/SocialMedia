@@ -3,7 +3,7 @@ import { GlobalStyles } from "./styles/global";
 import { ThemeProvider } from "styled-components";
 import { ThemeContext } from "./context/themeContext";
 import { lightTheme, darkTheme } from "./styles/theme";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Header from "./components/Header";
 import NewsFeedPage from "./pages/NewsFeedPage";
 import NotFoundPage from "pages/NotFoundPage";
@@ -14,8 +14,12 @@ import { useSelector } from "react-redux";
 import { toastState$ } from "redux/selectors";
 import handleToast from "components/Toast/HandleToast";
 import SearchPage from "pages/SearchPage";
+<<<<<<< HEAD
 import Home from "pages/HomePage";
 import SignupPage from "pages/SignupPage";
+=======
+import EditProfilePage from "pages/EditProfilePage";
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 
 function App() {
   const context = useContext(ThemeContext);
@@ -34,6 +38,12 @@ function App() {
     }
   }, [toast]);
 
+  const handleLoggedIn = () => {
+    const TOKEN = localStorage.getItem("access_token");
+    if (TOKEN) return true;
+    return false;
+  };
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
@@ -43,7 +53,13 @@ function App() {
 
           <Switch>
             <Route exact path="/" component={NewsFeedPage} />
+<<<<<<< HEAD
             {/* <Route path="/search" component={SearchPage} />
+=======
+            <Route path="/login">{handleLoggedIn() ? <Redirect to="/" /> : <NotFoundPage />}</Route>
+            <Route path="/search" component={SearchPage} />
+            <Route path="/setting" component={EditProfilePage} />
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
             <Route path="/profile/:userId" component={ProfilePage} />
             <Route path="/checkout" component={PaypalPage} />
             <Route path="*" component={NotFoundPage} /> */}

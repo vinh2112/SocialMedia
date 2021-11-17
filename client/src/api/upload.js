@@ -3,7 +3,11 @@ import axios from "axios";
 import uuid from "react-uuid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+<<<<<<< HEAD
 const BASE_URL_PREDICT = "http://2b40-35-230-190-61.ngrok.io/predict";
+=======
+const BASE_URL_PREDICT = "http://55e3-35-221-213-157.ngrok.io/predict";
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 
 const UPLOAD = {
     uploadImage: async(payload) => {
@@ -33,12 +37,33 @@ const UPLOAD = {
                     },
                 });
 
+<<<<<<< HEAD
                 return resolve({ categories, image: image.data });
             });
         } catch (error) {
             return error;
         }
     },
+=======
+        return resolve({ categories, image: image.data });
+      });
+    } catch (error) {
+      return error;
+    }
+  },
+  uploadAvatar: async (payload) => {
+    try {
+      const url = await axios.post(`${BASE_URL}/api/upload`, payload, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      return url;
+    } catch (error) {
+      return error;
+    }
+  },
+>>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 };
 
 export default UPLOAD;

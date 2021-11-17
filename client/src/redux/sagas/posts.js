@@ -9,12 +9,18 @@ function* fetchPosts() {
 
 function* fetchPostsTimeline() {
   const posts = yield call(api.PostAPI.fetchPostsTimeline);
-  yield put(actions.getPosts.getPostsSuccess(posts.data));
+  yield delay(500);
+  if (posts.data.length !== 0) {
+    yield put(actions.getPosts.getPostsSuccess(posts.data));
+  }
 }
 
 function* fetchProfilePosts(userId) {
   const posts = yield call(api.PostAPI.fetchProfilePosts, userId);
-  yield put(actions.getProfilePosts.getProfilePostsSuccess(posts.data));
+  yield delay(500);
+  if (posts.data.length !== 0) {
+    yield put(actions.getProfilePosts.getProfilePostsSuccess(posts.data));
+  }
 }
 
 export function* fetchPostsSaga() {
@@ -34,9 +40,10 @@ export function* fetchPostsSaga() {
 export function* fetchPostsLoadMore(action) {
   try {
     const res = yield call(api.PostAPI.fetchPosts, action.payload);
-    yield delay(1000);
-    // console.log(res.data);
-    yield put(actions.getPostsLoadMore.getPostsLoadMoreSuccess(res.data));
+    yield delay(500);
+    if (res.data.length !== 0) {
+      yield put(actions.getPostsLoadMore.getPostsLoadMoreSuccess(res.data));
+    }
   } catch (error) {
     return error;
   }
@@ -48,6 +55,15 @@ export function* fetchProfilePostsSaga(action) {
   } catch (error) {
     console.log(error);
     yield put(actions.getProfilePosts.getPostsFailure());
+  }
+}
+
+export function* fetchTopLikedPosts() {
+  try {
+    const posts = yield call(api.PostAPI.fetchTopLikedPosts);
+    yield put(actions.getTopLikedPosts.getTopLikedPostsSuccess(posts.data));
+  } catch (error) {
+    return error;
   }
 }
 

@@ -1,3 +1,4 @@
+import { getTopLikedPosts } from "redux/actions/posts";
 import { INIT_STATE } from "../../constant";
 import {
   createPost,
@@ -8,20 +9,28 @@ import {
   interactUser,
   getPostsLoadMore,
   searchPosts,
+  getProfileUser,
+  resetPosts,
 } from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
   switch (action.type) {
+    case getType(resetPosts):
+      return {
+        ...state,
+        data: [],
+      };
     case getType(getPosts.getPostsRequest):
       return {
         ...state,
         isLoading: true,
+        data: [],
       };
     case getType(getPosts.getPostsSuccess):
       return {
         ...state,
         isLoading: false,
-        data: action.payload,
+        data: [...new Map(action.payload.map((item) => [item["_id"], item])).values()],
       };
     case getType(getPosts.getPostsFailure):
       return {
@@ -37,7 +46,11 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
-        data: [...state.data, ...action.payload],
+        data: [
+          ...new Map(
+            [...state.data, ...action.payload].map((item) => [item["_id"], item])
+          ).values(),
+        ],
       };
     case getType(getProfilePosts.getProfilePostsRequest):
       return {
@@ -48,8 +61,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
-        data: action.payload.posts,
-        profile: action.payload.user,
+        data: [...state.data, ...action.payload],
       };
     case getType(getProfilePosts.getProfilePostsFailure):
       return {
@@ -57,6 +69,20 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         isLoading: false,
         data: [],
         profile: undefined,
+      };
+    case getType(getTopLikedPosts.getTopLikedPostsRequest):
+      return {
+        ...state,
+      };
+    case getType(getTopLikedPosts.getTopLikedPostsSuccess):
+      return {
+        ...state,
+        topLiked: action.payload,
+      };
+    case getType(getProfileUser):
+      return {
+        ...state,
+        profile: action.payload,
       };
     case getType(searchPosts.searchPostsRequest):
       return {

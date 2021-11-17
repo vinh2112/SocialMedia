@@ -44,7 +44,8 @@ export const DescWrapper = styled.div`
 `;
 
 export const Desc = styled.div`
-  line-height: 1.3rem;
+  margin: 12px 0 8px;
+  line-height: 1.4rem;
 `;
 
 export const LoadmoreButton = styled.div`

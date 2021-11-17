@@ -87,40 +87,34 @@ export const register = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  if (req.userId === req.params.userId) {
-    const { name, avatar, city, from, desc, creditCard } = req.body;
-
-    // Check Password and Hash Password
-    if (req.body.password) {
-      if (req.body.password.length < 6)
-        return res
-          .status(400)
-          .json({ msg: "Password must have at least 6 letters." });
-      try {
-        req.body.password = await bcrypt.hash(req.body.password, 10);
-      } catch (error) {
-        return res.status(500).json({ msg: error.message });
-      }
-    }
-
+  const { name, avatar, city, from, desc, creditCard, password } = req.body;
+  // Check Password and Hash Password
+  var newPassword;
+  if (password) {
+    if (password.length < 6)
+      return res.status(400).json({ msg: "Password must have at least 6 letters." });
     try {
-      await UserModel.findByIdAndUpdate(req.userId, {
-        password: req.body.password,
-        name: name,
-        avatar: avatar,
-        city: city,
-        from: from,
-        desc: desc,
-        creditCard: creditCard,
-      });
+      newPassword = await bcrypt.hash(password, 10);
     } catch (error) {
-      res.status(500).json({ msg: error.message });
+      return res.status(500).json({ msg: error.message });
     }
-
-    res.status(200).json("Updated user");
-  } else {
-    res.status(400).json({ msg: "You are not allowed to update this user" });
   }
+
+  try {
+    await UserModel.findByIdAndUpdate(req.userId, {
+      password: newPassword,
+      name: name,
+      avatar: avatar,
+      city: city,
+      from: from,
+      desc: desc,
+      creditCard: creditCard,
+    });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+
+  res.status(200).json("Updated user");
 };
 
 export const refreshToken = (req, res) => {
@@ -163,6 +157,28 @@ export const getUser = async (req, res) => {
   }
 };
 
+export const getProfileUser = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId)
+      .populate({
+        path: "followers",
+        select: "name email avatar",
+      })
+      .populate({
+        path: "followings",
+        select: "name email avatar",
+      })
+      .select("-password");
+    if (!user) {
+      return res.status(400).json({ msg: "User does not exist." });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const interactUser = async (req, res) => {
   try {
     if (req.userId !== req.params.userId) {
@@ -185,19 +201,11 @@ export const interactUser = async (req, res) => {
               select: "name email avatar",
             });
 
-          const newCurrentUser = await UserModel.findOneAndUpdate(
+          await UserModel.findOneAndUpdate(
             { _id: currentUser._id },
             { $push: { followings: req.params.userId } },
             { new: true }
-          )
-            .populate({
-              path: "followers",
-              select: "name email avatar",
-            })
-            .populate({
-              path: "followings",
-              select: "name email avatar",
-            });
+          );
 
           res.status(200).json(newUser);
         } else {
@@ -215,19 +223,11 @@ export const interactUser = async (req, res) => {
               select: "name email avatar",
             });
 
-          const newCurrentUser = await UserModel.findOneAndUpdate(
+          await UserModel.findOneAndUpdate(
             { _id: currentUser._id },
             { $pull: { followings: req.params.userId } },
             { new: true }
-          )
-            .populate({
-              path: "followers",
-              select: "name email avatar",
-            })
-            .populate({
-              path: "followings",
-              select: "name email avatar",
-            });
+          );
 
           res.status(200).json(newUser);
         }
@@ -237,6 +237,19 @@ export const interactUser = async (req, res) => {
     } else {
       res.status(400).json({ msg: "You can not follow yourself." });
     }
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const checkPassword = async (req, res) => {
+  try {
+    const { password } = req.query;
+    const user = await UserModel.findById(req.userId).select("password");
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (result) return res.status(200).json(true);
+      else return res.status(200).json(false);
+    });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

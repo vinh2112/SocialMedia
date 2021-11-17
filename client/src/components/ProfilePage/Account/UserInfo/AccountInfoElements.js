@@ -1,3 +1,5 @@
+import { Avatar, AvatarGroup } from "@mui/material";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const AvatarWrapper = styled.div`
@@ -24,7 +26,7 @@ export const AvatarWrapper = styled.div`
   }
 `;
 
-export const Avatar = styled.img`
+export const AvatarUser = styled.img`
   width: 110px;
   height: 110px;
   border-radius: 50%;
@@ -36,7 +38,7 @@ export const Avatar = styled.img`
   }
 `;
 
-export const EditButton = styled.div`
+export const EditButton = styled(Link)`
   position: absolute;
   display: flex;
   justify-content: center;
@@ -46,6 +48,7 @@ export const EditButton = styled.div`
   width: 30px;
   height: 30px;
   border-radius: 50%;
+  color: ${({ theme }) => theme.textColor};
   background-color: ${({ theme }) => theme.contrastColor};
   transition: all 0.05s ease-in-out;
   cursor: pointer;
@@ -162,8 +165,7 @@ export const Button = styled.button`
   border-radius: 5px;
   padding: 8px 16px;
   text-transform: capitalize;
-  background: ${({ isFollowed }) =>
-    isFollowed ? "transparent" : "var(--primary-color)"};
+  background: ${({ isFollowed }) => (isFollowed ? "transparent" : "var(--primary-color)")};
   color: ${({ isFollowed, theme }) => (isFollowed ? theme.textColor : "#fff")};
   transition: all 0.1s ease-in-out;
   cursor: pointer;
@@ -174,5 +176,18 @@ export const Button = styled.button`
 
   & .iconify {
     font-size: 16px;
+  }
+`;
+
+export const CustomAvatar = styled(Avatar)``;
+
+export const CustomAvatarGroup = styled(AvatarGroup)`
+  && {
+    & > .MuiAvatar-root {
+      width: 20px;
+      height: 20px;
+      border-color: ${({ theme }) => theme.contrastColor} !important;
+      font-size: 0.8rem;
+    }
   }
 `;

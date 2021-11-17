@@ -1,4 +1,6 @@
-import { createActions } from "redux-actions";
+import { createAction, createActions } from "redux-actions";
+
+export const resetPosts = createAction("RESET_POSTS");
 
 export const getPosts = createActions({
   getPostsRequest: undefined,
@@ -15,6 +17,11 @@ export const getProfilePosts = createActions({
   getProfilePostsRequest: (payload) => payload,
   getProfilePostsSuccess: (payload) => payload,
   getProfilePostsFailure: (err) => err,
+});
+
+export const getTopLikedPosts = createActions({
+  getTopLikedPostsRequest: undefined,
+  getTopLikedPostsSuccess: (payload) => payload,
 });
 
 export const searchPosts = createActions({

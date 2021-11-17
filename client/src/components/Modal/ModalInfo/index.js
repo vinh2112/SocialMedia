@@ -5,7 +5,7 @@ import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 
-export default function ModalInfo({ post }) {
+export default function ModalInfo({ post, comments }) {
   const [isLiked, setIsLiked] = useState(false);
   const { currentUser } = useSelector(authState$);
   const dispatch = useDispatch();
@@ -41,9 +41,17 @@ export default function ModalInfo({ post }) {
     }
   };
 
+  const countComments = () => {
+    let count = 0;
+    comments.forEach((comment) => {
+      count = count + 1 + comment.reply.length;
+    });
+    return count;
+  };
+
   return (
     <InfoWrapper>
-      <Likes>{post.likes.length} likes</Likes> ● 123 comments
+      <Likes>{post.likes.length} likes</Likes> ● {countComments()} comments
       <LikeButtonWrapper>
         <LikeButton onClick={handleReact}>
           {isLiked ? (

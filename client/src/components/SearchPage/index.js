@@ -38,6 +38,7 @@ export default function SearchSection() {
   const handleModal = (index) => {
     if (isShowModal) {
       setIsShowModal(false);
+      dispatch(actions.showBoxComment.showBoxCommentRequest(undefined));
     } else {
       setIsShowModal(true);
       setIndex(index);
@@ -48,7 +49,7 @@ export default function SearchSection() {
       <SearchHeader onSubmit={handleSearch} />
       <SearchList posts={data} showModal={handleModal} />
       {(index || index === 0) && (
-        <Modal index={index} isShow={isShowModal} closeModal={handleModal} />
+        <Modal post={data[index]} isShow={isShowModal} closeModal={handleModal} />
       )}
     </SearchContainer>
   );
