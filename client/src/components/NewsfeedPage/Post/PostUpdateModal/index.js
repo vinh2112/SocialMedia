@@ -22,16 +22,22 @@ import {
   PostButtonWrapper,
   PostButton,
   LoadingSection,
+  PostPayment,
+  SwitchWrapper,
+  InputPrice,
 } from "./PostUpdateModalElements";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, hideModal } from "redux/actions";
 import { modalState$, postState$ } from "redux/selectors";
+import Switch from "@mui/material/Switch";
 
 const initial_post = {
   desc: "",
   category: [],
   image: "",
+  isPaymentRequired: false,
+  price: 0,
 };
 
 const PostUpdateModal = ({ user }) => {
@@ -43,7 +49,9 @@ const PostUpdateModal = ({ user }) => {
   const [post, setPost] = useState(initial_post);
   const [isSmall, setIsSmall] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isChecked,setIsChecked] = useState(false);
 
+  console.log(post);
   useEffect(() => {
     if (!isLoading) {
       setPost(initial_post);
@@ -70,6 +78,16 @@ const PostUpdateModal = ({ user }) => {
 
   const handleRemovePhoto = () => {
     setPost({ ...post, image: "" });
+  };
+
+  const handlePayment = () => {
+    const cac = !post.isPaymentRequired;
+    setPost({ ...post, isPaymentRequired: cac });
+    setIsChecked(!isChecked);
+  };
+
+  const handlePrice = (e) => {
+    setPost({ ...post, price: e.target.value });
   };
 
   const closeModal = React.useCallback(
@@ -102,6 +120,16 @@ const PostUpdateModal = ({ user }) => {
               <Avatar src={user.avatar} alt="avatar" />
             </AvatarWrapper>
             <Name>@{user.name}</Name>
+            <PostPayment>
+              <SwitchWrapper>
+                  <Switch
+                    checked={post.isPaymentRequired}
+                    onChange={handlePayment}
+                  />
+                  Payment Required
+              </SwitchWrapper>
+              <InputPrice onChange={handlePrice} type="number" disabled={isChecked ? '' : 'disabled'}></InputPrice>
+            </PostPayment>
           </UserWrapper>
           <DescArea
             className="desc-area"

@@ -18,6 +18,15 @@ const UserAPI = {
       return error;
     }
   },
+  register: async(payload) =>{
+    try{
+      const res = await axios.post(`${BASE_URL}/user/register`,payload);
+      return res;
+    }
+    catch(error){
+      return error;
+    }
+  }
 };
 
 export default UserAPI;

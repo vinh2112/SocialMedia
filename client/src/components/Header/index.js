@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$, modalState$ } from "redux/selectors";
 
-const Header = () => {
+const Header = ({toggle}) => {
   const [isOpen, setIsOpen] = useState(false);
   const domNode = useRef();
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ const Header = () => {
     dispatch(
       actions.login.loginRequest({
         email: "18110396@student.hcmute.edu.vn",
-        password: "123456",
+        password: "1234567",
       })
     );
   }, [dispatch]);
@@ -85,8 +85,8 @@ const Header = () => {
             </RoundButtonLink>
           ) : (
             <AuthGroupButton>
-              <SignIn to="#">Sign in</SignIn>
-              <SignUp to="#">Sign up</SignUp>
+              <SignIn to="/home" onClick={toggle}>Sign in</SignIn>
+              <SignUp to="/signup">Sign up</SignUp>
             </AuthGroupButton>
           )}
 

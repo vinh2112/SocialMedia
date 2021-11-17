@@ -236,3 +236,24 @@ export const PostButton = styled.button`
     opacity: 1;
   }
 `;
+
+export const PostPayment = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  align-items: flex-end;
+`;
+
+export const SwitchWrapper = styled.div`
+  display:flex;
+  align-items: center;
+  font-size:14px;
+
+`
+export const InputPrice = styled.input`
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  width:50%;
+`;

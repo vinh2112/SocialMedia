@@ -18,6 +18,8 @@ import {
 } from "./PostItemElements";
 import moment from "moment";
 import { saveAs } from "file-saver";
+import {PaymentAPI} from 'api';
+import { useHistory } from "react-router-dom";
 
 const getFirstLetter = (name) => {
   return name.charAt(0).toUpperCase();
@@ -33,6 +35,7 @@ const PostItem = ({ post }) => {
   const [isShowComment, setIsShowComment] = useState(false);
   const postDesc = useRef();
   const boxComment = useRef();
+  const history = useHistory();
 
   useEffect(() => {
     if (isOverflow(postDesc.current)) {
@@ -55,9 +58,22 @@ const PostItem = ({ post }) => {
       boxComment.current.focus({ preventScroll: true });
     }
   };
-
   const handleDownload = async () => {
-    saveAs(post.image.url, `${post.image.public_id}.png`);
+    if(post.isPaymentRequired){
+      const isPaid = await PaymentAPI.checkPayment(post._id);
+      console.log(post._id)
+      console.log(isPaid)
+      if(isPaid.data){
+        saveAs(post.image.url, `${post.image.public_id}.png`);
+      } 
+      else{
+        history.push('/checkout',{post});     
+      }
+    }
+    else{
+      saveAs(post.image.url, `${post.image.public_id}.png`);
+    }
+    
   };
 
   return (
