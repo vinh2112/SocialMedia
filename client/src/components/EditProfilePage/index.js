@@ -21,6 +21,7 @@ const EditProfileContainer = styled.div`
 
 export default function EditProfile() {
   const { currentUser } = useSelector(authState$);
+
   return (
     <EditProfileContainer>
       <Menu />
@@ -28,9 +29,7 @@ export default function EditProfile() {
         <Route path="/setting/info">
           <InformationSection user={currentUser} />
         </Route>
-        <Route path="/setting/security">
-          <SecuritySection />
-        </Route>
+        <Route path="/setting/security">{currentUser && <SecuritySection />}</Route>
       </Switch>
     </EditProfileContainer>
   );

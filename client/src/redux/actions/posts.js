@@ -1,4 +1,6 @@
-import { createActions } from "redux-actions";
+import { createAction, createActions } from "redux-actions";
+
+export const resetPosts = createAction("RESET_POSTS");
 
 export const getPosts = createActions({
   getPostsRequest: undefined,

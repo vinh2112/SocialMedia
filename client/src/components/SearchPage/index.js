@@ -38,6 +38,7 @@ export default function SearchSection() {
   const handleModal = (index) => {
     if (isShowModal) {
       setIsShowModal(false);
+      dispatch(actions.showBoxComment.showBoxCommentRequest(undefined));
     } else {
       setIsShowModal(true);
       setIndex(index);

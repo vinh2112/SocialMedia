@@ -36,6 +36,7 @@ export const PostImage = styled.img`
   height: auto;
   object-fit: contain;
   max-height: 550px;
+  background-color: rgba(0, 0, 0, 0.1);
 `;
 
 export const AuthorInfo = styled.div`

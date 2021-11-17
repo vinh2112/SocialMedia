@@ -53,7 +53,26 @@ export default function InformationSection({ user }) {
   };
 
   const handleChangeValue = (e) => {
-    const { name, value } = e.target;
+    var { name, value } = e.target;
+    if (name === "creditCard") {
+      if (value.length < 20) {
+        value = value.replaceAll("-", "");
+        const re = /^[0-9\b]+$/;
+        if (e.target.value === "" || re.test(value)) {
+          let loop = Math.floor((value.length - 1) / 4);
+          for (var i = 1; i <= loop; i++) {
+            value =
+              value.substring(0, i * 4 + i - 1) +
+              "-" +
+              value.substring(i * 4 + i - 1, value.length);
+          }
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
+    }
     setNewUser({ ...newUser, [name]: value });
   };
 
@@ -167,7 +186,7 @@ export default function InformationSection({ user }) {
               <TextField
                 name="creditCard"
                 onChange={handleChangeValue}
-                defaultValue={newUser.creditCard}
+                value={newUser.creditCard}
                 label="Credit Card"
                 style={{ width: "300px" }}
                 size="small"

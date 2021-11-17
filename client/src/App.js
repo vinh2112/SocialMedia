@@ -3,7 +3,7 @@ import { GlobalStyles } from "./styles/global";
 import { ThemeProvider } from "styled-components";
 import { ThemeContext } from "./context/themeContext";
 import { lightTheme, darkTheme } from "./styles/theme";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Header from "./components/Header";
 import NewsFeedPage from "./pages/NewsFeedPage";
 import NotFoundPage from "pages/NotFoundPage";
@@ -27,6 +27,12 @@ function App() {
     }
   }, [toast]);
 
+  const handleLoggedIn = () => {
+    const TOKEN = localStorage.getItem("access_token");
+    if (TOKEN) return true;
+    return false;
+  };
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
@@ -36,6 +42,7 @@ function App() {
 
           <Switch>
             <Route exact path="/" component={NewsFeedPage} />
+            <Route path="/login">{handleLoggedIn() ? <Redirect to="/" /> : <NotFoundPage />}</Route>
             <Route path="/search" component={SearchPage} />
             <Route path="/setting" component={EditProfilePage} />
             <Route path="/profile/:userId" component={ProfilePage} />

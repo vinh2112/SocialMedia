@@ -10,20 +10,27 @@ import {
   getPostsLoadMore,
   searchPosts,
   getProfileUser,
+  resetPosts,
 } from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
   switch (action.type) {
+    case getType(resetPosts):
+      return {
+        ...state,
+        data: [],
+      };
     case getType(getPosts.getPostsRequest):
       return {
         ...state,
         isLoading: true,
+        data: [],
       };
     case getType(getPosts.getPostsSuccess):
       return {
         ...state,
         isLoading: false,
-        data: action.payload,
+        data: [...new Map(action.payload.map((item) => [item["_id"], item])).values()],
       };
     case getType(getPosts.getPostsFailure):
       return {
@@ -39,7 +46,11 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
-        data: [...state.data, ...action.payload],
+        data: [
+          ...new Map(
+            [...state.data, ...action.payload].map((item) => [item["_id"], item])
+          ).values(),
+        ],
       };
     case getType(getProfilePosts.getProfilePostsRequest):
       return {

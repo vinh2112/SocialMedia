@@ -64,23 +64,9 @@ export const getPostsTimeline = async (req, res) => {
     const user = await UserModel.findOne({ _id: req.userId });
 
     let posts = [];
-    user.followings.forEach(async (following, index) => {
-      const userPosts = await PostModel.find({ userId: following.toString() })
-        .limit(3)
-        .populate({
-          path: "userId",
-          select: "name email avatar",
-        })
-        .populate({
-          path: "likes",
-          select: "name email avatar",
-        })
-        .sort("-createdAt");
-      posts = [...posts, ...userPosts];
-
-      if (index === user.followings.length - 1) {
-        const newPosts = await PostModel.find({})
-          .limit(5)
+    const friendPosts = await Promise.all(
+      user.followings.map((following, index) => {
+        return PostModel.find({ userId: following.toString() })
           .populate({
             path: "userId",
             select: "name email avatar",
@@ -89,15 +75,29 @@ export const getPostsTimeline = async (req, res) => {
             path: "likes",
             select: "name email avatar",
           })
-          .sort("-createdAt");
-        posts = [...posts, ...newPosts];
-        return res.json(
-          posts.sort((a, b) => {
-            return b.createdAt - a.createdAt;
-          })
-        );
-      }
-    });
+          .sort("-createdAt")
+          .limit(3);
+      })
+    );
+    const newPosts = await PostModel.find({})
+      .limit(5)
+      .populate({
+        path: "userId",
+        select: "name email avatar",
+      })
+      .populate({
+        path: "likes",
+        select: "name email avatar",
+      })
+      .sort("-createdAt");
+
+    posts = newPosts.concat(...friendPosts);
+
+    return res.json(
+      posts.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -106,7 +106,7 @@ export const getPostsTimeline = async (req, res) => {
 export const getTopLikedPosts = async (req, res) => {
   try {
     const posts = await PostModel.find()
-      .sort("-likes")
+      .sort("-likes -createdAt")
       .limit(6)
       .populate({
         path: "userId",

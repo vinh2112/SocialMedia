@@ -1,7 +1,6 @@
 import React from "react";
 import {
   AvatarWrapper,
-  Avatar,
   EditButton,
   AccountInfo,
   AccountName,
@@ -12,6 +11,9 @@ import {
   Detail,
   ButtonWrapper,
   Button,
+  AvatarUser,
+  CustomAvatar,
+  CustomAvatarGroup,
 } from "./AccountInfoElements";
 import DefaultAvatar from "images/DefaultAvatar.png";
 import { Icon } from "@iconify/react";
@@ -32,7 +34,7 @@ export default function UserInfo() {
   return (
     <>
       <AvatarWrapper>
-        <Avatar src={profile?.avatar ? profile.avatar : DefaultAvatar} />
+        <AvatarUser src={profile?.avatar ? profile.avatar : DefaultAvatar} />
         {profile?._id === currentUser?._id && (
           <EditButton to="/setting/info">
             <Icon icon="akar-icons:edit" />
@@ -45,12 +47,24 @@ export default function UserInfo() {
         <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at.</Desc>
         <Details isYourAccount={isYourAccount}>
           <DetailItem>
-            <Detail>{profile?.followers.length}</Detail>
+            <Detail>
+              <CustomAvatarGroup max={4}>
+                {profile?.followers.map((user) => {
+                  return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
+                })}
+              </CustomAvatarGroup>
+            </Detail>
             <Title>Followers</Title>
           </DetailItem>
 
           <DetailItem>
-            <Detail>{profile?.followings.length}</Detail>
+            <Detail>
+              <CustomAvatarGroup max={4}>
+                {profile?.followings.map((user) => {
+                  return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
+                })}
+              </CustomAvatarGroup>
+            </Detail>
             <Title>Followings</Title>
           </DetailItem>
 

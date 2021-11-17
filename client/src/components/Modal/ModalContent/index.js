@@ -23,11 +23,15 @@ export default function ModalContent({ post }) {
   const descRef = useRef();
 
   useEffect(() => {
-    if (EllipsisActive(descRef.current)) {
-      setIsOverflow(true);
-    } else {
-      setIsOverflow(false);
-    }
+    const setOverFlow = () => {
+      if (EllipsisActive(descRef.current)) {
+        setIsOverflow(true);
+      } else {
+        setIsOverflow(false);
+      }
+    };
+
+    setOverFlow();
   }, [post]);
 
   const handleOverflow = () => {

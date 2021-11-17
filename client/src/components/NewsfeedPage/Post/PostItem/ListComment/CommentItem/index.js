@@ -76,7 +76,7 @@ const CommentItem = ({ comment }) => {
   return (
     <Container>
       <LeftSide>
-        <AvatarLink to={`/${comment.userId._id}`}>
+        <AvatarLink to={`/profile/${comment.userId._id}`}>
           <Avatar src={comment.userId.avatar} />
         </AvatarLink>
       </LeftSide>
@@ -85,7 +85,7 @@ const CommentItem = ({ comment }) => {
         <CommentContainer>
           <CommentWrapper>
             <CommentContent ref={currentReply} className="post__comment">
-              <Name to={`/${comment.userId._id}`} className="name__author">
+              <Name to={`/profile/${comment.userId._id}`} className="name__author">
                 @{comment.userId.name}
               </Name>
               <Comment>{comment.comment}</Comment>

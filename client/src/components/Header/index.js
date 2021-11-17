@@ -50,8 +50,8 @@ const Header = () => {
   const handleLogin = React.useCallback(() => {
     dispatch(
       actions.login.loginRequest({
-        email: "18110396@student.hcmute.edu.vn",
-        password: "1234567",
+        email: "vuongquocvinh.bh@gmail.com",
+        password: "123456",
       })
     );
   }, [dispatch]);
@@ -64,7 +64,7 @@ const Header = () => {
     <HeaderContainer>
       <HeaderWrapper>
         <HeaderRight>
-          <LogoLink to="/">
+          <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
             <h2>Logo</h2>
           </LogoLink>
 

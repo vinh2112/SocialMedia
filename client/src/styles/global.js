@@ -1,11 +1,11 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-    /* html {
+    html {
         scroll-behavior: smooth;
     }
 
-    ::-webkit-scrollbar {
+    /* ::-webkit-scrollbar {
         -webkit-appearance: none;
         width: 6px;
         height: 6px;

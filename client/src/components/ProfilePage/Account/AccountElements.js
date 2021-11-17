@@ -29,11 +29,34 @@ export const AccountWrapper = styled.div`
 export const ProfileLoadingContainer = styled.div`
   width: 300px;
   height: 320px;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 20px;
+  }
 `;
 
 export const CustomCard = styled(Card)`
   && {
     background: ${({ theme }) => theme.primary};
+
+    @media (max-width: 1024px) {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      height: 100%;
+    }
+  }
+`;
+
+export const ProfileLoadingWrapper = styled.div`
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
   }
 `;
 
@@ -42,7 +65,14 @@ export const CustomCardContent = styled(CardContent)`
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 12px;
+
+    @media (max-width: 1024px) {
+      ${ProfileLoadingWrapper} & {
+        align-items: flex-start;
+      }
+    }
   }
 `;
 

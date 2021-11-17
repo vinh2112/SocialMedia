@@ -3,7 +3,7 @@ import axios from "axios";
 import uuid from "react-uuid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const BASE_URL_PREDICT = "http://0bc2-35-229-251-104.ngrok.io/predict";
+const BASE_URL_PREDICT = "http://55e3-35-221-213-157.ngrok.io/predict";
 
 const UPLOAD = {
   uploadImage: async (payload) => {

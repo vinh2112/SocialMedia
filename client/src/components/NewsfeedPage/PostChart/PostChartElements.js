@@ -19,6 +19,26 @@ export const PostChartContainer = styled.div`
   }
 `;
 
+export const PostTopTitle = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 10px;
+
+  & > .title {
+    display: inline-block;
+    white-space: nowrap;
+    margin-right: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.subTextColor};
+  }
+
+  @media (max-width: 700px) {
+    padding: 0 8px;
+  }
+`;
+
 export const PostChartWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -42,10 +62,6 @@ export const PostChartWrapper = styled.div`
       width: 140px;
       height: 140px;
     }
-    /* grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 140px;
-    grid-template-areas: unset;
-    margin-bottom: 20px; */
   }
 
   @media (max-width: 700px) {
@@ -89,34 +105,6 @@ export const PostChartItem = styled.div`
 
   &:hover {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
-  }
-`;
-
-export const PostTopTitle = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  margin-bottom: 20px;
-
-  & > h3 {
-    display: inline-block;
-    white-space: nowrap;
-    margin-right: 10px;
-    font-weight: 400;
-    color: ${({ theme }) => theme.subTextColor};
-  }
-
-  & > span {
-    display: block;
-    height: 1.8px;
-    width: 100%;
-    opacity: 1;
-    background-color: ${({ theme }) => theme.hoverColor};
-    user-select: none;
-  }
-
-  @media (max-width: 700px) {
-    padding: 0 8px;
   }
 `;
 

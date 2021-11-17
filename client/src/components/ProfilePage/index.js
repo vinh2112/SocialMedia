@@ -17,6 +17,7 @@ const ProfileContainer = styled.div`
   @media (max-width: 1024px) {
     flex-direction: column;
     padding: 54px 0 0;
+    max-width: 100%;
   }
 `;
 

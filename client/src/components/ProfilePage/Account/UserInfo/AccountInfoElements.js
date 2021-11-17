@@ -1,3 +1,4 @@
+import { Avatar, AvatarGroup } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -25,7 +26,7 @@ export const AvatarWrapper = styled.div`
   }
 `;
 
-export const Avatar = styled.img`
+export const AvatarUser = styled.img`
   width: 110px;
   height: 110px;
   border-radius: 50%;
@@ -175,5 +176,18 @@ export const Button = styled.button`
 
   & .iconify {
     font-size: 16px;
+  }
+`;
+
+export const CustomAvatar = styled(Avatar)``;
+
+export const CustomAvatarGroup = styled(AvatarGroup)`
+  && {
+    & > .MuiAvatar-root {
+      width: 20px;
+      height: 20px;
+      border-color: ${({ theme }) => theme.contrastColor} !important;
+      font-size: 0.8rem;
+    }
   }
 `;

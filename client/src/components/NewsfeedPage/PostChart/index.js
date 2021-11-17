@@ -7,9 +7,9 @@ import {
   PostChartContainer,
   PostChartItem,
   PostChartWrapper,
+  PostTopTitle,
 } from "./PostChartElements";
 import Modal from "components/Modal";
-import { PostTopTitle } from "../Post/PostElements";
 
 export default function PostChart() {
   const [currentPost, setCurrentPost] = useState(null);
@@ -33,8 +33,7 @@ export default function PostChart() {
     <>
       <PostChartContainer>
         <PostTopTitle>
-          <h3>Top Liked</h3>
-          <span></span>
+          <div className="title">Top Liked</div>
         </PostTopTitle>
         <PostChartWrapper>
           {topLiked

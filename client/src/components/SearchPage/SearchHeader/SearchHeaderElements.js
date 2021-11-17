@@ -19,7 +19,7 @@ export const SearchBar = styled.div`
   max-width: 350px;
   background: ${({ theme }) => theme.contrastColor};
   padding: 12px 25px 12px 45px;
-  border-radius: 24px;
+  border-radius: 24px 24px 2px 24px;
 `;
 
 export const SearchLabel = styled.label`

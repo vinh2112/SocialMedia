@@ -1,4 +1,4 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, delay } from "redux-saga/effects";
 import * as actions from "../actions";
 import * as api from "../../api";
 
@@ -9,12 +9,18 @@ function* fetchPosts() {
 
 function* fetchPostsTimeline() {
   const posts = yield call(api.PostAPI.fetchPostsTimeline);
-  yield put(actions.getPosts.getPostsSuccess(posts.data));
+  yield delay(500);
+  if (posts.data.length !== 0) {
+    yield put(actions.getPosts.getPostsSuccess(posts.data));
+  }
 }
 
 function* fetchProfilePosts(userId) {
   const posts = yield call(api.PostAPI.fetchProfilePosts, userId);
-  yield put(actions.getProfilePosts.getProfilePostsSuccess(posts.data));
+  yield delay(500);
+  if (posts.data.length !== 0) {
+    yield put(actions.getProfilePosts.getProfilePostsSuccess(posts.data));
+  }
 }
 
 export function* fetchPostsSaga() {
@@ -34,8 +40,10 @@ export function* fetchPostsSaga() {
 export function* fetchPostsLoadMore(action) {
   try {
     const res = yield call(api.PostAPI.fetchPosts, action.payload);
-    // console.log(res.data);
-    yield put(actions.getPostsLoadMore.getPostsLoadMoreSuccess(res.data));
+    yield delay(500);
+    if (res.data.length !== 0) {
+      yield put(actions.getPostsLoadMore.getPostsLoadMoreSuccess(res.data));
+    }
   } catch (error) {
     return error;
   }

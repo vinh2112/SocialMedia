@@ -9,6 +9,7 @@ import {
   searchPosts,
   createPost,
   reactPost,
+  resetPosts,
 } from "./posts";
 import {
   showBoxComment,
@@ -32,6 +33,7 @@ export {
   toast,
   login,
   logout,
+  resetPosts,
   getProfileUser,
   getCurrentUser,
   interactUser,

@@ -24,7 +24,7 @@ export default function ProfilePage() {
           window.innerHeight +
             document.documentElement.scrollTop -
             document.documentElement.offsetHeight
-        ) <= 1
+        ) <= 200
       ) {
         if (!isLoading) {
           setPage(page + 1);
@@ -37,6 +37,10 @@ export default function ProfilePage() {
       window.removeEventListener("scroll", scrollWindow);
     };
   }, [isLoading, page]);
+
+  useEffect(() => {
+    dispatch(actions.resetPosts());
+  }, [dispatch]);
 
   useEffect(() => {
     const getProfileUser = async () => {
