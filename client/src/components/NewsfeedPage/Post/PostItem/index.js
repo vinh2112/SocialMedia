@@ -14,37 +14,48 @@ import {
   AuthorName,
   PostCreated,
   Description,
-  ToggleButton,
+  CustomButton,
 } from "./PostItemElements";
 import moment from "moment";
 import { saveAs } from "file-saver";
-import {PaymentAPI} from 'api';
+import { PaymentAPI } from "api";
 import { useHistory } from "react-router-dom";
+import {
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Stack,
+  Switch,
+} from "@mui/material";
+import { authState$ } from "redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { PostAPI } from "api";
+import * as actions from "redux/actions";
+import { LoadingButton } from "@mui/lab";
 
 const getFirstLetter = (name) => {
   return name.charAt(0).toUpperCase();
 };
 
-const isOverflow = (e) => {
-  return e.offsetHeight < e.scrollHeight || e.offsetWidth < e.scrollWidth;
-};
-
 const PostItem = ({ post }) => {
-  const [isDescShow, setIsDescShow] = useState(false);
-  const [overflow, setOverflow] = useState(false);
+  const [newPost, setNewPost] = useState(null);
   const [isShowComment, setIsShowComment] = useState(false);
-  const postDesc = useRef();
+  const [isOnEdit, setIsOnEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { currentUser } = useSelector(authState$);
   const boxComment = useRef();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isOverflow(postDesc.current)) {
-      setOverflow(true);
-      return;
+    if (post) {
+      setNewPost(post);
     }
-
-    setOverflow(false);
-  }, [setOverflow]);
+    return () => {
+      setNewPost(null);
+    };
+  }, [post]);
 
   const handleShowComment = () => {
     if (!isShowComment) {
@@ -58,30 +69,71 @@ const PostItem = ({ post }) => {
       boxComment.current.focus({ preventScroll: true });
     }
   };
+
   const handleDownload = async () => {
-    if(post.isPaymentRequired){
+    if (post.isPaymentRequired) {
       const isPaid = await PaymentAPI.checkPayment(post._id);
-      console.log(post._id)
-      console.log(isPaid)
-      if(isPaid.data){
+
+      if (isPaid.data) {
         saveAs(post.image.url, `${post.image.public_id}.png`);
-      } 
-      else{
-        history.push('/checkout',{post});     
+      } else {
+        history.push("/checkout", { post });
       }
-    }
-    else{
+    } else {
       saveAs(post.image.url, `${post.image.public_id}.png`);
     }
-    
+  };
+
+  const handleChangeValue = (e) => {
+    const { name, value, checked } = e.target;
+    if (name === "isPaymentRequired") {
+      setNewPost({ ...newPost, [name]: checked });
+    } else {
+      setNewPost({ ...newPost, [name]: value });
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const res = await PostAPI.updatePost({
+        data: {
+          desc: newPost.desc,
+          isPaymentRequired: newPost.isPaymentRequired,
+          price: newPost.price,
+        },
+        postId: newPost._id,
+      });
+      if (res.status === 200) {
+        dispatch(actions.updatePost(res.data));
+        dispatch(
+          actions.toast.showToast({
+            message: "Update post success",
+            type: "success",
+          })
+        );
+      } else {
+        dispatch(
+          actions.toast.showToast({
+            message: "Update post failed",
+            type: "warning",
+          })
+        );
+      }
+      setIsOnEdit(false);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <div>
+    <>
       <PostContainer>
         <PostTop>
           <PostAuthor>
             <AuthorInfo>
+              {/* {post.price} */}
               <AvatarLink to={`/profile/${post.userId._id}`}>
                 {post.userId.avatar ? (
                   <Avatar src={post.userId.avatar} />
@@ -97,27 +149,79 @@ const PostItem = ({ post }) => {
                 <AuthorName to={`/profile/${post.userId._id}`}>
                   @{post.userId.name ? post.userId.name : post.userId.email}
                 </AuthorName>
-                <PostCreated>{moment(post.createdAt).toNow(true)}</PostCreated>
+                <PostCreated>{moment(post.createdAt).fromNow()}</PostCreated>
               </RightSide>
-            </AuthorInfo>
-            <Description isShow={isDescShow}>
-              <pre className="post__desc" ref={postDesc}>
-                {post.desc}
-              </pre>
 
-              {isDescShow || !overflow ? (
-                <></>
+              {post.userId._id === currentUser?._id &&
+                (isOnEdit ? (
+                  <Stack spacing={1} direction="row">
+                    <CustomButton
+                      size="small"
+                      variant="string"
+                      onClick={() => setIsOnEdit(!isOnEdit)}
+                    >
+                      Cancel
+                    </CustomButton>
+                    <LoadingButton
+                      size="small"
+                      sx={{ height: 30 }}
+                      loading={loading}
+                      variant="outlined"
+                      color="success"
+                      onClick={handleSubmit}
+                    >
+                      Update
+                    </LoadingButton>
+                  </Stack>
+                ) : (
+                  <CustomButton
+                    size="small"
+                    variant="string"
+                    onClick={() => setIsOnEdit(!isOnEdit)}
+                  >
+                    Edit
+                  </CustomButton>
+                ))}
+            </AuthorInfo>
+            <Description>
+              {isOnEdit ? (
+                <Stack spacing={1} direction="row">
+                  <textarea name="desc" onChange={handleChangeValue} value={newPost.desc} />
+
+                  <Stack spacing={1} alignItems="center" direction="column">
+                    <Switch
+                      checked={newPost.isPaymentRequired}
+                      name="isPaymentRequired"
+                      onChange={handleChangeValue}
+                      size="small"
+                      color="primary"
+                    />
+                    <FormControl>
+                      <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-amount"
+                        name="price"
+                        value={newPost.price}
+                        disabled={!newPost.isPaymentRequired}
+                        onChange={handleChangeValue}
+                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                        label="Price"
+                        sx={{ width: 100, height: 40 }}
+                      />
+                    </FormControl>
+                  </Stack>
+                </Stack>
               ) : (
-                <ToggleButton onClick={() => setIsDescShow(!isDescShow)}>Load more</ToggleButton>
+                <pre className="post__desc">{post.desc}</pre>
               )}
             </Description>
           </PostAuthor>
           <PostImage src={post.image.url} />
         </PostTop>
         <ListAction showComment={handleShowComment} post={post} downloadImage={handleDownload} />
-        {isShowComment && <ListComment boxComment={boxComment} postId={post._id} />}
+        {isShowComment && <ListComment boxComment={boxComment} post={post} />}
       </PostContainer>
-    </div>
+    </>
   );
 };
 

@@ -12,12 +12,12 @@ import {
 import Modal from "components/Modal";
 
 export default function PostChart() {
-  const [currentPost, setCurrentPost] = useState(null);
+  const [index, setIndex] = useState(null);
   const [isShowModal, setIsShowModal] = useState(false);
   const { topLiked } = useSelector(postState$);
 
-  const handleViewPost = (post) => {
-    setCurrentPost(post);
+  const handleViewPost = (index) => {
+    setIndex(index);
     handleModal();
   };
 
@@ -40,7 +40,7 @@ export default function PostChart() {
             ? topLiked.map((post, index) => (
                 <PostChartItem
                   key={index}
-                  onClick={() => handleViewPost(post)}
+                  onClick={() => handleViewPost(index)}
                   style={{
                     backgroundImage: `url(${post.image.url})`,
                   }}
@@ -49,7 +49,9 @@ export default function PostChart() {
             : [...Array(6)].map((item, index) => <PostChartItemLoading key={index} />)}
         </PostChartWrapper>
       </PostChartContainer>
-      {currentPost && <Modal post={currentPost} isShow={isShowModal} closeModal={handleModal} />}
+      {(index || index === 0) && isShowModal && (
+        <Modal post={topLiked[index]} isShow={isShowModal} closeModal={handleModal} />
+      )}
     </>
   );
 }

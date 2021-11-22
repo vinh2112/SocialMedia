@@ -64,8 +64,10 @@ export const updateComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   try {
     const comment = await CommentModel.findById(req.params.commentId);
+    const post = await PostModel.findById(comment.postId);
+
     if (!comment) return res.status(403).json({ msg: "Comment not found" });
-    if (comment.userId.toString() === req.userId) {
+    if (comment.userId.toString() === req.userId || post.userId.toString() === req.userId) {
       await comment.deleteOne();
 
       await CommentModel.populate(comment, {

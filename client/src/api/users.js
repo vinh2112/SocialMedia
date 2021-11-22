@@ -18,17 +18,14 @@ const UserAPI = {
       return error;
     }
   },
-<<<<<<< HEAD
-  register: async(payload) =>{
-    try{
-      const res = await axios.post(`${BASE_URL}/user/register`,payload);
+  register: async (payload) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/user/register`, payload);
       return res;
-    }
-    catch(error){
+    } catch (error) {
       return error;
     }
-  }
-=======
+  },
   getProfileUser: async (payload) => {
     try {
       const res = await axios.get(`${BASE_URL}/user/${payload}/profile`);
@@ -48,7 +45,6 @@ const UserAPI = {
       return error;
     }
   },
->>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 };
 
 export default UserAPI;

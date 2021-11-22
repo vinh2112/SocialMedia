@@ -33,9 +33,11 @@ export default function Modal({ post, isShow, closeModal }) {
       }
       setIsLoading(false);
     };
+    if (isLoading) {
+      fetchCommentsByPostId();
+    }
+  }, [dispatch, isLoading, post]);
 
-    fetchCommentsByPostId();
-  }, [dispatch, setIsLoading, post]);
   return (
     <ModalContainer isShow={isShow}>
       <ModalForm>
@@ -56,7 +58,7 @@ export default function Modal({ post, isShow, closeModal }) {
               comments={comments.data.filter((comment) => comment.postId === post._id && comment)}
             />
             <ModalComments
-              postId={post._id}
+              post={post}
               comments={comments.data.filter((comment) => comment.postId === post._id && comment)}
             />
           </ModalContentWrapper>

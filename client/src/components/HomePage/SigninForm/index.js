@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import {
   SigninContainer,
   SigninMenu,
@@ -14,29 +14,27 @@ import {
   SignupInfo,
   ItemsWrapper,
 } from "./SigninElements";
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$ } from "redux/selectors";
 import { RiLockPasswordLine } from "react-icons/ri";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const Signin = ({toggle,isOpen }) => {
+const Signin = ({ toggle, isOpen }) => {
   const overlayModal = useRef();
   const dispatch = useDispatch();
-  const user = useSelector(authState$)
-  const history = useHistory()
+  const user = useSelector(authState$);
+  const history = useHistory();
 
-  useEffect(()=>{
+  useEffect(() => {
     const TOKEN = localStorage.getItem("access_token");
-    if(TOKEN){
-      history.push("/")
+    if (TOKEN) {
+      history.push("/");
     }
-  })
-  
+  });
 
   const handleCloseModal = (e) => {
     if (overlayModal.current === e.target) toggle();
-    console.log(overlayModal.current);
   };
 
   const [data, setData] = useState({
@@ -47,14 +45,13 @@ const Signin = ({toggle,isOpen }) => {
   const handleChangeValue = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
-    console.log(data)
   };
 
-  const isLogin = () =>{
-    if (user.loggedIn){
-      history.push("/")
-    } 
-  }
+  const isLogin = useCallback(() => {
+    if (user.loggedIn) {
+      history.push("/");
+    }
+  }, [history, user]);
   const handleLogin = React.useCallback(() => {
     dispatch(
       actions.login.loginRequest({
@@ -63,15 +60,10 @@ const Signin = ({toggle,isOpen }) => {
       })
     );
     isLogin();
-  }, [dispatch,data,isLogin]);
+  }, [dispatch, data, isLogin]);
 
   return (
-    <SigninContainer
-      id="home/signin"
-      isOpen={isOpen}
-      onClick={handleCloseModal}
-      ref={overlayModal}
-    >
+    <SigninContainer id="home/signin" isOpen={isOpen} onClick={handleCloseModal} ref={overlayModal}>
       <SigninMenu isOpen={isOpen}>
         <FormTop></FormTop>
         <FormBottom>
@@ -79,32 +71,24 @@ const Signin = ({toggle,isOpen }) => {
             <IconWrapper>
               <span className="iconify" data-icon="ic:round-email"></span>
             </IconWrapper>
-            <Txb
-              placeholder="Email"
-              name="email"
-              onChange={handleChangeValue}
-            ></Txb>
+            <Txb placeholder="Email" name="email" onChange={handleChangeValue}></Txb>
           </TxbWrapper>
 
           <TxbWrapper>
             <IconWrapper>
               <RiLockPasswordLine />
             </IconWrapper>
-            <Txb
-              placeholder="Pwd"
-              name="password"
-              onChange={handleChangeValue}
-            ></Txb>
+            <Txb placeholder="Pwd" name="password" onChange={handleChangeValue}></Txb>
           </TxbWrapper>
           <SignupDiv>
             Don't have account yet?
-            <SignupInfo to="\signup">Sign up</SignupInfo>
+            <SignupInfo to="/signup">Sign up</SignupInfo>
           </SignupDiv>
           <ButtonLogin to="#" onClick={handleLogin}>
-            Sign in{" "}
+            Sign in
           </ButtonLogin>
           <OrDiv>OR</OrDiv>
-          <ButtonSignUp to="\dsad">Create a new account</ButtonSignUp>
+          <ButtonSignUp to="/signup">Create a new account</ButtonSignUp>
           {/* <ButtonLoginGG>
             <IconWrapper>
               <FcGoogle />
@@ -113,15 +97,9 @@ const Signin = ({toggle,isOpen }) => {
           </ButtonLoginGG> */}
 
           <ItemsWrapper>
-            <span
-              className="iconify"
-              data-icon="akar-icons:facebook-fill"
-            ></span>
+            <span className="iconify" data-icon="akar-icons:facebook-fill"></span>
             <span className="iconify" data-icon="fa-brands:instagram"></span>
-            <span
-              className="iconify"
-              data-icon="entypo-social:twitter-with-circle"
-            ></span>
+            <span className="iconify" data-icon="entypo-social:twitter-with-circle"></span>
           </ItemsWrapper>
         </FormBottom>
       </SigninMenu>

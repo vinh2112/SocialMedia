@@ -28,7 +28,17 @@ export default function UserInfo() {
   const isYourAccount = profile?._id === currentUser?._id;
 
   const handleInteract = () => {
-    dispatch(actions.interactUser.interactUserRequest(profile?._id));
+    if (currentUser) {
+      dispatch(actions.interactUser.interactUserRequest(profile?._id));
+    } else {
+      // history.push("/login");
+      dispatch(
+        actions.toast.showToast({
+          message: "Please Login",
+          type: "warning",
+        })
+      );
+    }
   };
 
   return (
@@ -44,7 +54,7 @@ export default function UserInfo() {
 
       <AccountInfo>
         <AccountName>@{profile?.name}</AccountName>
-        <Desc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce at.</Desc>
+        <Desc>{profile?.desc}</Desc>
         <Details isYourAccount={isYourAccount}>
           <DetailItem>
             <Detail>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import img from "../../images/img3.jpg";
-import { Icon } from "@iconify/react";
+// import { Icon } from "@iconify/react";
 import {
   SignupContainer,
   ImgWrapper,
@@ -16,15 +16,15 @@ import {
   Headline,
   Subline,
   Description,
-  ErrorWrapper
+  ErrorWrapper,
 } from "./SignupElements";
 
-import { ItemsWrapper } from "../HomePage/SigninForm/SigninElements";
-import {UserAPI} from 'api';
-import {useHistory} from 'react-router-dom';
+// import { ItemsWrapper } from "../HomePage/SigninForm/SigninElements";
+import { UserAPI } from "api";
+import { useHistory } from "react-router-dom";
 
 const SignupSection = () => {
-  const history = useHistory()
+  const history = useHistory();
   const [hidden, setHidden] = useState({
     pwd: false,
     repwd: false,
@@ -41,32 +41,30 @@ const SignupSection = () => {
     repassword: "",
   });
 
-  const [message,setMessage] = useState(null)
+  const [message, setMessage] = useState(null);
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  const handleSignup = async () =>{
-    if(data.password !== data.repassword){
-      setMessage('Password must be the same')
-    }
-    else{ 
+  const handleSignup = async () => {
+    if (data.password !== data.repassword) {
+      setMessage("Password must be the same");
+    } else {
       const register = await UserAPI.register({
         email: data.email,
-        password:data.password,
-        name:data.name
-      })
-      if(register.response.status === 400){
-        setMessage(register.response.data.msg)
+        password: data.password,
+        name: data.name,
+      });
+      if (register.response.status === 400) {
+        setMessage(register.response.data.msg);
+      } else {
+        history.push("/home/signin");
       }
-      else{
-        history.push('/home/signin')
-      }
-      console.log(register.response)
+      console.log(register.response);
     }
-  }
-  console.log(message)
+  };
+  console.log(message);
   return (
     <SignupContainer>
       {/* Video background */}
@@ -86,12 +84,7 @@ const SignupSection = () => {
         <InfoBottom>
           {/* Email */}
           <TxbWrapper>
-            <Txb
-              id="user"
-              placeholder=" "
-              name="email"
-              onChange={handleValueChange}
-            ></Txb>
+            <Txb id="user" placeholder=" " name="email" onChange={handleValueChange}></Txb>
             <label htmlFor="user">Email</label>
           </TxbWrapper>
 
@@ -134,9 +127,7 @@ const SignupSection = () => {
             </i>
           </TxbWrapper>
 
-          {message ? 
-          (<ErrorWrapper>{message}</ErrorWrapper>)
-          : null}
+          {message ? <ErrorWrapper>{message}</ErrorWrapper> : null}
 
           <ButtonSignup to="#" onClick={handleSignup}>
             Sign up
@@ -156,7 +147,7 @@ const SignupSection = () => {
           </ItemsWrapper> */}
 
           <LoginDiv>
-            Already have account ?<Signin to="signin">Sign in</Signin>
+            Already have account ?<Signin to="/home">Sign in</Signin>
           </LoginDiv>
         </InfoBottom>
       </InfoContainer>

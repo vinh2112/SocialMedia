@@ -8,6 +8,7 @@ import {
   getTopLikedPosts,
   searchPosts,
   createPost,
+  updatePost,
   reactPost,
   resetPosts,
 } from "./posts";
@@ -43,6 +44,7 @@ export {
   getTopLikedPosts,
   searchPosts,
   createPost,
+  updatePost,
   reactPost,
   showBoxComment,
   fetchComments,

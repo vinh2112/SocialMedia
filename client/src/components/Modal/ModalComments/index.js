@@ -8,12 +8,12 @@ const Container = styled.div`
   border-top: 1px solid ${({ theme }) => theme.borderColor};
 `;
 
-export default function ModalComments({ comments, postId }) {
+export default function ModalComments({ comments, post }) {
   return (
     <Container>
-      <BoxComment postId={postId} />
+      <BoxComment postId={post._id} />
       {comments.map((comment, index) => (
-        <CommentItem key={index} comment={comment} />
+        <CommentItem key={index} comment={comment} post={post} />
       ))}
     </Container>
   );

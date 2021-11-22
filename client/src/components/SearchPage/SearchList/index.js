@@ -2,14 +2,15 @@ import React from "react";
 import SearchItem from "../SearchItem";
 import { CustomCard, CustomSkeleton, SearchListContainer } from "./SearchListElements";
 
-export default function SearchList({ posts, showModal }) {
+export default function SearchList({ posts, showModal, isLoading }) {
   return (
     <SearchListContainer>
       {posts.length !== 0
         ? posts.map((post, index) => (
             <SearchItem key={index} post={post} index={index} showModal={showModal} />
           ))
-        : [...Array(5)].map((item, index) => <LoadingItem key={index} />)}
+        : [...Array(2)].map((item, index) => <LoadingItem key={index} />)}
+      {isLoading && [...Array(3)].map((item, index) => <LoadingItem key={index} />)}
     </SearchListContainer>
   );
 }

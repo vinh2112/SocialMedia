@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$, modalState$ } from "redux/selectors";
 
-const Header = ({toggle}) => {
+const Header = ({ toggle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const domNode = useRef();
   const dispatch = useDispatch();
@@ -50,19 +50,10 @@ const Header = ({toggle}) => {
   const handleLogin = React.useCallback(() => {
     dispatch(
       actions.login.loginRequest({
-<<<<<<< HEAD
-        email: "18110396@student.hcmute.edu.vn",
-        password: "1234567",
-=======
         email: "vuongquocvinh.bh@gmail.com",
         password: "123456",
->>>>>>> 8c254739450e6314e5e521bccdb404871290eead
       })
     );
-  }, [dispatch]);
-
-  const handleLogout = React.useCallback(() => {
-    dispatch(actions.logout.logoutRequest());
   }, [dispatch]);
 
   return (
@@ -73,11 +64,7 @@ const Header = ({toggle}) => {
             <h2>Logo</h2>
           </LogoLink>
 
-          {!user.loggedIn ? (
-            <button onClick={handleLogin}>Login</button>
-          ) : (
-            <button onClick={handleLogout}>Log out</button>
-          )}
+          {!user.loggedIn && <button onClick={handleLogin}>Login</button>}
         </HeaderRight>
 
         {user.isLoading && <p>Loading...</p>}
@@ -90,7 +77,9 @@ const Header = ({toggle}) => {
             </RoundButtonLink>
           ) : (
             <AuthGroupButton>
-              <SignIn to="/home" onClick={toggle}>Sign in</SignIn>
+              <SignIn to="/home" onClick={toggle}>
+                Sign in
+              </SignIn>
               <SignUp to="/signup">Sign up</SignUp>
             </AuthGroupButton>
           )}

@@ -16,8 +16,15 @@ import {
 import DefaultAvatar from "images/DefaultAvatar.png";
 import ToggleSwitch from "./ToggleSwitch";
 import { Icon } from "@iconify/react";
+import { useDispatch } from "react-redux";
+import * as actions from "redux/actions";
 
 const SideBar = ({ isOpen, handleSideBar, user }) => {
+  const dispatch = useDispatch();
+
+  const handleLogout = React.useCallback(() => {
+    dispatch(actions.logout.logoutRequest());
+  }, [dispatch]);
   return (
     <OverLay isOpen={isOpen} onClick={handleSideBar}>
       <Container className="side-bar" isOpen={isOpen}>
@@ -69,9 +76,17 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
 
         {user.currentUser ? (
           <>
+            <MenuItemLink to="/setting/info">
+              <MenuIcon>
+                <Icon icon="uil:setting" />
+              </MenuIcon>
+
+              <MenuTitle>Setting</MenuTitle>
+            </MenuItemLink>
+
             <Separate />
 
-            <MenuItem>
+            <MenuItem onClick={() => handleLogout()}>
               <MenuIcon>
                 <Icon icon="mdi:exit-to-app" />
               </MenuIcon>

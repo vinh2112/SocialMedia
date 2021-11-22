@@ -105,7 +105,15 @@ export function* interactUser(action) {
 export function* searchPosts(action) {
   try {
     const res = yield call(api.PostAPI.searchPosts, action.payload);
-    yield put(actions.searchPosts.searchPostsSuccess(res.data));
+    if (res.data.length > 0) {
+      yield put(
+        actions.searchPosts.searchPostsSuccess({
+          posts: res.data,
+          page: action.payload.page,
+          query: action.payload.query,
+        })
+      );
+    }
   } catch (error) {
     console.log(error.response);
   }

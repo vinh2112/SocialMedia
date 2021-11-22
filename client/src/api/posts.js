@@ -32,6 +32,17 @@ const PostAPI = {
       return error;
     }
   },
+  updatePost: (payload) => {
+    try {
+      const TOKEN = localStorage.getItem("access_token");
+      const res = axios.put(`${BASE_URL}/api/post/${payload.postId}`, payload.data, {
+        headers: { Authorization: TOKEN },
+      });
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
   reactPost: async (payload) => {
     try {
       const TOKEN = localStorage.getItem("access_token");

@@ -23,7 +23,7 @@ import { Container } from "./ReplyCommentElements";
 import * as actions from "redux/actions";
 import moment from "moment";
 
-export default function ReplyComment({ reply, commentId, currentUser }) {
+export default function ReplyComment({ reply, commentId, currentUser, post }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuNode = useRef();
   const dispatch = useDispatch();
@@ -72,20 +72,21 @@ export default function ReplyComment({ reply, commentId, currentUser }) {
               <Comment>{reply.replyComment}</Comment>
             </CommentContent>
             <BottomComment>
-              <Time>{moment(reply?.createdAt).toNow(true)}</Time>
+              <Time>{moment(reply?.createdAt).fromNow()}</Time>
             </BottomComment>
           </CommentWrapper>
 
-          {currentUser && (
-            <ButtonWrapper ref={menuNode}>
-              <Button onClick={() => setIsOpen(!isOpen)}>
-                <Icon icon="akar-icons:more-horizontal" />
-              </Button>
-              <MenuActions isOpen={isOpen}>
-                <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
-              </MenuActions>
-            </ButtonWrapper>
-          )}
+          {currentUser &&
+            (currentUser._id === reply.user._id || currentUser._id === post.userId._id) && (
+              <ButtonWrapper ref={menuNode}>
+                <Button onClick={() => setIsOpen(!isOpen)}>
+                  <Icon icon="akar-icons:more-horizontal" />
+                </Button>
+                <MenuActions isOpen={isOpen}>
+                  <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
+                </MenuActions>
+              </ButtonWrapper>
+            )}
         </CommentContainer>
       </RightSide>
     </Container>

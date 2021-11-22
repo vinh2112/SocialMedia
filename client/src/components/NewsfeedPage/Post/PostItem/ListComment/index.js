@@ -7,14 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "redux/actions";
 import { commentState$ } from "redux/selectors";
 
-const ListComment = ({ boxComment, postId }) => {
+const ListComment = ({ boxComment, post }) => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const { data } = useSelector(commentState$);
 
   useEffect(() => {
     const fetchCommentsByPostId = async () => {
-      const res = await CommentAPI.fetchComments(postId);
+      const res = await CommentAPI.fetchComments(post._id);
 
       if (res.status === 200) {
         dispatch(fetchComments.fetchCommentsSuccess(res.data));
@@ -23,7 +23,7 @@ const ListComment = ({ boxComment, postId }) => {
     };
 
     fetchCommentsByPostId();
-  }, [dispatch, setIsLoading, postId]);
+  }, [dispatch, setIsLoading, post._id]);
 
   return (
     <Container>
@@ -31,12 +31,14 @@ const ListComment = ({ boxComment, postId }) => {
         <LoadingSection />
       ) : (
         <>
-          <BoxComment boxComment={boxComment} postId={postId} />
+          <BoxComment boxComment={boxComment} postId={post._id} />
 
           {data &&
             data.map((comment) => {
               return (
-                comment.postId === postId && <CommentItem key={comment._id} comment={comment} />
+                comment.postId === post._id && (
+                  <CommentItem key={comment._id} comment={comment} post={post} />
+                )
               );
             })}
         </>

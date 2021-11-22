@@ -33,9 +33,9 @@ export const AvatarUser = styled.img`
   object-fit: cover;
   transition: all 0.1s ease;
 
-  &:hover {
+  /* &:hover {
     filter: brightness(1.1);
-  }
+  } */
 `;
 
 export const EditButton = styled(Link)`
@@ -108,7 +108,7 @@ export const Details = styled.div`
 export const DetailItem = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 
   ${Details} &:nth-child(3) {

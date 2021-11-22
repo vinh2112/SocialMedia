@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Profile from "components/ProfilePage";
 import { postState$ } from "redux/selectors";
 import { UserAPI } from "api";
+import Header from "components/Header";
 
 export default function ProfilePage() {
   const { userId } = useParams();
@@ -39,10 +40,6 @@ export default function ProfilePage() {
   }, [isLoading, page]);
 
   useEffect(() => {
-    dispatch(actions.resetPosts());
-  }, [dispatch]);
-
-  useEffect(() => {
     const getProfileUser = async () => {
       try {
         setIsProfileLoading(true);
@@ -57,6 +54,15 @@ export default function ProfilePage() {
     };
     getProfileUser();
     window.scrollTo(0, 0);
+
+    return () => {
+      dispatch(actions.resetPosts());
+    };
   }, [userId, dispatch]);
-  return <Profile isProfileLoading={isProfileLoading} />;
+  return (
+    <>
+      <Header />
+      <Profile isProfileLoading={isProfileLoading} />
+    </>
+  );
 }

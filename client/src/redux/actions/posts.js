@@ -35,6 +35,8 @@ export const createPost = createActions({
   createPostFailure: (err) => err,
 });
 
+export const updatePost = createAction("UPDATE_POST", (payload) => payload);
+
 export const reactPost = createActions({
   reactPostRequest: (payload) => payload,
   reactPostSuccess: (payload) => payload,

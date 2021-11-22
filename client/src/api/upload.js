@@ -3,48 +3,36 @@ import axios from "axios";
 import uuid from "react-uuid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-<<<<<<< HEAD
 const BASE_URL_PREDICT = "http://2b40-35-230-190-61.ngrok.io/predict";
-=======
-const BASE_URL_PREDICT = "http://55e3-35-221-213-157.ngrok.io/predict";
->>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 
 const UPLOAD = {
-    uploadImage: async(payload) => {
-        try {
-            let file = await fetch(payload)
-                .then((r) => r.blob())
-                .then((blobFile) => new File([blobFile], uuid(), { type: "image/png" }));
+  uploadImage: async (payload) => {
+    try {
+      let file = await fetch(payload)
+        .then((r) => r.blob())
+        .then((blobFile) => new File([blobFile], uuid(), { type: "image/png" }));
 
-            // Upload file
-            return new Promise(async(resolve, reject) => {
-                let formData = new FormData();
-                formData.append("image", file);
+      // Upload file
+      return new Promise(async (resolve, reject) => {
+        let formData = new FormData();
+        formData.append("image", file);
 
-                const res = await axios.post(BASE_URL_PREDICT, formData, {
-                    headers: {
-                        "content-type": "multipart/form-data",
-                    },
-                });
-                let categories = [];
-                res.data.predictions.filter((category) => {
-                    return category.probability > 0.15 && categories.push(category.label);
-                });
+        const res = await axios.post(BASE_URL_PREDICT, formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        });
+        let categories = [];
+        res.data.predictions.filter((category) => {
+          return category.probability > 0.15 && categories.push(category.label);
+        });
 
-                const image = await axios.post(`${BASE_URL}/api/upload`, formData, {
-                    headers: {
-                        "content-type": "multipart/form-data",
-                    },
-                });
+        const image = await axios.post(`${BASE_URL}/api/upload`, formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        });
 
-<<<<<<< HEAD
-                return resolve({ categories, image: image.data });
-            });
-        } catch (error) {
-            return error;
-        }
-    },
-=======
         return resolve({ categories, image: image.data });
       });
     } catch (error) {
@@ -63,7 +51,6 @@ const UPLOAD = {
       return error;
     }
   },
->>>>>>> 8c254739450e6314e5e521bccdb404871290eead
 };
 
 export default UPLOAD;

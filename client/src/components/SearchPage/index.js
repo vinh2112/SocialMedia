@@ -25,14 +25,42 @@ export default function SearchSection() {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const dispatch = useDispatch();
-  const { data } = useSelector(postState$);
+  const { data, isLoading } = useSelector(postState$);
 
   useEffect(() => {
     dispatch(actions.searchPosts.searchPostsRequest({ page, query }));
     setIndex(null);
   }, [dispatch, page, query]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(actions.resetPosts());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    const scrollWindow = () => {
+      if (
+        Math.abs(
+          window.innerHeight +
+            document.documentElement.scrollTop -
+            document.documentElement.offsetHeight
+        ) <= 1
+      ) {
+        if (!isLoading) {
+          setPage(page + 1);
+        }
+      }
+    };
+    window.addEventListener("scroll", scrollWindow);
+
+    return () => {
+      window.removeEventListener("scroll", scrollWindow);
+    };
+  }, [dispatch, isLoading, page]);
+
   const handleSearch = (value) => {
+    setPage(1);
     setQuery(value);
   };
   const handleModal = (index) => {
@@ -47,7 +75,7 @@ export default function SearchSection() {
   return (
     <SearchContainer>
       <SearchHeader onSubmit={handleSearch} />
-      <SearchList posts={data} showModal={handleModal} />
+      <SearchList posts={data} showModal={handleModal} isLoading={isLoading} />
       {(index || index === 0) && (
         <Modal post={data[index]} isShow={isShowModal} closeModal={handleModal} />
       )}

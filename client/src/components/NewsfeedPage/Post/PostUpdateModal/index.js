@@ -49,9 +49,8 @@ const PostUpdateModal = ({ user }) => {
   const [post, setPost] = useState(initial_post);
   const [isSmall, setIsSmall] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isChecked,setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
-  console.log(post);
   useEffect(() => {
     if (!isLoading) {
       setPost(initial_post);
@@ -122,13 +121,14 @@ const PostUpdateModal = ({ user }) => {
             <Name>@{user.name}</Name>
             <PostPayment>
               <SwitchWrapper>
-                  <Switch
-                    checked={post.isPaymentRequired}
-                    onChange={handlePayment}
-                  />
-                  Payment Required
+                <Switch checked={post.isPaymentRequired} onChange={handlePayment} />
+                Payment Required
               </SwitchWrapper>
-              <InputPrice onChange={handlePrice} type="number" disabled={isChecked ? '' : 'disabled'}></InputPrice>
+              <InputPrice
+                onChange={handlePrice}
+                type="number"
+                disabled={isChecked ? "" : "disabled"}
+              ></InputPrice>
             </PostPayment>
           </UserWrapper>
           <DescArea
@@ -172,9 +172,7 @@ const PostUpdateModal = ({ user }) => {
 
           <PostButtonWrapper>
             <PostButton
-              disabled={
-                post.desc.length === 0 || !post.image ? "disabled" : null
-              }
+              disabled={post.desc.length === 0 || !post.image ? "disabled" : null}
               onClick={onSubmit}
             >
               Post

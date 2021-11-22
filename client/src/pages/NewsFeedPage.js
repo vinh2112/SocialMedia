@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import NewsFeed from "components/NewsfeedPage";
 import { postState$ } from "redux/selectors";
+import Header from "components/Header";
 
 const NewsFeedPage = () => {
   const [page, setPage] = useState(1);
@@ -38,16 +39,24 @@ const NewsFeedPage = () => {
   }, [page, dispatch]);
 
   useEffect(() => {
-    dispatch(actions.resetPosts());
     dispatch(actions.getPosts.getPostsRequest());
     dispatch(actions.getTopLikedPosts.getTopLikedPostsRequest());
+
+    return () => {
+      dispatch(actions.resetPosts());
+    };
   }, [dispatch]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  return <NewsFeed />;
+  return (
+    <>
+      <Header />
+      <NewsFeed />
+    </>
+  );
 };
 
 export default NewsFeedPage;

@@ -28,7 +28,7 @@ import { authState$, commentState$ } from "redux/selectors";
 import { CommentAPI } from "api";
 import ReplyComment from "./ReplyComment";
 
-const CommentItem = ({ comment }) => {
+const CommentItem = ({ comment, post }) => {
   const [isOpen, setIsOpen] = useState(false);
   const currentReply = useRef();
   const menuNode = useRef();
@@ -57,6 +57,7 @@ const CommentItem = ({ comment }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      setIsOpen(false);
     };
   }, []);
 
@@ -70,6 +71,7 @@ const CommentItem = ({ comment }) => {
           type: "success",
         })
       );
+      setIsOpen(false);
     }
   };
 
@@ -93,20 +95,21 @@ const CommentItem = ({ comment }) => {
 
             <BottomComment>
               <ReplyButton onClick={handleReply}>Reply</ReplyButton>
-              <Time>{moment(comment.createdAt).toNow(true)}</Time>
+              <Time>{moment(comment.createdAt).fromNow()}</Time>
             </BottomComment>
           </CommentWrapper>
 
-          {currentUser && (
-            <ButtonWrapper ref={menuNode}>
-              <Button onClick={() => setIsOpen(!isOpen)}>
-                <Icon icon="akar-icons:more-horizontal" />
-              </Button>
-              <MenuActions isOpen={isOpen}>
-                <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
-              </MenuActions>
-            </ButtonWrapper>
-          )}
+          {currentUser &&
+            (currentUser._id === comment.userId._id || currentUser._id === post.userId._id) && (
+              <ButtonWrapper ref={menuNode}>
+                <Button onClick={() => setIsOpen(!isOpen)}>
+                  <Icon icon="akar-icons:more-horizontal" />
+                </Button>
+                <MenuActions isOpen={isOpen}>
+                  <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
+                </MenuActions>
+              </ButtonWrapper>
+            )}
         </CommentContainer>
 
         {/* Reply Comment */}
@@ -120,6 +123,7 @@ const CommentItem = ({ comment }) => {
                   reply={reply}
                   commentId={comment._id}
                   currentUser={currentUser}
+                  post={post}
                 />
               ))}
             </ReplyWrapper>

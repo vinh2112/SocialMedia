@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 
 export const PostContainer = styled.div`
   display: flex;
@@ -103,8 +104,22 @@ export const Description = styled.div`
     display: block;
     line-height: 1.2rem;
     width: 100%;
-    max-height: ${({ isShow }) => (isShow ? "" : "2.4rem")};
-    overflow: ${({ isShow }) => (isShow ? "visible" : "hidden")};
+  }
+
+  & > div > textarea {
+    width: 100%;
+    resize: none;
+    font-size: 0.9rem;
+    padding: 0 4px;
+    outline: none;
+    border: 1px solid ${({ theme }) => theme.contrastColor};
+    color: ${({ theme }) => theme.textColor};
+    background: none;
+    border-radius: 3px;
+
+    &:focus {
+      outline: 2px solid ${({ theme }) => theme.contrastColor};
+    }
   }
 `;
 
@@ -119,5 +134,11 @@ export const ToggleButton = styled.div`
 
   ${Description} .post__desc:hidden {
     display: none;
+  }
+`;
+
+export const CustomButton = styled(Button)`
+  && {
+    height: 30px;
   }
 `;

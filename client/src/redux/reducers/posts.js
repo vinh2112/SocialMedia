@@ -11,6 +11,7 @@ import {
   searchPosts,
   getProfileUser,
   resetPosts,
+  updatePost,
 } from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
@@ -90,10 +91,19 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         isLoading: true,
       };
     case getType(searchPosts.searchPostsSuccess):
+      if (
+        (action.payload.page === 1 && action.payload.query !== "") ||
+        (action.payload.page === 1 && action.payload.query === "")
+      )
+        return {
+          ...state,
+          isLoading: false,
+          data: [...action.payload.posts],
+        };
       return {
         ...state,
         isLoading: false,
-        data: action.payload,
+        data: [...state.data, ...action.payload.posts],
       };
     case getType(createPost.createPostRequest):
       return {
@@ -112,6 +122,14 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         isLoading: false,
         error: action.payload,
       };
+    case getType(updatePost):
+      return {
+        ...state,
+        topLiked: state.topLiked.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        ),
+        data: state.data.map((post) => (post._id === action.payload._id ? action.payload : post)),
+      };
     case getType(reactPost.reactPostRequest):
       return {
         ...state,
@@ -119,6 +137,9 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(reactPost.reactPostSuccess):
       return {
         ...state,
+        topLiked: state.topLiked.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        ),
         data: state.data.map((post) => (post._id === action.payload._id ? action.payload : post)),
       };
     case getType(reactPost.reactPostFailure):

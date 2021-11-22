@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -23,11 +24,16 @@ export const Avatar = styled.img`
 
 export const AuthorWrapper = styled.div`
   margin-left: 10px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  overflow: hidden;
 `;
 
 export const AuthorName = styled(Link)`
   color: ${({ theme }) => theme.textColor};
   text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
 `;
 
 export const CreatedDate = styled.div`
@@ -37,22 +43,31 @@ export const CreatedDate = styled.div`
 `;
 
 export const DescWrapper = styled.div`
-  display: -webkit-box;
-  -webkit-line-clamp: ${({ isOverflow }) => (isOverflow ? 4 : "none")};
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin: 12px 0 8px;
+
+  & > div > textarea {
+    width: 100%;
+    resize: none;
+    font-size: 0.9rem;
+    padding: 0 4px;
+    outline: none;
+    border: 1px solid ${({ theme }) => theme.contrastColor};
+    color: ${({ theme }) => theme.textColor};
+    background: none;
+    border-radius: 3px;
+
+    &:focus {
+      outline: 2px solid ${({ theme }) => theme.contrastColor};
+    }
+  }
 `;
 
 export const Desc = styled.div`
-  margin: 12px 0 8px;
   line-height: 1.4rem;
 `;
 
-export const LoadmoreButton = styled.div`
-  margin-top: 4px;
-  font-size: 14px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.subTextColor};
-  cursor: pointer;
-  user-select: none;
+export const CustomButton = styled(Button)`
+  && {
+    height: 30px;
+  }
 `;

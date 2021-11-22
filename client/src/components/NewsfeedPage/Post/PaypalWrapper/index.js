@@ -1,16 +1,15 @@
-import React from 'react'
-import Paypal from '../Paypal'
-import {PaypalContainer} from './PaypalWrapperElements'
-import {useLocation} from 'react-router-dom'
+import React from "react";
+import Paypal from "../Paypal";
+import { PaypalContainer } from "./PaypalWrapperElements";
+import { useLocation } from "react-router-dom";
 
 const PaypalWrapper = () => {
-    const post = useLocation();
-    console.log(post.state)
-    return (
-        <PaypalContainer>
-            <Paypal post={post.state}/>
-        </PaypalContainer>
-    )
-}
+  const { state } = useLocation();
+  return (
+    <PaypalContainer>
+      <Paypal post={state.post} />
+    </PaypalContainer>
+  );
+};
 
-export default PaypalWrapper
+export default PaypalWrapper;
