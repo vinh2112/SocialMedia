@@ -90,7 +90,11 @@ const Header = ({ toggle }) => {
             </RoundButton>
             <input type="checkbox" id="activeCheckBox"></input>
 
-            <SideBar isOpen={isOpen} handleSideBar={handleSideBar} user={user} />
+            <SideBar
+              isOpen={isOpen}
+              handleSideBar={handleSideBar}
+              user={user}
+            />
           </SideBarContainer>
         </HeaderLeft>
       </HeaderWrapper>

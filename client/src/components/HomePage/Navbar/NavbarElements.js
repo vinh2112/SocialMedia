@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link as LinkR } from "react-router-dom";
 
 export const Nav = styled.nav`
-  width: 100%;
+  width: 100vw;
   background-color: rgba(0, 0, 0, 0.1);
   height: 60px;
   z-index: 10;

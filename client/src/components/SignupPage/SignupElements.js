@@ -5,6 +5,7 @@ export const SignupContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100vh;
+  color: black;
   z-index: 1;
   @media screen and (max-width: 800px) {
     justify-content: center;
@@ -179,10 +180,10 @@ export const Signin = styled(LinkR)`
   }
 `;
 export const ErrorWrapper = styled.div`
-  font-size:12px;
-  color:red;
-  margin-top:10px;
-`
+  font-size: 12px;
+  color: red;
+  margin-top: 10px;
+`;
 
 export const Headline = styled.h1`
   font-size: 40px;

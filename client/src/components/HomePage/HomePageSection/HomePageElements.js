@@ -6,8 +6,9 @@ import { Link as LinkS } from "react-scroll";
 export const HomePgContainer = styled.div`
   display: flex;
   z-index: 1;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  min-height: 100vh;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -79,6 +80,14 @@ export const InfoHeadline = styled.h1`
   @media screen and (max-width: 550px) {
     margin-top: 270px;
     font-size: 37px;
+  }
+  @media screen and (max-width: 414px) {
+    margin-top: 237px;
+    font-size: 40px;
+  }
+  @media screen and (max-width: 375px) {
+    margin-top: 200px;
+    font-size: 32px;
   }
 `;
 

@@ -14,6 +14,7 @@ export default function userReducers(state = INIT_STATE.auth, action) {
         loggedIn: true,
         isLoading: false,
         currentUser: action.payload,
+        errMsg: "",
       };
     case getType(getCurrentUser):
       return {
@@ -24,6 +25,7 @@ export default function userReducers(state = INIT_STATE.auth, action) {
       return {
         ...state,
         isLoading: false,
+        errMsg: action.payload,
       };
     case getType(logout.logoutRequest):
       return {
