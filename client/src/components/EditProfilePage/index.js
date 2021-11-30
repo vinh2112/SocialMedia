@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import { authState$ } from "redux/selectors";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import InformationSection from "./InformationSection";
 import Menu from "./Menu";
@@ -17,10 +18,25 @@ const EditProfileContainer = styled.div`
   border-left: 1px solid ${({ theme }) => theme.contrastColor};
   border-right: 1px solid ${({ theme }) => theme.contrastColor};
   margin: 0 auto;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
 `;
 
 export default function EditProfile() {
   const { currentUser } = useSelector(authState$);
+  const history = useHistory();
+
+  const checkIsLoggedIn = useCallback(() => {
+    if (!currentUser) {
+      history.push("/");
+    }
+  }, [currentUser, history]);
+
+  useEffect(() => {
+    checkIsLoggedIn();
+  }, [checkIsLoggedIn]);
 
   return (
     <EditProfileContainer>

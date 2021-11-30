@@ -3,7 +3,7 @@ import axios from "axios";
 import uuid from "react-uuid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const BASE_URL_PREDICT = "http://2b40-35-230-190-61.ngrok.io/predict";
+// const BASE_URL_PREDICT = "http://2b40-35-230-190-61.ngrok.io/predict";
 
 const UPLOAD = {
   uploadImage: async (payload) => {
@@ -17,15 +17,14 @@ const UPLOAD = {
         let formData = new FormData();
         formData.append("image", file);
 
-        const res = await axios.post(BASE_URL_PREDICT, formData, {
+        const res = await axios.post(`${BASE_URL}/api/detect`, formData, {
           headers: {
             "content-type": "multipart/form-data",
           },
         });
+
         let categories = [];
-        res.data.predictions.filter((category) => {
-          return category.probability > 0.15 && categories.push(category.label);
-        });
+        res.data.Labels.forEach((label) => categories.push(label.Name));
 
         const image = await axios.post(`${BASE_URL}/api/upload`, formData, {
           headers: {

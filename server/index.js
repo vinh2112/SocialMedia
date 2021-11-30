@@ -10,6 +10,8 @@ import posts from "./routers/posts.js";
 import comments from "./routers/comments.js";
 import upload from "./routers/upload.js";
 import payments from "./routers/payments.js";
+import detect from "./routers/detect.js";
+import reports from "./routers/reports.js";
 
 dotenv.config();
 
@@ -29,10 +31,12 @@ app.use(
 );
 
 app.use("/user", users);
+app.use("/api", detect);
 app.use("/api", posts);
 app.use("/api", comments);
 app.use("/api", upload);
 app.use("/api", payments);
+app.use("/api", reports);
 
 mongoose
   .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })

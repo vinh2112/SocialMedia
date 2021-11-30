@@ -71,7 +71,7 @@ const PostUpdateModal = ({ user }) => {
     [post]
   );
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     setPost({ ...post, image: URL.createObjectURL(e.target.files[0]) });
   };
 

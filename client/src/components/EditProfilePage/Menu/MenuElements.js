@@ -7,6 +7,14 @@ export const MenuContainer = styled.div`
   min-height: calc(100vh - 54px);
   padding: 8px 4px;
   border-right: 1px solid ${({ theme }) => theme.contrastColor};
+
+  @media (max-width: 700px) {
+    padding: 8px 16px;
+    min-height: 60px;
+    max-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid ${({ theme }) => theme.contrastColor};
+  }
 `;
 
 export const MenuTitle = styled.div`
@@ -15,6 +23,10 @@ export const MenuTitle = styled.div`
   font-weight: 700;
   filter: opacity(0.6);
   margin-left: 8px;
+
+  @media (max-width: 700px) {
+    margin-left: 0;
+  }
 `;
 
 export const MenuListItem = styled.div`
@@ -22,6 +34,13 @@ export const MenuListItem = styled.div`
   flex-direction: column;
   gap: 2px;
   margin-top: 12px;
+
+  @media (max-width: 700px) {
+    flex-direction: row;
+    overflow: hidden;
+    overflow-x: auto;
+    gap: 10px;
+  }
 `;
 
 export const MenuItem = styled(NavLink)`
@@ -29,6 +48,7 @@ export const MenuItem = styled(NavLink)`
   align-items: center;
   padding: 12px 8px;
   border-radius: 5px;
+  min-width: 240px;
   color: ${({ theme }) => theme.textColor};
   text-decoration: none;
   font-weight: 500;
@@ -50,5 +70,9 @@ export const MenuItem = styled(NavLink)`
 
   &:hover {
     background: ${({ theme }) => theme.hoverColor};
+  }
+
+  @media (max-width: 700px) {
+    border: 1px solid ${({ theme }) => theme.hoverColor};
   }
 `;

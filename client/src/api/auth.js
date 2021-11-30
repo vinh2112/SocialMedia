@@ -7,8 +7,9 @@ const AuthAPI = {
     try {
       const res = await axios.post(`${BASE_URL}/user/login`, payload);
       localStorage.setItem("access_token", `Bearer ${res.data.accessToken}`);
+      return res;
     } catch (error) {
-      return error;
+      return error.response;
     }
   },
 

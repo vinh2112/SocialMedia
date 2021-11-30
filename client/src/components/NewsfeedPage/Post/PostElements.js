@@ -6,7 +6,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${({ direction }) => (direction === "left" ? "0 20px 0 0" : "0 0 0 20px")};
-  max-width: calc((var(--max-width) * 1.9 / 3) - 20px);
+  max-width: calc((var(--max-width) * 1.8 / 3) - 20px);
   width: 100%;
   z-index: 1;
 

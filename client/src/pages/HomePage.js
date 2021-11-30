@@ -4,7 +4,6 @@ const HomePage = () => {
   const [isOpen, setOpen] = useState(false);
   const toggle = () => {
     setOpen(!isOpen);
-    console.log(isOpen);
   };
 
   return <Home toggle={toggle} isOpen={isOpen} />;

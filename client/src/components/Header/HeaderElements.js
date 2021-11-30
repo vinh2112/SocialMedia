@@ -26,12 +26,12 @@ export const HeaderWrapper = styled.div`
   z-index: 101;
 `;
 
-export const HeaderRight = styled.div`
+export const HeaderLeft = styled.div`
   display: flex;
   width: 300px;
 `;
 
-export const HeaderLeft = styled.div`
+export const HeaderRight = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
@@ -57,21 +57,53 @@ const roundButton = css`
   justify-content: center;
   width: 35px;
   height: 35px;
-  margin-left: 12px;
   border-radius: 50%;
   font-size: 1.1rem;
   color: ${({ theme }) => theme.textColor};
   background-color: ${({ theme }) => theme.contrastColor};
   transition: all 0.1s ease-in-out 0s;
-`;
-
-export const RoundButton = styled.label`
   cursor: pointer;
   user-select: none;
+`;
+
+export const RoundLabelButton = styled.label`
   ${roundButton}
+  margin-left: 8px;
 
   &:hover {
     background-color: ${({ theme }) => theme.hoverColor};
+  }
+`;
+
+export const RoundActionButton = styled(Link)`
+  ${roundButton}
+  position: relative;
+  margin-right: 8px;
+  font-size: 1.4rem;
+
+  &:before {
+    content: "Administrator";
+    position: absolute;
+    top: 110%;
+    font-size: 12px;
+    padding: 4px;
+    border-radius: 4px;
+    background-color: ${({ theme }) => theme.hoverColor};
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.1s ease;
+    user-select: none;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.hoverColor};
+  }
+
+  &:hover:before {
+    opacity: 1;
+    transform: scale(1);
   }
 `;
 

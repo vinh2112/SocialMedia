@@ -15,6 +15,10 @@ export default function Menu() {
           <Icon icon="bi:shield-lock" />
           <span>Security</span>
         </MenuItem>
+        <MenuItem to="history" activeClassName="active">
+          <Icon icon="fluent:history-24-filled" />
+          <span>Payment History</span>
+        </MenuItem>
       </MenuListItem>
     </MenuContainer>
   );

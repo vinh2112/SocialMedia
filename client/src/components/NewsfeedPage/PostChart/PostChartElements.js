@@ -4,9 +4,13 @@ import styled from "styled-components";
 export const PostChartContainer = styled.div`
   position: fixed;
   top: 80px;
-  left: calc(100vw - ((100vw - var(--max-width) + 32px) / 2));
+  left: calc(100vw - ((100vw - var(--max-width) + 48px) / 2));
   transform: translateX(-100%);
-  width: 300px;
+  width: 332px;
+  background: ${({ theme }) => theme.primary};
+  box-shadow: var(--box-shadow);
+  border-radius: 5px;
+  padding: 12px;
 
   @media (max-width: 1024px) {
     position: relative;

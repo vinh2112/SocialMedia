@@ -6,13 +6,14 @@ import {
   HeaderLeft,
   LogoLink,
   SideBarContainer,
-  RoundButton,
+  RoundLabelButton,
   RoundButtonLink,
   Avatar,
   UserName,
   AuthGroupButton,
   SignIn,
   SignUp,
+  RoundActionButton,
 } from "./HeaderElements";
 import SideBar from "./SideBar";
 import { Icon } from "@iconify/react";
@@ -59,22 +60,29 @@ const Header = ({ toggle }) => {
   return (
     <HeaderContainer>
       <HeaderWrapper>
-        <HeaderRight>
+        <HeaderLeft>
           <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
             <h2>Logo</h2>
           </LogoLink>
 
           {!user.loggedIn && <button onClick={handleLogin}>Login</button>}
-        </HeaderRight>
+        </HeaderLeft>
 
         {user.isLoading && <p>Loading...</p>}
 
-        <HeaderLeft>
+        <HeaderRight>
           {user.currentUser ? (
-            <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
-              <Avatar src={user.currentUser.avatar} alt="Photo" />
-              <UserName>@{user.currentUser.name}</UserName>
-            </RoundButtonLink>
+            <>
+              {user.currentUser.isAdmin && (
+                <RoundActionButton to="#">
+                  <Icon icon="eos-icons:admin-outlined" />
+                </RoundActionButton>
+              )}
+              <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
+                <Avatar src={user.currentUser.avatar} alt="Photo" />
+                <UserName>@{user.currentUser.name}</UserName>
+              </RoundButtonLink>
+            </>
           ) : (
             <AuthGroupButton>
               <SignIn to="/home" onClick={toggle}>
@@ -85,14 +93,14 @@ const Header = ({ toggle }) => {
           )}
 
           <SideBarContainer ref={domNode}>
-            <RoundButton htmlFor="activeCheckBox" onClick={handleSideBar}>
+            <RoundLabelButton htmlFor="activeCheckBox" onClick={handleSideBar}>
               <Icon icon="feather:menu" />
-            </RoundButton>
+            </RoundLabelButton>
             <input type="checkbox" id="activeCheckBox"></input>
 
             <SideBar isOpen={isOpen} handleSideBar={handleSideBar} user={user} />
           </SideBarContainer>
-        </HeaderLeft>
+        </HeaderRight>
       </HeaderWrapper>
     </HeaderContainer>
   );
