@@ -92,7 +92,9 @@ export const updateUser = async (req, res) => {
   var newPassword;
   if (password) {
     if (password.length < 6)
-      return res.status(400).json({ msg: "Password must have at least 6 letters." });
+      return res
+        .status(400)
+        .json({ msg: "Password must have at least 6 letters." });
     try {
       newPassword = await bcrypt.hash(password, 10);
     } catch (error) {

@@ -3,6 +3,7 @@ export const INIT_STATE = {
     loggedIn: false,
     isLoading: false,
     currentUser: undefined,
+    errMsg: "",
   },
   posts: {
     isLoading: false,

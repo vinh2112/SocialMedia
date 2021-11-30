@@ -5,13 +5,14 @@ import * as actions from "redux/actions";
 export function* loginSaga(payload) {
   try {
     const res = yield call(api.AuthAPI.login, payload);
-
     if (res.status === 200) {
       const user = yield call(api.AuthAPI.getUserInfo);
       yield put(actions.login.loginSuccess(user.data));
+    } else {
+      yield put(actions.login.loginFailure(res.response.data.msg));
     }
   } catch (err) {
-    yield put(actions.login.loginFailure(err.response.data.msg));
+    console.log(err);
   }
 }
 

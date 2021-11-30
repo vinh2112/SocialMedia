@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { Link as LinkR } from "react-router-dom";
 export const SigninContainer = styled.div`
   position: fixed;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   padding: 0 10%;
   z-index: 999;
+  color: black;
   background: rgba(0, 0, 0, 0.5);
   transition: all 0.2s ease-in-out;
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
@@ -36,7 +37,21 @@ export const FormTop = styled.div`
   display: flex;
   height: 30%;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
+  margin: 0 15%;
+`;
+export const Headline = styled.h1`
+  width: 100%;
+  font-size: 2rem;
+  margin-top: 35%;
+`;
+export const Subline = styled.div`
+  width: 100%;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 5px;
+  padding-left: 5px;
 `;
 
 export const FormBottom = styled.div`
@@ -187,4 +202,13 @@ export const ItemsWrapper = styled.div`
     cursor: pointer;
     margin: 5px 7px;
   }
+`;
+
+export const ErrorWrapper = styled.div`
+  color: red;
+  font-size: 12px;
+  width: 100%;
+  display: flex;
+  text-align: flex-start;
+  padding-left: 5px;
 `;

@@ -1,4 +1,6 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect } from "react";
+
+import { Icon } from "@iconify/react";
 import {
   SigninContainer,
   SigninMenu,
@@ -13,6 +15,9 @@ import {
   SignupDiv,
   SignupInfo,
   ItemsWrapper,
+  ErrorWrapper,
+  Headline,
+  Subline,
 } from "./SigninElements";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
@@ -25,6 +30,11 @@ const Signin = ({ toggle, isOpen }) => {
   const dispatch = useDispatch();
   const user = useSelector(authState$);
   const history = useHistory();
+  const [hidden, setHidden] = useState(false);
+  const isHidden = () => {
+    setHidden(!hidden);
+    console.log(hidden);
+  };
 
   useEffect(() => {
     const TOKEN = localStorage.getItem("access_token");
@@ -47,11 +57,10 @@ const Signin = ({ toggle, isOpen }) => {
     setData({ ...data, [name]: value });
   };
 
-  const isLogin = useCallback(() => {
-    if (user.loggedIn) {
-      history.push("/");
-    }
+  const isLogin = React.useCallback(() => {
+    if (user.loggedIn) history.push("/");
   }, [history, user]);
+
   const handleLogin = React.useCallback(() => {
     dispatch(
       actions.login.loginRequest({
@@ -59,31 +68,58 @@ const Signin = ({ toggle, isOpen }) => {
         password: data.password,
       })
     );
+    // if (user.loggedIn) {
+    //   history.push("/");
+    // } else {
+    //   setMessage(user.errMsg);
+    //   console.log(user.errMsg);
+    // }
     isLogin();
   }, [dispatch, data, isLogin]);
 
   return (
-    <SigninContainer id="home/signin" isOpen={isOpen} onClick={handleCloseModal} ref={overlayModal}>
+    <SigninContainer
+      id="home/signin"
+      isOpen={isOpen}
+      onClick={handleCloseModal}
+      ref={overlayModal}
+    >
       <SigninMenu isOpen={isOpen}>
-        <FormTop></FormTop>
+        <FormTop>
+          <Headline>Welcome to Icon</Headline>
+          <Subline>Login to experience world</Subline>
+        </FormTop>
         <FormBottom>
           <TxbWrapper>
             <IconWrapper>
               <span className="iconify" data-icon="ic:round-email"></span>
             </IconWrapper>
-            <Txb placeholder="Email" name="email" onChange={handleChangeValue}></Txb>
+            <Txb
+              placeholder="Email"
+              name="email"
+              onChange={handleChangeValue}
+            ></Txb>
           </TxbWrapper>
 
           <TxbWrapper>
             <IconWrapper>
               <RiLockPasswordLine />
             </IconWrapper>
-            <Txb placeholder="Pwd" name="password" onChange={handleChangeValue}></Txb>
+            <Txb
+              type={hidden ? "text" : "password"}
+              placeholder="Password"
+              name="password"
+              onChange={handleChangeValue}
+            ></Txb>
+            <i onClick={isHidden} name="repwd" style={{ cursor: "pointer" }}>
+              <Icon icon="dashicons:hidden" />
+            </i>
           </TxbWrapper>
           <SignupDiv>
             Don't have account yet?
             <SignupInfo to="/signup">Sign up</SignupInfo>
           </SignupDiv>
+          {user.errMsg ? <ErrorWrapper>{user.errMsg}</ErrorWrapper> : null}
           <ButtonLogin to="#" onClick={handleLogin}>
             Sign in
           </ButtonLogin>
@@ -97,9 +133,15 @@ const Signin = ({ toggle, isOpen }) => {
           </ButtonLoginGG> */}
 
           <ItemsWrapper>
-            <span className="iconify" data-icon="akar-icons:facebook-fill"></span>
+            <span
+              className="iconify"
+              data-icon="akar-icons:facebook-fill"
+            ></span>
             <span className="iconify" data-icon="fa-brands:instagram"></span>
-            <span className="iconify" data-icon="entypo-social:twitter-with-circle"></span>
+            <span
+              className="iconify"
+              data-icon="entypo-social:twitter-with-circle"
+            ></span>
           </ItemsWrapper>
         </FormBottom>
       </SigninMenu>

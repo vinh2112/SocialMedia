@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import img from "../../images/img3.jpg";
-// import { Icon } from "@iconify/react";
+import { Icon } from "@iconify/react";
 import {
   SignupContainer,
   ImgWrapper,
@@ -25,13 +25,10 @@ import { useHistory } from "react-router-dom";
 
 const SignupSection = () => {
   const history = useHistory();
-  const [hidden, setHidden] = useState({
-    pwd: false,
-    repwd: false,
-  });
-  const isHidden = (e) => {
-    const { name } = e.target;
-    setHidden({ ...hidden, [name]: !hidden.name });
+  const [hidden, setHidden] = useState(false);
+  const isHidden = () => {
+    setHidden(!hidden);
+    console.log(hidden);
   };
 
   const [data, setData] = useState({
@@ -64,7 +61,6 @@ const SignupSection = () => {
       console.log(register.response);
     }
   };
-  console.log(message);
   return (
     <SignupContainer>
       {/* Video background */}
@@ -84,7 +80,12 @@ const SignupSection = () => {
         <InfoBottom>
           {/* Email */}
           <TxbWrapper>
-            <Txb id="user" placeholder=" " name="email" onChange={handleValueChange}></Txb>
+            <Txb
+              id="user"
+              placeholder=" "
+              name="email"
+              onChange={handleValueChange}
+            ></Txb>
             <label htmlFor="user">Email</label>
           </TxbWrapper>
 
@@ -105,11 +106,14 @@ const SignupSection = () => {
             <Txb
               id="pwd"
               placeholder=" "
-              type={hidden.pwd ? "text" : "password"}
+              type={hidden ? "text" : "password"}
               name="password"
               onChange={handleValueChange}
             ></Txb>
             <label htmlFor="pwd">Password</label>
+            <i onClick={isHidden} name="repwd" style={{ cursor: "pointer" }}>
+              <Icon icon="dashicons:hidden" />
+            </i>
           </TxbWrapper>
 
           {/* Repassword */}
@@ -117,13 +121,13 @@ const SignupSection = () => {
             <Txb
               id="repwd"
               placeholder=" "
-              type={"password"}
+              type={hidden ? "text" : "password"}
               name="repassword"
               onChange={handleValueChange}
             ></Txb>
             <label htmlFor="repwd">Verifying password</label>
-            <i onClick={isHidden} name="repwd">
-              {/* <Icon icon="dashicons:hidden" /> */}
+            <i onClick={isHidden} name="repwd" style={{ cursor: "pointer" }}>
+              <Icon icon="dashicons:hidden" />
             </i>
           </TxbWrapper>
 

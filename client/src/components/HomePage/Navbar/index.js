@@ -9,13 +9,21 @@ import {
   BarIcon,
 } from "./NavbarElements";
 import { FaBars } from "react-icons/fa";
+import { useHistory } from "react-router-dom";
 const Navbar = ({ toggle }) => {
+  const history = useHistory();
+  const handleSearchClick = () => {
+    history.push("/search");
+  };
+  const handleNewFeedsClick = () => {
+    history.push("");
+  };
   return (
     <Nav>
       <NavContainer>
-        <NavLogo>Icon</NavLogo>
+        <NavLogo onClick={handleNewFeedsClick}>Icon</NavLogo>
         <NavRight>
-          <Search>
+          <Search onClick={handleSearchClick}>
             <span className="iconify" data-icon="feather:search"></span>
           </Search>
           <BarIcon>
