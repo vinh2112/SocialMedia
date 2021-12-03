@@ -122,14 +122,14 @@ const PostUpdateModal = ({ user }) => {
             <Name>@{user.name}</Name>
             <PostPayment>
               <SwitchWrapper>
-                <Switch checked={post.isPaymentRequired} onChange={handlePayment} />
                 Payment Required
+                <Switch checked={post.isPaymentRequired} onChange={handlePayment} size="small" />
+                <InputPrice
+                  onChange={handlePrice}
+                  type="number"
+                  disabled={isChecked ? "" : "disabled"}
+                ></InputPrice>
               </SwitchWrapper>
-              <InputPrice
-                onChange={handlePrice}
-                type="number"
-                disabled={isChecked ? "" : "disabled"}
-              ></InputPrice>
             </PostPayment>
           </UserWrapper>
           <DescArea

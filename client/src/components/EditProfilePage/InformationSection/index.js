@@ -17,6 +17,7 @@ import DefaultAvatar from "images/DefaultAvatar.png";
 const initialUser = {
   avatar: "",
   name: "",
+  fullName: "",
   from: "",
   creditCard: "",
   desc: "",
@@ -32,6 +33,7 @@ export default function InformationSection({ user }) {
       setNewUser({
         ...initialUser,
         name: user.name,
+        fullName: user.fullName,
         from: user.from,
         creditCard: user.creditCard,
         desc: user.desc,
@@ -160,10 +162,22 @@ export default function InformationSection({ user }) {
           <Grid item xs={12}>
             <InfoItem>
               <TextField
+                name="fullName"
+                onChange={handleChangeValue}
+                defaultValue={newUser.fullName}
+                label="Full Name"
+                style={{ width: "300px" }}
+                size="small"
+              />
+            </InfoItem>
+          </Grid>
+          <Grid item xs={12}>
+            <InfoItem>
+              <TextField
                 name="name"
                 onChange={handleChangeValue}
                 defaultValue={newUser.name}
-                label="Name"
+                label="Nick Name"
                 style={{ width: "300px" }}
                 size="small"
               />

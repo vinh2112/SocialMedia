@@ -12,6 +12,11 @@ const schema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     name: {
       type: String,
       trim: true,

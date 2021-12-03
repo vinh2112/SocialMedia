@@ -35,7 +35,7 @@ export const PostTopTitle = styled.div`
   }
 
   & > div:last-child {
-    width: 60%;
+    width: 30%;
     background-color: ${({ theme }) => theme.contrastColor};
     padding-bottom: 2px;
     margin: 10px 0 12px;

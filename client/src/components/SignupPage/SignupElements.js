@@ -26,11 +26,7 @@ export const ImgWrapper = styled.div`
     right: 0;
     left: 0;
     bottom: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.1) 0%,
-        rgba(0, 0, 0, 0.2) 100%
-      ),
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%),
       linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
     z-index: 3;
   }
@@ -63,7 +59,7 @@ export const InfoContainer = styled.form`
 export const InfoTop = styled.div`
   display: flex;
   flex-direction: column;
-  height: 30%;
+  height: 25%;
   margin: 0 60px;
   padding-top: 18%;
 `;

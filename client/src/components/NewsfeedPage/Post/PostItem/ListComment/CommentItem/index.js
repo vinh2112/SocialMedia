@@ -19,6 +19,7 @@ import {
   MenuActions,
   MenuItem,
   ReplyWrapper,
+  ReplyCount,
 } from "./CommentItemElements";
 import { Icon } from "@iconify/react";
 import moment from "moment";
@@ -97,6 +98,11 @@ const CommentItem = ({ comment, post }) => {
             <BottomComment>
               <ReplyButton onClick={handleReply}>Reply</ReplyButton>
               <Time>{moment(comment.createdAt).fromNow()}</Time>
+              <ReplyCount>
+                {comment.reply.length === 0
+                  ? null
+                  : comment.reply.length + [comment.reply.length > 1 ? " replies" : " reply"]}
+              </ReplyCount>
             </BottomComment>
           </CommentWrapper>
 

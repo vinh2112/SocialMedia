@@ -70,6 +70,14 @@ export const BottomComment = styled.div`
   gap: 6px;
 `;
 
+export const ReplyCount = styled.div`
+  display: inline;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: ${({ theme }) => theme.subTextColor};
+  font-style: italic;
+`;
+
 export const Time = styled.div`
   font-size: 0.8rem;
   font-weight: 400;

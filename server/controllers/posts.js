@@ -106,7 +106,7 @@ export const getPostsTimeline = async (req, res) => {
 export const getTopLikedPosts = async (req, res) => {
   try {
     const posts = await PostModel.find()
-      .sort("-likes -createdAt")
+      .sort("-likes")
       .limit(6)
       .populate({
         path: "userId",

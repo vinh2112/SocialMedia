@@ -49,14 +49,14 @@ const Header = ({ toggle }) => {
     };
   });
 
-  const handleLogin = React.useCallback(() => {
-    dispatch(
-      actions.login.loginRequest({
-        email: "vuongquocvinh.bh@gmail.com",
-        password: "123456",
-      })
-    );
-  }, [dispatch]);
+  // const handleLogin = React.useCallback(() => {
+  //   dispatch(
+  //     actions.login.loginRequest({
+  //       email: "vuongquocvinh.bh@gmail.com",
+  //       password: "123456",
+  //     })
+  //   );
+  // }, [dispatch]);
 
   return (
     <HeaderContainer>
@@ -66,10 +66,10 @@ const Header = ({ toggle }) => {
             <h2>Logo</h2>
           </LogoLink>
 
-          {!user.loggedIn && <button onClick={handleLogin}>Login</button>}
+          {/* {!user.loggedIn && <button onClick={handleLogin}>Login</button>} */}
         </HeaderLeft>
 
-        {user.isLoading && <p>Loading...</p>}
+        {/* {user.isLoading && <p>Loading...</p>} */}
 
         <HeaderRight>
           {user.currentUser ? (

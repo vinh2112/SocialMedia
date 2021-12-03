@@ -245,15 +245,32 @@ export const PostPayment = styled.div`
 `;
 
 export const SwitchWrapper = styled.div`
-  display:flex;
+  display: flex;
   align-items: center;
-  font-size:14px;
-
-`
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--success-color);
+`;
 export const InputPrice = styled.input`
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
-  width:50%;
+  width: 100%;
+  max-width: 140px;
+  padding: 4px 8px;
+  border: 1px solid ${({ theme }) => theme.borderColor};
+  outline: none;
+  background: none;
+  border-radius: 2px;
+  color: ${({ theme }) => theme.textColor};
+
+  &:disabled {
+    color: ${({ theme }) => theme.subTextColor};
+  }
+
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.borderColor};
+  }
 `;

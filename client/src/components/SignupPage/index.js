@@ -33,7 +33,8 @@ const SignupSection = () => {
 
   const [data, setData] = useState({
     email: "",
-    fullname: "",
+    fullName: "",
+    name: "",
     password: "",
     repassword: "",
   });
@@ -52,6 +53,7 @@ const SignupSection = () => {
         email: data.email,
         password: data.password,
         name: data.name,
+        fullName: data.fullName,
       });
       if (register?.response?.status === 400) {
         setMessage(register.response.data.msg);
@@ -95,10 +97,22 @@ const SignupSection = () => {
               id="fName"
               placeholder=" "
               maxLength="50"
-              name="fullname"
+              name="fullName"
               onChange={handleValueChange}
             ></Txb>
-            <label htmlFor="fNname">Full name</label>
+            <label htmlFor="fName">Full name</label>
+          </TxbWrapper>
+
+          {/* Nick name */}
+          <TxbWrapper>
+            <Txb
+              id="name"
+              placeholder=" "
+              maxLength="50"
+              name="name"
+              onChange={handleValueChange}
+            ></Txb>
+            <label htmlFor="name">Nickname</label>
           </TxbWrapper>
 
           {/* Password */}

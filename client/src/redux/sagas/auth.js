@@ -9,7 +9,7 @@ export function* loginSaga(payload) {
       const user = yield call(api.AuthAPI.getUserInfo);
       yield put(actions.login.loginSuccess(user.data));
     } else {
-      yield put(actions.login.loginFailure(res.response.data.msg));
+      yield put(actions.login.loginFailure(res.data.msg));
     }
   } catch (err) {
     console.log(err);

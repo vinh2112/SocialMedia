@@ -9,7 +9,6 @@ import {
   AuthorInfo,
   AvatarLink,
   Avatar,
-  AvatarLetter,
   RightSide,
   AuthorName,
   PostCreated,
@@ -29,10 +28,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
 import * as actions from "redux/actions";
 import { LoadingButton } from "@mui/lab";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
-const getFirstLetter = (name) => {
-  return name.charAt(0).toUpperCase();
-};
+// const getFirstLetter = (name) => {
+//   return name.charAt(0).toUpperCase();
+// };
 
 const PostItem = ({ post }) => {
   const [newPost, setNewPost] = useState(null);
@@ -131,15 +131,7 @@ const PostItem = ({ post }) => {
             <AuthorInfo>
               {/* {post.price} */}
               <AvatarLink to={`/profile/${post.userId._id}`}>
-                {post.userId.avatar ? (
-                  <Avatar src={post.userId.avatar} />
-                ) : (
-                  <AvatarLetter>
-                    {post.userId.name
-                      ? getFirstLetter(post.userId.name)
-                      : getFirstLetter(post.userId.email)}
-                  </AvatarLetter>
-                )}
+                <Avatar src={post.userId.avatar ? post.userId.avatar : DefaultAvatar} />
               </AvatarLink>
               <RightSide>
                 <AuthorName to={`/profile/${post.userId._id}`}>

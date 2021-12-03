@@ -49,7 +49,7 @@ export const logout = (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name, fullName } = req.body;
 
     // Validate User
     if (
@@ -66,7 +66,7 @@ export const register = async (req, res) => {
       return res.status(400).json({ msg: "Password is at least 6 letters." });
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = new UserModel({ email, password: passwordHash, name });
+    const newUser = new UserModel({ email, password: passwordHash, name, fullName });
 
     await newUser.save();
 
@@ -87,14 +87,12 @@ export const register = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const { name, avatar, city, from, desc, creditCard, password } = req.body;
+  const { fullName, name, avatar, city, from, desc, creditCard, password } = req.body;
   // Check Password and Hash Password
   var newPassword;
   if (password) {
     if (password.length < 6)
-      return res
-        .status(400)
-        .json({ msg: "Password must have at least 6 letters." });
+      return res.status(400).json({ msg: "Password must have at least 6 letters." });
     try {
       newPassword = await bcrypt.hash(password, 10);
     } catch (error) {
@@ -106,6 +104,7 @@ export const updateUser = async (req, res) => {
     await UserModel.findByIdAndUpdate(req.userId, {
       password: newPassword,
       name: name,
+      fullName: fullName,
       avatar: avatar,
       city: city,
       from: from,

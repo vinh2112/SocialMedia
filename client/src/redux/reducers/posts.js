@@ -56,7 +56,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(getProfilePosts.getProfilePostsRequest):
       return {
         ...state,
-        isLoading: true,
+        isLoading: false,
       };
     case getType(getProfilePosts.getProfilePostsSuccess):
       return {
