@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import { CardContent, CardHeader } from "@mui/material";
 
 const Posts = ({ direction }) => {
-  const { data, isLoading } = useSelector(postState$);
+  const { data } = useSelector(postState$);
   const { currentUser } = useSelector(authState$);
 
   const { userId } = useParams();
@@ -29,7 +29,9 @@ const Posts = ({ direction }) => {
           <PostItem key={i} post={post} />
         ))}
 
-        {isLoading && [...Array(2)].map((item, index) => <PostLoading key={index} />)}
+        {[...Array(1)].map((item, index) => (
+          <PostLoading key={index} />
+        ))}
       </Container>
     </>
   );

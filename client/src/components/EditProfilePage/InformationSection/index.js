@@ -12,6 +12,7 @@ import { AuthAPI, UPLOAD, UserAPI } from "api";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useDispatch } from "react-redux";
 import * as actions from "redux/actions";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 const initialUser = {
   avatar: "",
@@ -47,9 +48,6 @@ export default function InformationSection({ user }) {
 
   const handleUploadAvatar = (e) => {
     setNewUser({ ...newUser, avatar: URL.createObjectURL(e.target.files[0]) });
-    // const newState = newUser;
-    // delete newState["name"];
-    // setNewUser({ ...newState, avatar: URL.createObjectURL(e.target.files[0]) });
   };
 
   const handleChangeValue = (e) => {
@@ -133,7 +131,9 @@ export default function InformationSection({ user }) {
               <AvatarWrapper>
                 <Avatar
                   onClick={handleClick}
-                  src={newUser.avatar ? newUser.avatar : user?.avatar}
+                  src={
+                    newUser.avatar ? newUser.avatar : [user?.avatar ? user.avatar : DefaultAvatar]
+                  }
                   alt="avatar"
                 />
                 <input

@@ -20,6 +20,7 @@ import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$, modalState$ } from "redux/selectors";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 const Header = ({ toggle }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +80,10 @@ const Header = ({ toggle }) => {
                 </RoundActionButton>
               )}
               <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
-                <Avatar src={user.currentUser.avatar} alt="Photo" />
+                <Avatar
+                  src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar}
+                  alt="Photo"
+                />
                 <UserName>@{user.currentUser.name}</UserName>
               </RoundButtonLink>
             </>
@@ -98,11 +102,7 @@ const Header = ({ toggle }) => {
             </RoundLabelButton>
             <input type="checkbox" id="activeCheckBox"></input>
 
-            <SideBar
-              isOpen={isOpen}
-              handleSideBar={handleSideBar}
-              user={user}
-            />
+            <SideBar isOpen={isOpen} handleSideBar={handleSideBar} user={user} />
           </SideBarContainer>
         </HeaderRight>
       </HeaderWrapper>

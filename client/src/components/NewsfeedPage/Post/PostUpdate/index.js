@@ -3,6 +3,7 @@ import { Container, AvatarLink, Avatar, OverLay, DescSection } from "./PostUpdat
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "redux/actions";
 import { authState$ } from "redux/selectors";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 const PostUpdate = () => {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ const PostUpdate = () => {
   return (
     <Container>
       <AvatarLink to={`/profile/${currentUser._id}`}>
-        <Avatar src={currentUser.avatar} alt="avatar" />
+        <Avatar src={currentUser.avatar ? currentUser.avatar : DefaultAvatar} alt="avatar" />
         <OverLay></OverLay>
       </AvatarLink>
       <DescSection onClick={handleModal}>

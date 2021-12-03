@@ -65,7 +65,7 @@ export const getPostsTimeline = async (req, res) => {
 
     let posts = [];
     const friendPosts = await Promise.all(
-      user.followings.map((following, index) => {
+      user.followings.map((following) => {
         return PostModel.find({ userId: following.toString() })
           .populate({
             path: "userId",

@@ -1,4 +1,4 @@
-import { takeLatest, fork } from "redux-saga/effects";
+import { takeLatest, takeEvery, fork } from "redux-saga/effects";
 import {
   fetchPostsSaga,
   fetchProfilePostsSaga,
@@ -16,8 +16,8 @@ import { createComment, createReply, showBoxComment } from "./comments";
 function* mySaga() {
   yield fork(watchUser);
   yield takeLatest(actions.getPosts.getPostsRequest, fetchPostsSaga);
-  yield takeLatest(actions.getPostsLoadMore.getPostsLoadMoreRequest, fetchPostsLoadMore);
-  yield takeLatest(actions.getProfilePosts.getProfilePostsRequest, fetchProfilePostsSaga);
+  yield takeEvery(actions.getPostsLoadMore.getPostsLoadMoreRequest, fetchPostsLoadMore);
+  yield takeEvery(actions.getProfilePosts.getProfilePostsRequest, fetchProfilePostsSaga);
   yield takeLatest(actions.getTopLikedPosts.getTopLikedPostsRequest, fetchTopLikedPosts);
   yield takeLatest(actions.searchPosts.searchPostsRequest, searchPosts);
   yield takeLatest(actions.createPost.createPostRequest, createPostSaga);

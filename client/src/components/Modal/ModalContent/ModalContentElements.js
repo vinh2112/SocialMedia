@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -69,5 +69,29 @@ export const Desc = styled.div`
 export const CustomButton = styled(Button)`
   && {
     height: 30px;
+  }
+`;
+
+export const CustomInputLabel = styled(InputLabel)`
+  && {
+    color: ${({ theme }) => theme.textColor};
+  }
+`;
+
+export const CustomInputAdornment = styled(InputAdornment)`
+  && {
+    & > p {
+      color: ${({ theme }) => theme.textColor};
+    }
+  }
+`;
+
+export const CustomOutlinedInput = styled(OutlinedInput)`
+  && {
+    color: ${({ theme }) => theme.textColor};
+
+    & > fieldset {
+      border-color: ${({ theme }) => theme.contrastColor};
+    }
   }
 `;

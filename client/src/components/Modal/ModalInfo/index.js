@@ -51,7 +51,10 @@ export default function ModalInfo({ post, comments }) {
 
   return (
     <InfoWrapper>
-      <Likes>{post.likes.length} likes</Likes> ● {countComments()} comments
+      <Likes>
+        {post.likes.length} {post.likes.length > 1 ? "likes" : "like"}
+      </Likes>{" "}
+      ● {countComments()} {countComments() > 1 ? "comments" : "comment"}
       <LikeButtonWrapper>
         <LikeButton onClick={handleReact}>
           {isLiked ? (

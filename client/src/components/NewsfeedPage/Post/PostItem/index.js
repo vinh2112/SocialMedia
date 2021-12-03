@@ -15,19 +15,15 @@ import {
   PostCreated,
   Description,
   CustomButton,
+  CustomInputLabel,
+  CustomInputAdornment,
+  CustomOutlinedInput,
 } from "./PostItemElements";
 import moment from "moment";
 import { saveAs } from "file-saver";
 import { PaymentAPI } from "api";
 import { useHistory } from "react-router-dom";
-import {
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  Switch,
-} from "@mui/material";
+import { FormControl, Stack, Switch } from "@mui/material";
 import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
@@ -197,15 +193,23 @@ const PostItem = ({ post }) => {
                       color="primary"
                     />
                     <FormControl>
-                      <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-                      <OutlinedInput
+                      <CustomInputLabel
+                        style={{ color: `${({ theme }) => theme.textColor}` }}
+                        htmlFor="outlined-adornment-amount"
+                      >
+                        Price
+                      </CustomInputLabel>
+                      <CustomOutlinedInput
                         id="outlined-adornment-amount"
                         name="price"
                         value={newPost.price}
                         disabled={!newPost.isPaymentRequired}
                         onChange={handleChangeValue}
-                        startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                        startAdornment={
+                          <CustomInputAdornment position="start">$</CustomInputAdornment>
+                        }
                         label="Price"
+                        style={{ color: `${({ theme }) => theme.textColor}` }}
                         sx={{ width: 100, height: 40 }}
                       />
                     </FormControl>

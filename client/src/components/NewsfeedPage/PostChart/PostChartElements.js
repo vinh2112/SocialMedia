@@ -17,25 +17,28 @@ export const PostChartContainer = styled.div`
     order: 1;
     top: 0;
     left: 0;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     transform: translateX(0);
     width: 100%;
   }
 `;
 
 export const PostTopTitle = styled.div`
-  display: flex;
   width: 100%;
-  align-items: center;
-  margin-bottom: 10px;
 
   & > .title {
-    display: inline-block;
     white-space: nowrap;
     margin-right: 12px;
     font-size: 16px;
     font-weight: 500;
     color: ${({ theme }) => theme.subTextColor};
+  }
+
+  & > div:last-child {
+    width: 60%;
+    background-color: ${({ theme }) => theme.contrastColor};
+    padding-bottom: 2px;
+    margin: 10px 0 12px;
   }
 
   @media (max-width: 700px) {

@@ -22,6 +22,7 @@ import {
 import { Container } from "./ReplyCommentElements";
 import * as actions from "redux/actions";
 import moment from "moment";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 export default function ReplyComment({ reply, commentId, currentUser, post }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,7 +61,7 @@ export default function ReplyComment({ reply, commentId, currentUser, post }) {
     <Container>
       <LeftSide>
         <AvatarLink to={`/profile/${reply.user._id}`}>
-          <Avatar src={reply.user.avatar} alt="avatar" />
+          <Avatar src={reply.user.avatar ? reply.user.avatar : DefaultAvatar} alt="avatar" />
         </AvatarLink>
       </LeftSide>
 

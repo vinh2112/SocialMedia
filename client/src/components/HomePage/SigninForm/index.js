@@ -74,16 +74,12 @@ const Signin = ({ toggle, isOpen }) => {
     //   setMessage(user.errMsg);
     //   console.log(user.errMsg);
     // }
+
     isLogin();
   }, [dispatch, data, isLogin]);
 
   return (
-    <SigninContainer
-      id="home/signin"
-      isOpen={isOpen}
-      onClick={handleCloseModal}
-      ref={overlayModal}
-    >
+    <SigninContainer id="home/signin" isOpen={isOpen} onClick={handleCloseModal} ref={overlayModal}>
       <SigninMenu isOpen={isOpen}>
         <FormTop>
           <Headline>Welcome to Icon</Headline>
@@ -94,11 +90,7 @@ const Signin = ({ toggle, isOpen }) => {
             <IconWrapper>
               <span className="iconify" data-icon="ic:round-email"></span>
             </IconWrapper>
-            <Txb
-              placeholder="Email"
-              name="email"
-              onChange={handleChangeValue}
-            ></Txb>
+            <Txb placeholder="Email" name="email" onChange={handleChangeValue}></Txb>
           </TxbWrapper>
 
           <TxbWrapper>
@@ -133,15 +125,9 @@ const Signin = ({ toggle, isOpen }) => {
           </ButtonLoginGG> */}
 
           <ItemsWrapper>
-            <span
-              className="iconify"
-              data-icon="akar-icons:facebook-fill"
-            ></span>
+            <span className="iconify" data-icon="akar-icons:facebook-fill"></span>
             <span className="iconify" data-icon="fa-brands:instagram"></span>
-            <span
-              className="iconify"
-              data-icon="entypo-social:twitter-with-circle"
-            ></span>
+            <span className="iconify" data-icon="entypo-social:twitter-with-circle"></span>
           </ItemsWrapper>
         </FormBottom>
       </SigninMenu>

@@ -49,7 +49,7 @@ export const Btn = styled(LinkR)`
   font-weight: 400;
   border-radius: 30px;
   border: 2px solid white;
-  padding: 10px 16px;
+  padding: 6px 16px;
   background: black; //#fbf7f0;
   &:hover {
     background: #fff;

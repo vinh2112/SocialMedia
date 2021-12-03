@@ -40,6 +40,7 @@ export default function SearchHeader({ onSubmit }) {
           id="search-input"
           placeholder="Search ..."
           required
+          autoComplete="off"
         ></SearchInput>
         <SearchLabel htmlFor="search-input">
           <Icon icon="akar-icons:search" />

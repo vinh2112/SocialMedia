@@ -40,7 +40,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
               </UserInfo>
             </MenuItemLink>
           ) : (
-            <MenuItemLink className="justify__center lg" to="#">
+            <MenuItemLink className="justify__center lg" to="/home">
               <MenuTitle>Sign in</MenuTitle>
             </MenuItemLink>
           )}

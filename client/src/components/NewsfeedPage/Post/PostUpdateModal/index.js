@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPost, hideModal } from "redux/actions";
 import { modalState$, postState$ } from "redux/selectors";
 import Switch from "@mui/material/Switch";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 const initial_post = {
   desc: "",
@@ -116,7 +117,7 @@ const PostUpdateModal = ({ user }) => {
         <Content>
           <UserWrapper>
             <AvatarWrapper>
-              <Avatar src={user.avatar} alt="avatar" />
+              <Avatar src={user.avatar ? user.avatar : DefaultAvatar} alt="avatar" />
             </AvatarWrapper>
             <Name>@{user.name}</Name>
             <PostPayment>

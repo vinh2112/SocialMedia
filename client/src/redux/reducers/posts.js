@@ -102,7 +102,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         };
       return {
         ...state,
-        isLoading: false,
+        isLoading: action.payload.posts.length === 0 ? true : false,
         data: [...state.data, ...action.payload.posts],
       };
     case getType(createPost.createPostRequest):

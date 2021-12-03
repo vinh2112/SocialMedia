@@ -9,19 +9,15 @@ import {
   ContentTop,
   CreatedDate,
   CustomButton,
+  CustomInputAdornment,
+  CustomInputLabel,
+  CustomOutlinedInput,
   Desc,
   DescWrapper,
 } from "./ModalContentElements";
 import moment from "moment";
 import { LoadingButton } from "@mui/lab";
-import {
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Stack,
-  Switch,
-} from "@mui/material";
+import { FormControl, Stack, Switch } from "@mui/material";
 import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
@@ -137,14 +133,14 @@ export default function ModalContent({ post }) {
                 color="primary"
               />
               <FormControl>
-                <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-                <OutlinedInput
+                <CustomInputLabel htmlFor="outlined-adornment-amount">Price</CustomInputLabel>
+                <CustomOutlinedInput
                   id="outlined-adornment-amount"
                   name="price"
                   value={newPost.price}
                   disabled={!newPost.isPaymentRequired}
                   onChange={handleChangeValue}
-                  startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                  startAdornment={<CustomInputAdornment position="start">$</CustomInputAdornment>}
                   label="Price"
                   sx={{ width: 100, height: 40 }}
                 />

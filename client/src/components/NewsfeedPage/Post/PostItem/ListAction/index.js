@@ -93,12 +93,13 @@ const ListAction = ({ showComment, post, downloadImage }) => {
           >
             <Icon icon="fluent:arrow-download-16-filled" />
             <Title>Download</Title>
-            <Icon icon="ant-design:dollar-circle-filled" />
           </MenuItem>
-          <MenuItem className="danger">
-            <Icon icon="feather:delete" />
-            <Title>Delete post</Title>
-          </MenuItem>
+          {post?.userId._id === currentUser?._id && (
+            <MenuItem className="danger">
+              <Icon icon="feather:delete" />
+              <Title>Delete post</Title>
+            </MenuItem>
+          )}
           <MenuItem className="danger">
             <Icon icon="jam:triangle-danger" />
             <Title>Report</Title>

@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Nav,
-  NavContainer,
-  NavLogo,
-  NavRight,
-  Search,
-  Btn,
-  BarIcon,
-} from "./NavbarElements";
+import { Nav, NavContainer, NavLogo, NavRight, Search, Btn, BarIcon } from "./NavbarElements";
 import { FaBars } from "react-icons/fa";
 import { useHistory } from "react-router-dom";
 const Navbar = ({ toggle }) => {
@@ -21,7 +13,7 @@ const Navbar = ({ toggle }) => {
   return (
     <Nav>
       <NavContainer>
-        <NavLogo onClick={handleNewFeedsClick}>Icon</NavLogo>
+        <NavLogo onClick={handleNewFeedsClick}>Logo</NavLogo>
         <NavRight>
           <Search onClick={handleSearchClick}>
             <span className="iconify" data-icon="feather:search"></span>
@@ -29,7 +21,7 @@ const Navbar = ({ toggle }) => {
           <BarIcon>
             <FaBars />
           </BarIcon>
-          <Btn to="home/signin" onClick={toggle}>
+          <Btn to="/home" onClick={toggle}>
             Signin
           </Btn>
           <Btn to="/signup">Signup</Btn>

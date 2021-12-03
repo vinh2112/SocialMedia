@@ -34,6 +34,7 @@ export default function PostChart() {
       <PostChartContainer>
         <PostTopTitle>
           <div className="title">Top Liked</div>
+          <div></div>
         </PostTopTitle>
         <PostChartWrapper>
           {topLiked

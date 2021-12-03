@@ -9,7 +9,6 @@ export const InfoWrapper = styled.div`
   width: 80%;
   height: calc(100vh - 40px - 54px);
   margin: 0 auto;
-  padding-right: 16px;
   overflow: hidden;
   overflow-y: auto;
 `;

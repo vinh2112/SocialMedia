@@ -18,18 +18,18 @@ import {
   Description,
   ErrorWrapper,
 } from "./SignupElements";
-
-// import { ItemsWrapper } from "../HomePage/SigninForm/SigninElements";
 import { UserAPI } from "api";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import * as actions from "redux/actions";
 
 const SignupSection = () => {
   const history = useHistory();
   const [hidden, setHidden] = useState(false);
   const isHidden = () => {
     setHidden(!hidden);
-    console.log(hidden);
   };
+  const dispatch = useDispatch();
 
   const [data, setData] = useState({
     email: "",
@@ -53,12 +53,17 @@ const SignupSection = () => {
         password: data.password,
         name: data.name,
       });
-      if (register.response.status === 400) {
+      if (register?.response?.status === 400) {
         setMessage(register.response.data.msg);
       } else {
-        history.push("/home/signin");
+        history.push("/home");
+        dispatch(
+          actions.toast.showToast({
+            message: "Register Successfully",
+            type: "success",
+          })
+        );
       }
-      console.log(register.response);
     }
   };
   return (
@@ -80,12 +85,7 @@ const SignupSection = () => {
         <InfoBottom>
           {/* Email */}
           <TxbWrapper>
-            <Txb
-              id="user"
-              placeholder=" "
-              name="email"
-              onChange={handleValueChange}
-            ></Txb>
+            <Txb id="user" placeholder=" " name="email" onChange={handleValueChange}></Txb>
             <label htmlFor="user">Email</label>
           </TxbWrapper>
 

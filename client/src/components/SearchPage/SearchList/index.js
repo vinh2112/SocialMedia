@@ -2,7 +2,7 @@ import React from "react";
 import SearchItem from "../SearchItem";
 import { CustomCard, CustomSkeleton, SearchListContainer } from "./SearchListElements";
 
-export default function SearchList({ posts, showModal, isLoading }) {
+export default function SearchList({ posts, showModal }) {
   return (
     <SearchListContainer>
       {posts.length !== 0
@@ -10,7 +10,9 @@ export default function SearchList({ posts, showModal, isLoading }) {
             <SearchItem key={index} post={post} index={index} showModal={showModal} />
           ))
         : [...Array(2)].map((item, index) => <LoadingItem key={index} />)}
-      {isLoading && [...Array(3)].map((item, index) => <LoadingItem key={index} />)}
+      {[...Array(3)].map((item, index) => (
+        <LoadingItem key={index} />
+      ))}
     </SearchListContainer>
   );
 }

@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authState$, commentState$ } from "redux/selectors";
 import { CommentAPI } from "api";
 import ReplyComment from "./ReplyComment";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 const CommentItem = ({ comment, post }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +80,7 @@ const CommentItem = ({ comment, post }) => {
     <Container>
       <LeftSide>
         <AvatarLink to={`/profile/${comment.userId._id}`}>
-          <Avatar src={comment.userId.avatar} />
+          <Avatar src={comment.userId.avatar ? comment.userId.avatar : DefaultAvatar} />
         </AvatarLink>
       </LeftSide>
 
