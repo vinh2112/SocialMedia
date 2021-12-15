@@ -70,14 +70,31 @@ const PostItem = ({ post }) => {
 
   const handleDownload = async () => {
     if (post.isPaymentRequired) {
-      const isPaid = await PaymentAPI.checkPayment(post._id);
+      if(currentUser){
+        if(post.userId=== currentUser._id ){
+          saveAs(post.image.url, `${post.image.public_id}.png`);
+        }
+        else{
+        const isPaid = await PaymentAPI.checkPayment(post._id);
 
-      if (isPaid.data) {
-        saveAs(post.image.url, `${post.image.public_id}.png`);
-      } else {
-        history.push("/checkout", { post });
+        if (isPaid.data) {
+          saveAs(post.image.url, `${post.image.public_id}.png`);
+        } else {
+          history.push("/checkout", { post });
+          }
+        }
       }
-    } else {
+      else{
+        dispatch(
+          actions.toast.showToast({
+            message: "Please Login",
+            type: "warning",
+          })
+        );
+
+      }
+    }
+    else {
       saveAs(post.image.url, `${post.image.public_id}.png`);
     }
   };
