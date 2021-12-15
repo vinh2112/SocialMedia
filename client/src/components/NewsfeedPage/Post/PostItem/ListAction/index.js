@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$ } from "redux/selectors";
 
-const ListAction = ({ showComment, post, downloadImage }) => {
+const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport }) => {
   // const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
   const menuNode = useRef();
@@ -74,7 +74,7 @@ const ListAction = ({ showComment, post, downloadImage }) => {
         ) : (
           <Icon icon="ant-design:heart-outlined" />
         )}
-        <span>Like</span>
+        <span>{post.likes.length}</span>
       </LikeAction>
 
       <CommentAction onClick={showComment}>
@@ -85,6 +85,12 @@ const ListAction = ({ showComment, post, downloadImage }) => {
       <MoreAction ref={menuNode} onClick={() => setIsOpen(!isOpen)}>
         <Icon icon="carbon:overflow-menu-horizontal" />
         <ActionMenu isOpen={isOpen}>
+          {post?.userId._id === currentUser?._id && (
+            <MenuItem onClick={() => handleEdit(true)}>
+              <Icon icon="ant-design:edit-outlined" />
+              <Title>Edit Post</Title>
+            </MenuItem>
+          )}
           <MenuItem
             onClick={(e) => {
               e.preventDefault();
@@ -100,7 +106,7 @@ const ListAction = ({ showComment, post, downloadImage }) => {
               <Title>Delete post</Title>
             </MenuItem>
           )}
-          <MenuItem className="danger">
+          <MenuItem className="danger" onClick={() => handleReport(true)}>
             <Icon icon="jam:triangle-danger" />
             <Title>Report</Title>
           </MenuItem>

@@ -16,6 +16,11 @@ export const getAllReports = async (req, res) => {
 export const createReport = async (req, res) => {
   try {
     const { postId, reason } = req.body;
+    const post = await PostModel.findById(postId);
+    if (!post) return res.status(500).json({ msg: "Post is not exist" });
+
+    const report = await ReportModel.find({ reporterId: req.userId, reportedPostId: postId });
+    if (report.length) return res.status(400).json({ msg: "Report is existed" });
     const newReport = new ReportModel({
       reporterId: req.userId,
       reason,
@@ -34,10 +39,10 @@ export const deleteReportedPost = async (req, res) => {
     const report = await ReportModel.findById(reportId);
 
     if (report) {
-      await ReportModel.findByIdAndDelete(reportId)
+      await ReportModel.deleteMany({ reportedPostId: report.reportedPostId })
         .then(async () => {
           await PostModel.findByIdAndDelete(report.reportedPostId.toString());
-          return res.status(200).json({ msg: "success" });
+          return res.status(200).json(report.reportedPostId);
         })
         .catch((err) => {
           return res.status(500).json({ msg: err.message });
@@ -57,7 +62,7 @@ export const refuseReportedPost = async (req, res) => {
 
     if (report) {
       await ReportModel.findByIdAndDelete(reportId)
-        .then(async () => {
+        .then(() => {
           return res.status(200).json({ msg: "success" });
         })
         .catch((err) => {

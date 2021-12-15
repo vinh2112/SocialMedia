@@ -6,14 +6,13 @@ const globalTheme = {
   colorWhite: "#FFF",
   switchColorPrimary: "#fe3456",
   switchAnimationDuration: "0.2s",
-  gradient:
-    "linear-gradient(122deg, rgba(128,74,216,1) 0%, rgba(98,75,217,1) 100%)",
+  gradient: "linear-gradient(122deg, rgba(128,74,216,1) 0%, rgba(98,75,217,1) 100%)",
   colorGray: "#4e4e4e",
 };
 
 export const lightTheme = {
   primary: "#fefefe",
-  secondary: "#fafafc",
+  secondary: "#fafafa",
   contrastColor: "#eaeaea",
   hoverColor: "#dfdfdf",
   textColor: "#333",

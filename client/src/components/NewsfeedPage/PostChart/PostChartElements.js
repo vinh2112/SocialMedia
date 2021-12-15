@@ -21,6 +21,10 @@ export const PostChartContainer = styled.div`
     transform: translateX(0);
     width: 100%;
   }
+
+  @media (max-width: 700px) {
+    border-radius: 0;
+  }
 `;
 
 export const PostTopTitle = styled.div`
@@ -72,7 +76,8 @@ export const PostChartWrapper = styled.div`
   }
 
   @media (max-width: 700px) {
-    margin: 0 4px 20px;
+    margin: 0 -6px 20px;
+    padding: 10px;
   }
 
   @media (min-width: 1025px) {

@@ -48,6 +48,7 @@ export const CommentAction = styled.div`
 export const MoreAction = styled.div`
   ${Action}
   position: relative;
+  z-index: 0;
 `;
 
 // ------------

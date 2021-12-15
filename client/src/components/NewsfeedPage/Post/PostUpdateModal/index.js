@@ -121,8 +121,8 @@ const PostUpdateModal = ({ user }) => {
             </AvatarWrapper>
             <Name>@{user.name}</Name>
             <PostPayment>
-              <SwitchWrapper>
-                Payment Required
+              <SwitchWrapper isChecked={isChecked}>
+                <span>Payment Required</span>
                 <Switch checked={post.isPaymentRequired} onChange={handlePayment} size="small" />
                 <InputPrice
                   onChange={handlePrice}

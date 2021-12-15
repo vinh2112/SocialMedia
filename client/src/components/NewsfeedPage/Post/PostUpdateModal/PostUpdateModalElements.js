@@ -7,7 +7,7 @@ export const OverLay = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: ${({ isShow }) => (isShow ? "1" : "0")};
   visibility: ${({ isShow }) => (isShow ? "visible" : "hidden")};
   transition: all 0.2s ease-in-out;
@@ -23,7 +23,7 @@ export const Container = styled.div`
   top: ${({ isShow }) => (isShow ? "50%" : "40%")};
   left: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 5px;
+  border-radius: 4px;
   box-shadow: var(--box-shadow);
   transition: all 0.1s linear 0.1s;
   overflow: hidden;
@@ -250,7 +250,10 @@ export const SwitchWrapper = styled.div`
   flex-direction: column;
   gap: 6px;
   font-size: 14px;
-  color: var(--success-color);
+
+  & > span {
+    color: ${({ isChecked, theme }) => (isChecked ? "var(--success-color)" : theme.subTextColor)};
+  }
 `;
 export const InputPrice = styled.input`
   &::-webkit-outer-spin-button,

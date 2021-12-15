@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 
 export const OverLay = styled.div`
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
   transition: all 0.1s ease-out 0s;

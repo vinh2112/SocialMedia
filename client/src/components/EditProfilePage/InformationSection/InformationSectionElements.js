@@ -6,11 +6,17 @@ export const InfoContainer = styled.div`
 `;
 
 export const InfoWrapper = styled.div`
-  width: 80%;
+  width: 100%;
   height: calc(100vh - 40px - 54px);
   margin: 0 auto;
+  padding: 0 16px;
   overflow: hidden;
   overflow-y: auto;
+
+  @media (max-width: 700px) {
+    overflow: visible;
+    height: auto;
+  }
 `;
 
 export const InfoItem = styled.div`

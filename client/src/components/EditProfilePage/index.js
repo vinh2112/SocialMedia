@@ -29,7 +29,8 @@ export default function EditProfile() {
   const history = useHistory();
 
   const checkIsLoggedIn = useCallback(() => {
-    if (!currentUser) {
+    const TOKEN = localStorage.getItem("access_token");
+    if (!currentUser && !TOKEN) {
       history.push("/");
     }
   }, [currentUser, history]);

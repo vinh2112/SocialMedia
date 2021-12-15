@@ -16,6 +16,7 @@ import SearchPage from "pages/SearchPage";
 import Home from "pages/HomePage";
 import SignupPage from "pages/SignupPage";
 import EditProfilePage from "pages/EditProfilePage";
+import AdminPage from "pages/AdminPage";
 
 function App() {
   const context = useContext(ThemeContext);
@@ -50,6 +51,7 @@ function App() {
             <Route path="/setting" component={EditProfilePage} />
             <Route path="/profile/:userId" component={ProfilePage} />
             <Route path="/checkout" component={PaypalPage} />
+            <Route path="/administrator" component={AdminPage} />
             <Route path="*" component={NotFoundPage} />
           </Switch>
 

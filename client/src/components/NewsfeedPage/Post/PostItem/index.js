@@ -29,6 +29,7 @@ import { PostAPI } from "api";
 import * as actions from "redux/actions";
 import { LoadingButton } from "@mui/lab";
 import DefaultAvatar from "images/DefaultAvatar.png";
+import PostReportModal from "./PostReportModal";
 
 // const getFirstLetter = (name) => {
 //   return name.charAt(0).toUpperCase();
@@ -38,6 +39,7 @@ const PostItem = ({ post }) => {
   const [newPost, setNewPost] = useState(null);
   const [isShowComment, setIsShowComment] = useState(false);
   const [isOnEdit, setIsOnEdit] = useState(false);
+  const [isReporting, setIsReporting] = useState(false);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector(authState$);
   const boxComment = useRef();
@@ -140,36 +142,27 @@ const PostItem = ({ post }) => {
                 <PostCreated>{moment(post.createdAt).fromNow()}</PostCreated>
               </RightSide>
 
-              {post.userId._id === currentUser?._id &&
-                (isOnEdit ? (
-                  <Stack spacing={1} direction="row">
-                    <CustomButton
-                      size="small"
-                      variant="string"
-                      onClick={() => setIsOnEdit(!isOnEdit)}
-                    >
-                      Cancel
-                    </CustomButton>
-                    <LoadingButton
-                      size="small"
-                      sx={{ height: 30 }}
-                      loading={loading}
-                      variant="outlined"
-                      color="success"
-                      onClick={handleSubmit}
-                    >
-                      Update
-                    </LoadingButton>
-                  </Stack>
-                ) : (
+              {post.userId._id === currentUser?._id && isOnEdit && (
+                <Stack spacing={1} direction="row">
                   <CustomButton
                     size="small"
                     variant="string"
                     onClick={() => setIsOnEdit(!isOnEdit)}
                   >
-                    Edit
+                    Cancel
                   </CustomButton>
-                ))}
+                  <LoadingButton
+                    size="small"
+                    sx={{ height: 30 }}
+                    loading={loading}
+                    variant="outlined"
+                    color="success"
+                    onClick={handleSubmit}
+                  >
+                    Update
+                  </LoadingButton>
+                </Stack>
+              )}
             </AuthorInfo>
             <Description>
               {isOnEdit ? (
@@ -214,9 +207,16 @@ const PostItem = ({ post }) => {
           </PostAuthor>
           <PostImage src={post.image.url} />
         </PostTop>
-        <ListAction showComment={handleShowComment} post={post} downloadImage={handleDownload} />
+        <ListAction
+          showComment={handleShowComment}
+          post={post}
+          downloadImage={handleDownload}
+          handleEdit={setIsOnEdit}
+          handleReport={setIsReporting}
+        />
         {isShowComment && <ListComment boxComment={boxComment} post={post} />}
       </PostContainer>
+      {isReporting && <PostReportModal handleClose={setIsReporting} postId={post._id} />}
     </>
   );
 };

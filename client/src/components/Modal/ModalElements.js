@@ -14,10 +14,9 @@ export const ModalForm = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  width: 90%;
-  max-width: 975px;
-  height: 80vh;
-  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
   background: ${({ theme }) => theme.primary};
   overflow: hidden;
 
@@ -34,6 +33,7 @@ export const ModalForm = styled.div`
 `;
 
 export const ModalPhotoWrapper = styled.div`
+  flex: 1;
   display: flex;
   align-items: center;
   width: 60%;
@@ -63,9 +63,13 @@ export const ModalPhoto = styled.div`
 `;
 
 export const ModalContentContainer = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
+  width: 320px;
+
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 export const ModalContentWrapper = styled.div`
