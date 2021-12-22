@@ -42,3 +42,8 @@ export const reactPost = createActions({
   reactPostSuccess: (payload) => payload,
   reactPostFailure: (err) => err,
 });
+
+export const deletePost = createActions({
+  deletePostRequest: (payload) => payload,
+  deletePostSuccess: (payload) => payload,
+});

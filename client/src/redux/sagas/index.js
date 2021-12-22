@@ -8,6 +8,7 @@ import {
   fetchPostsLoadMore,
   searchPosts,
   fetchTopLikedPosts,
+  deletePost,
 } from "./posts";
 import { watchUser } from "./auth";
 import * as actions from "../actions";
@@ -26,6 +27,7 @@ function* mySaga() {
   yield takeLatest(actions.showBoxComment.showBoxCommentRequest, showBoxComment);
   yield takeLatest(actions.createComment.createCommentRequest, createComment);
   yield takeLatest(actions.createReply.createReplyRequest, createReply);
+  yield takeLatest(actions.deletePost.deletePostRequest, deletePost);
 }
 
 export default mySaga;

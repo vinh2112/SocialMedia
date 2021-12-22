@@ -6,9 +6,8 @@ import { Link as LinkS } from "react-scroll";
 export const HomePgContainer = styled.div`
   display: flex;
   z-index: 1;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  min-height: 100vh;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -20,11 +19,7 @@ export const HomePgContainer = styled.div`
     right: 0;
     left: 0;
     bottom: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.1) 0%,
-        rgba(0, 0, 0, 0.2) 100%
-      ),
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.2) 100%),
       linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
     z-index: 3;
   }
@@ -58,15 +53,9 @@ export const InfoContainer = styled.div`
   max-width: 1280px;
   width: 100%;
   height: 100%;
-  margin-left: 185px;
   margin: 0 auto;
   padding: 60px 40px;
-  @media screen and (max-width: 1350px) {
-    margin-left: 110px;
-  }
-  @media screen and (max-width: 1100px) {
-    margin-left: 0;
-  }
+
   @media screen and (max-width: 550px) {
     width: 100%;
   }

@@ -17,12 +17,12 @@ export default function ModalActions({ post, handleEdit }) {
     if (post.isPaymentRequired) {
       if (currentUser) {
         if (post.userId._id === currentUser._id) {
-          saveAs(post.image.url, `${post.image.public_id}.png`);
+          await saveAs(post.image.url, `${post.image.public_id}.png`);
         } else {
           const isPaid = await PaymentAPI.checkPayment(post._id);
 
           if (isPaid.data) {
-            saveAs(post.image.url, `${post.image.public_id}.png`);
+            await saveAs(post.image.url, `${post.image.public_id}.png`);
           } else {
             history.push("/checkout", { post });
           }
@@ -36,7 +36,7 @@ export default function ModalActions({ post, handleEdit }) {
         );
       }
     } else {
-      saveAs(post.image.url, `${post.image.public_id}.png`);
+      await saveAs(post.image.url, `${post.image.public_id}.png`);
     }
   };
   return (
@@ -55,12 +55,14 @@ export default function ModalActions({ post, handleEdit }) {
         <ButtonTooltip className="danger">Report</ButtonTooltip>
       </ButtonWrapper>
 
-      <ButtonWrapper>
-        <Button className="danger">
-          <Icon icon="feather:delete" />
-        </Button>
-        <ButtonTooltip className="danger">Delete</ButtonTooltip>
-      </ButtonWrapper>
+      {post.userId._id === currentUser._id && (
+        <ButtonWrapper>
+          <Button className="danger">
+            <Icon icon="feather:delete" />
+          </Button>
+          <ButtonTooltip className="danger">Delete</ButtonTooltip>
+        </ButtonWrapper>
+      )}
     </Container>
   );
 }

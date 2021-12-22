@@ -58,6 +58,18 @@ const PostAPI = {
       return err;
     }
   },
+  deletePost: async (payload) => {
+    try {
+      const TOKEN = localStorage.getItem("access_token");
+
+      const res = await axios.delete(`${BASE_URL}/api/post/${payload}`, {
+        headers: { Authorization: TOKEN },
+      });
+      return res;
+    } catch (err) {
+      return err;
+    }
+  },
 };
 
 export default PostAPI;

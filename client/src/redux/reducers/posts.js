@@ -12,6 +12,7 @@ import {
   getProfileUser,
   resetPosts,
   updatePost,
+  deletePost,
 } from "../actions";
 
 export default function postsReducers(state = INIT_STATE.posts, action) {
@@ -150,6 +151,17 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(interactUser.interactUserFailure):
       return {
         ...state,
+      };
+    case getType(deletePost.deletePostRequest):
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case getType(deletePost.deletePostSuccess):
+      return {
+        ...state,
+        data: state.data.filter((post) => post._id !== action.payload),
+        isLoading: false,
       };
     default:
       return state;

@@ -52,7 +52,7 @@ export const InfoContainer = styled.form`
   }
   @media screen and (max-width: 600px) {
     position: absolute;
-    width: 400px;
+    width: 100%;
   }
 `;
 
@@ -68,7 +68,6 @@ export const InfoBottom = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 70%;
   margin: 0 60px;
 `;
 
@@ -159,7 +158,7 @@ export const LoginDiv = styled.div`
   margin: 10px 0;
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: right;
   font-size: 14px;
 `;

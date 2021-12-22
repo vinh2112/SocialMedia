@@ -66,6 +66,21 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
     }
   };
 
+  const handleDeletePost = () => {
+    console.log("123");
+    if (currentUser) {
+      dispatch(actions.deletePost.deletePostRequest(post._id));
+    } else {
+      // history.push("/login");
+      dispatch(
+        actions.toast.showToast({
+          message: "Please Login",
+          type: "warning",
+        })
+      );
+    }
+  };
+
   return (
     <ActionContainer>
       <LikeAction onClick={handleReact}>
@@ -101,7 +116,13 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
             <Title>Download</Title>
           </MenuItem>
           {post?.userId._id === currentUser?._id && (
-            <MenuItem className="danger">
+            <MenuItem
+              className="danger"
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeletePost();
+              }}
+            >
               <Icon icon="feather:delete" />
               <Title>Delete post</Title>
             </MenuItem>

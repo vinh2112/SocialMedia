@@ -1,4 +1,5 @@
 import { PostModel } from "../models/PostModel.js";
+import { ReportModel } from "../models/ReportModel.js";
 import { UserModel } from "../models/UserModel.js";
 
 export const getPosts = async (req, res) => {
@@ -264,11 +265,14 @@ export const deletePost = async (req, res) => {
   try {
     const post = await PostModel.findById(req.params.postId);
     if (post.userId.toString() === req.userId) {
-      await post.deleteOne();
-      res.status(200).json({ msg: "Delete Post Successfully." });
+      await post.deleteOne().then(async () => {
+        await ReportModel.findOneAndDelete({ postId: req.params.postId });
+        res.status(200).json({ msg: "Delete Post Successfully." });
+      });
     } else {
       res.status(403).json({ msg: "You can delete only your post." });
     }
+    res.status(500).json({ msg: "Delete Failed" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

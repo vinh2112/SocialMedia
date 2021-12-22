@@ -11,6 +11,7 @@ import {
   updatePost,
   reactPost,
   resetPosts,
+  deletePost,
 } from "./posts";
 import {
   showBoxComment,
@@ -46,6 +47,7 @@ export {
   createPost,
   updatePost,
   reactPost,
+  deletePost,
   showBoxComment,
   fetchComments,
   createComment,

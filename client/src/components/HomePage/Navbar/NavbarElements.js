@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link as LinkR } from "react-router-dom";
 
 export const Nav = styled.nav`
-  width: 100vw;
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.1);
   height: 60px;
   z-index: 10;
@@ -25,6 +25,7 @@ export const NavLogo = styled.div`
   display: flex;
   justify-self: flex-start;
   font-size: 24px;
+  font-weight: 700;
   color: #fff;
   cursor: pointer;
 `;

@@ -11,12 +11,15 @@ export const PaymentItemContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.borderColor};
   padding: 8px;
 
   @media (max-width: 840px) {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.borderColor};
   }
 `;
 
@@ -24,6 +27,10 @@ export const PaymentPhotoWrapper = styled.div`
   display: inline-flex;
   justify-content: center;
   width: 120px;
+
+  @media (max-width: 840px) {
+    justify-content: flex-start;
+  }
 `;
 
 export const Photo = styled.img`

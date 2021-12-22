@@ -113,3 +113,23 @@ export function* searchPosts(action) {
     console.log(error.response);
   }
 }
+
+export function* deletePost(action) {
+  try {
+    yield call(api.PostAPI.deletePost, action.payload);
+    yield put(actions.deletePost.deletePostSuccess(action.payload));
+    yield put(
+      actions.toast.showToast({
+        message: "Deleted post",
+        type: "success",
+      })
+    );
+  } catch (error) {
+    yield put(
+      actions.toast.showToast({
+        message: error.response.data.msg,
+        type: "warning",
+      })
+    );
+  }
+}
