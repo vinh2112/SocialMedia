@@ -122,7 +122,7 @@ export const PostPhoto = styled.img`
 
 export const ReportTop = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   width: 100%;
   max-width: 670px;
@@ -130,10 +130,10 @@ export const ReportTop = styled.div`
   margin-bottom: 16px;
 
   & > .report-title {
-    padding: 6px;
+    padding: 6px 0;
     color: ${({ theme }) => theme.textColor};
     opacity: 0.6;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 700;
   }
 
@@ -141,6 +141,7 @@ export const ReportTop = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: 8px;
     width: 30px;
     height: 30px;
     border-radius: 50%;
