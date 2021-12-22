@@ -59,7 +59,7 @@ const Header = ({ toggle }) => {
   }, [dispatch]);
 
   return (
-    <HeaderContainer>
+    <HeaderContainer id="header">
       <HeaderWrapper>
         <HeaderLeft>
           <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>

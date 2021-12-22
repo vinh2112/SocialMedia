@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   OverLay,
   Container,
@@ -18,13 +18,24 @@ import ToggleSwitch from "./ToggleSwitch";
 import { Icon } from "@iconify/react";
 import { useDispatch } from "react-redux";
 import * as actions from "redux/actions";
+import useScrollBlock from "hooks/useScrollBlock";
 
 const SideBar = ({ isOpen, handleSideBar, user }) => {
   const dispatch = useDispatch();
+  const [blockScroll, allowScroll] = useScrollBlock();
+
+  useEffect(() => {
+    if (isOpen) {
+      blockScroll();
+    }
+
+    return () => allowScroll();
+  }, [isOpen, blockScroll, allowScroll]);
 
   const handleLogout = React.useCallback(() => {
     dispatch(actions.logout.logoutRequest());
   }, [dispatch]);
+
   return (
     <OverLay isOpen={isOpen} onClick={handleSideBar}>
       <Container className="side-bar" isOpen={isOpen}>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const PostChartContainer = styled.div`
   position: fixed;
-  top: 80px;
+  top: 72px;
   left: calc(100vw - ((100vw - var(--max-width) + 48px) / 2));
   transform: translateX(-100%);
   width: 332px;

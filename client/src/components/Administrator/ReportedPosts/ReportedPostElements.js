@@ -53,6 +53,7 @@ export const ReportButton = styled.div`
   width: 28px;
   height: 28px;
   border-radius: 50%;
+  color: #fefefe;
   cursor: pointer;
 
   &.danger {
@@ -71,6 +72,8 @@ export const ReportButton = styled.div`
 export const PostDetail = styled.div`
   margin-top: 6px;
   background-color: ${({ theme }) => theme.primary};
+  box-shadow: var(--box-shadow);
+
   border-radius: 5px;
   overflow: hidden;
 `;
@@ -115,4 +118,41 @@ export const PostPhoto = styled.img`
   width: 100%;
   max-height: 500px;
   object-fit: contain;
+`;
+
+export const ReportTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 670px;
+  padding: 0 48px;
+  margin-bottom: 16px;
+
+  & > .report-title {
+    padding: 6px;
+    color: ${({ theme }) => theme.textColor};
+    opacity: 0.6;
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  & > .report-count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--danger-color);
+
+    & > span {
+      font-weight: 700;
+      color: #fefefe;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    padding: 0 16px;
+  }
 `;

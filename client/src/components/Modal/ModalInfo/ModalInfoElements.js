@@ -1,7 +1,10 @@
 import styled from "styled-components";
 
 export const InfoWrapper = styled.div`
-  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 10px;
   font-size: 14px;
   font-weight: 700;
   color: #999;
@@ -18,7 +21,6 @@ export const Likes = styled.div`
 
 export const LikeButtonWrapper = styled.div`
   color: ${({ theme }) => theme.textColor};
-  margin: 6px 0;
 
   & > * {
     flex-shrink: 0;

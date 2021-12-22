@@ -7,6 +7,7 @@ export const SecurityContainer = styled.div`
 
 export const SecurityWrapper = styled.div`
   width: 80%;
+  height: calc(100vh - 40px - 54px);
   margin: 0 auto;
 `;
 

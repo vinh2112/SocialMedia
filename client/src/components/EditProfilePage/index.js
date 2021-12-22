@@ -7,6 +7,7 @@ import styled from "styled-components";
 import InformationSection from "./InformationSection";
 import Menu from "./Menu";
 import SecuritySection from "./SecuritySection";
+import PaymentHistory from "./PaymentHistorySection";
 
 const EditProfileContainer = styled.div`
   display: flex;
@@ -15,8 +16,6 @@ const EditProfileContainer = styled.div`
   width: 100%;
   background: ${({ theme }) => theme.primary};
   padding: 54px 0 0;
-  border-left: 1px solid ${({ theme }) => theme.contrastColor};
-  border-right: 1px solid ${({ theme }) => theme.contrastColor};
   margin: 0 auto;
 
   @media (max-width: 700px) {
@@ -47,6 +46,7 @@ export default function EditProfile() {
           <InformationSection user={currentUser} />
         </Route>
         <Route path="/setting/security">{currentUser && <SecuritySection />}</Route>
+        <Route path="/setting/history">{currentUser && <PaymentHistory />}</Route>
       </Switch>
     </EditProfileContainer>
   );

@@ -4,42 +4,38 @@ import { Icon } from "@iconify/react";
 import { saveAs } from "file-saver";
 import { authState$ } from "redux/selectors";
 import { useSelector, useDispatch } from "react-redux";
-import {PaymentAPI} from 'api';
-import {useHistory} from 'react-router-dom';
+import { PaymentAPI } from "api";
+import { useHistory } from "react-router-dom";
 import * as actions from "redux/actions";
 
-export default function ModalActions({ post }) {
+export default function ModalActions({ post, handleEdit }) {
   const { currentUser } = useSelector(authState$);
   const history = useHistory();
   const dispatch = useDispatch();
   const handleDownload = async () => {
     // saveAs(post.image.url, post.image.public_id + ".png");
     if (post.isPaymentRequired) {
-      if(currentUser){
-        if(post.userId=== currentUser._id ){
-          saveAs(post.image.url, `${post.image.public_id}.png`);
-        }
-        else{
-        const isPaid = await PaymentAPI.checkPayment(post._id);
-
-        if (isPaid.data) {
+      if (currentUser) {
+        if (post.userId._id === currentUser._id) {
           saveAs(post.image.url, `${post.image.public_id}.png`);
         } else {
-          history.push("/checkout", { post });
+          const isPaid = await PaymentAPI.checkPayment(post._id);
+
+          if (isPaid.data) {
+            saveAs(post.image.url, `${post.image.public_id}.png`);
+          } else {
+            history.push("/checkout", { post });
           }
         }
-      }
-      else{
+      } else {
         dispatch(
           actions.toast.showToast({
             message: "Please Login",
             type: "warning",
           })
         );
-
       }
-    }
-    else {
+    } else {
       saveAs(post.image.url, `${post.image.public_id}.png`);
     }
   };
@@ -52,7 +48,7 @@ export default function ModalActions({ post }) {
         <ButtonTooltip>Download</ButtonTooltip>
       </ButtonWrapper>
 
-      <ButtonWrapper>
+      <ButtonWrapper onClick={() => handleEdit(true)}>
         <Button className="danger">
           <Icon icon="jam:triangle-danger" />
         </Button>

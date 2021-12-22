@@ -10,6 +10,10 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
     },
+    posterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     price: {
       type: Number,
       default: 0,

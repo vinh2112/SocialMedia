@@ -18,6 +18,7 @@ const Action = css`
   margin: 4px 0;
   white-space: nowrap;
   width: 100%;
+  /* min-width: 100px; */
   cursor: pointer;
   user-select: none;
   border-radius: 4px;

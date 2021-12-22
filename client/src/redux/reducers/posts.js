@@ -91,19 +91,10 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         isLoading: true,
       };
     case getType(searchPosts.searchPostsSuccess):
-      if (
-        (action.payload.page === 1 && action.payload.query !== "") ||
-        (action.payload.page === 1 && action.payload.query === "")
-      )
-        return {
-          ...state,
-          isLoading: false,
-          data: [...action.payload.posts],
-        };
       return {
         ...state,
-        isLoading: action.payload.posts.length === 0 ? true : false,
-        data: [...state.data, ...action.payload.posts],
+        isLoading: false,
+        data: [...action.payload.posts],
       };
     case getType(createPost.createPostRequest):
       return {

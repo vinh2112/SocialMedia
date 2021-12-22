@@ -12,7 +12,7 @@ const globalTheme = {
 
 export const lightTheme = {
   primary: "#fefefe",
-  secondary: "#fafafa",
+  secondary: "#f4f4f4",
   contrastColor: "#eaeaea",
   hoverColor: "#dfdfdf",
   textColor: "#333",

@@ -16,15 +16,18 @@ import {
   ReportDetailRight,
   ReportedPostContainer,
   ReportedPostList,
+  ReportTop,
 } from "./ReportedPostElements";
 import { Icon } from "@iconify/react";
 import * as api from "api";
 import moment from "moment";
 import * as actions from "redux/actions";
 import { useDispatch } from "react-redux";
+import LoadingSection from "../LoadingSection";
 
 export default function ReportedPosts() {
   const [reports, setReports] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,6 +35,7 @@ export default function ReportedPosts() {
       const res = await api.ReportAPI.getAllReports();
 
       setReports(res.data);
+      setIsLoading(false);
     };
 
     fetchReportPosts();
@@ -75,16 +79,30 @@ export default function ReportedPosts() {
   };
 
   return (
-    <ReportedPostList>
-      {reports.map((report) => (
-        <ReportedPostItem
-          key={report._id}
-          report={report}
-          handleAccept={handleAcceptReport}
-          handleRefuse={handleRefuseReport}
-        />
-      ))}
-    </ReportedPostList>
+    <>
+      {isLoading ? (
+        <LoadingSection />
+      ) : (
+        <>
+          <ReportTop>
+            <div className="report-title">Reports</div>
+            <div className="report-count">
+              <span>{reports.length}</span>
+            </div>
+          </ReportTop>
+          <ReportedPostList>
+            {reports.map((report) => (
+              <ReportedPostItem
+                key={report._id}
+                report={report}
+                handleAccept={handleAcceptReport}
+                handleRefuse={handleRefuseReport}
+              />
+            ))}
+          </ReportedPostList>
+        </>
+      )}
+    </>
   );
 }
 
@@ -120,13 +138,15 @@ const ReportedPostItem = ({ report, handleAccept, handleRefuse }) => {
       <PostDetail>
         <PostDetailTop>
           <AvatarWrapper>
-            <Avatar to="#">
-              <img src={report.reporterId.avatar} alt="avatar" />
+            <Avatar to={`/profile/${report.reportedPostId.userId._id}`}>
+              <img src={report.reportedPostId.userId.avatar} alt="avatar" />
             </Avatar>
           </AvatarWrapper>
 
           <DetailRightSide>
-            <NameAuthorLink to="#">@{report.reporterId.name}</NameAuthorLink>
+            <NameAuthorLink to={`/profile/${report.reportedPostId.userId._id}`}>
+              @{report.reportedPostId.userId.name}
+            </NameAuthorLink>
             <CreatedDate>{moment(report.reportedPostId.createdAt).fromNow()}</CreatedDate>
           </DetailRightSide>
         </PostDetailTop>

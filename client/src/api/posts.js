@@ -18,8 +18,7 @@ const PostAPI = {
   fetchProfilePosts: (payload) =>
     axios.get(`${BASE_URL}/api/post/profile/${payload.userId}?page=${payload.page}`),
   fetchTopLikedPosts: () => axios.get(`${BASE_URL}/api/post/top_liked`),
-  searchPosts: (payload) =>
-    axios.get(`${BASE_URL}/api/post/search?query=${payload.query}&page=${payload.page}`),
+  searchPosts: (payload) => axios.get(`${BASE_URL}/api/post/search?query=${payload}`),
   createPost: (payload) => {
     try {
       const TOKEN = localStorage.getItem("access_token");

@@ -5,7 +5,13 @@ export const getAllReports = async (req, res) => {
   try {
     const reports = await ReportModel.find({})
       .populate({ path: "reporterId", select: "name email avatar" })
-      .populate({ path: "reportedPostId" })
+      .populate({
+        path: "reportedPostId",
+        populate: {
+          path: "userId",
+          select: "name email avatar",
+        },
+      })
       .sort("-createdAt");
     return res.status(200).json(reports);
   } catch (error) {

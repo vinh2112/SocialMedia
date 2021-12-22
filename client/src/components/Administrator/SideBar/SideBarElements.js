@@ -5,7 +5,7 @@ export const AdminSidebarContainer = styled.div`
   width: 100%;
   max-width: 300px;
   min-height: calc(100vh - 54px);
-  padding: 8px 16px;
+  padding: 14px 16px;
   border-right: 1px solid ${({ theme }) => theme.contrastColor};
 
   @media (max-width: 900px) {

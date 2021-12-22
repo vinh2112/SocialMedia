@@ -43,7 +43,7 @@ export const CreatedDate = styled.div`
 `;
 
 export const DescWrapper = styled.div`
-  margin: 12px 0 8px;
+  margin: 12px 0 0px;
 
   & > div > textarea {
     width: 100%;

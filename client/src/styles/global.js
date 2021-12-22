@@ -33,7 +33,7 @@ export const GlobalStyles = createGlobalStyle`
         color: ${({ theme }) => theme.textColor};
         min-height: 100vh;
         font-family: 'Roboto', sans-serif;
-        transition: all 0.1s linear;
+        /* transition: all 0.1s linear; */
     }
 
     textarea, pre {

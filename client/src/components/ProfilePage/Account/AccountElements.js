@@ -11,7 +11,7 @@ export const AccountContainer = styled.aside`
 
 export const AccountWrapper = styled.div`
   position: fixed;
-  width: 300px;
+  width: 330px;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.1);

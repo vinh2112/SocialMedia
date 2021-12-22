@@ -29,9 +29,11 @@ import {
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, hideModal } from "redux/actions";
-import { modalState$, postState$ } from "redux/selectors";
+import { authState$, modalState$, postState$ } from "redux/selectors";
 import Switch from "@mui/material/Switch";
 import DefaultAvatar from "images/DefaultAvatar.png";
+import useScrollBlock from "hooks/useScrollBlock";
+import * as actions from "redux/actions";
 
 const initial_post = {
   desc: "",
@@ -46,17 +48,26 @@ const PostUpdateModal = ({ user }) => {
   const dispatch = useDispatch();
   const { isShow } = useSelector(modalState$);
   const { isLoading } = useSelector(postState$);
+  const { currentUser } = useSelector(authState$);
 
   const [post, setPost] = useState(initial_post);
   const [isSmall, setIsSmall] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const [blockScroll, allowScroll] = useScrollBlock();
 
   useEffect(() => {
     if (!isLoading) {
       setPost(initial_post);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (isShow) {
+      blockScroll();
+    }
+
+    return () => allowScroll();
+  }, [isShow, blockScroll, allowScroll]);
 
   const handleChangeValue = React.useCallback(
     (e) => {
@@ -81,9 +92,20 @@ const PostUpdateModal = ({ user }) => {
   };
 
   const handlePayment = () => {
-    const cac = !post.isPaymentRequired;
-    setPost({ ...post, isPaymentRequired: cac });
-    setIsChecked(!isChecked);
+    if (!post.isPaymentRequired) {
+      if (currentUser.creditCard) {
+        setPost({ ...post, isPaymentRequired: !post.isPaymentRequired });
+      } else {
+        dispatch(
+          actions.toast.showToast({
+            message: "Please update your Paypal",
+            type: "warning",
+          })
+        );
+      }
+    } else {
+      setPost({ ...post, isPaymentRequired: !post.isPaymentRequired });
+    }
   };
 
   const handlePrice = (e) => {
@@ -121,13 +143,13 @@ const PostUpdateModal = ({ user }) => {
             </AvatarWrapper>
             <Name>@{user.name}</Name>
             <PostPayment>
-              <SwitchWrapper isChecked={isChecked}>
+              <SwitchWrapper isChecked={post.isPaymentRequired}>
                 <span>Payment Required</span>
                 <Switch checked={post.isPaymentRequired} onChange={handlePayment} size="small" />
                 <InputPrice
                   onChange={handlePrice}
                   type="number"
-                  disabled={isChecked ? "" : "disabled"}
+                  disabled={post.isPaymentRequired ? "" : "disabled"}
                 ></InputPrice>
               </SwitchWrapper>
             </PostPayment>
@@ -181,7 +203,6 @@ const PostUpdateModal = ({ user }) => {
           </PostButtonWrapper>
         </Actions>
         {isLoading && <LoadingSection />}
-        {/* <LoadingSection /> */}
       </Container>
     </OverLay>
   );

@@ -10,7 +10,7 @@ const NewsFeedContainer = styled.div`
   display: flex;
   max-width: var(--max-width);
   width: 100%;
-  padding: 80px 16px 0;
+  padding: 72px 16px 0;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
@@ -18,7 +18,7 @@ const NewsFeedContainer = styled.div`
   }
 
   @media (max-width: 700px) {
-    padding: 68px 0 0;
+    padding: 54px 0 0;
   }
 `;
 

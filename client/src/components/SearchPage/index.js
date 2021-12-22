@@ -22,15 +22,15 @@ const SearchContainer = styled.div`
 export default function SearchSection() {
   const [index, setIndex] = useState(null);
   const [isShowModal, setIsShowModal] = useState(false);
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const dispatch = useDispatch();
-  const { data, isLoading } = useSelector(postState$);
+  const { data } = useSelector(postState$);
 
   useEffect(() => {
-    dispatch(actions.searchPosts.searchPostsRequest({ page, query }));
+    dispatch(actions.searchPosts.searchPostsRequest(query));
     setIndex(null);
-  }, [dispatch, page, query]);
+  }, [dispatch, query]);
 
   useEffect(() => {
     return () => {
@@ -38,29 +38,29 @@ export default function SearchSection() {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    const scrollWindow = () => {
-      if (
-        Math.abs(
-          window.innerHeight +
-            document.documentElement.scrollTop -
-            document.documentElement.offsetHeight
-        ) <= 1
-      ) {
-        if (!isLoading) {
-          setPage(page + 1);
-        }
-      }
-    };
-    window.addEventListener("scroll", scrollWindow);
+  // useEffect(() => {
+  //   const scrollWindow = () => {
+  //     if (
+  //       Math.abs(
+  //         window.innerHeight +
+  //           document.documentElement.scrollTop -
+  //           document.documentElement.offsetHeight
+  //       ) <= 1
+  //     ) {
+  //       if (!isLoading) {
+  //         setPage(page + 1);
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener("scroll", scrollWindow);
 
-    return () => {
-      window.removeEventListener("scroll", scrollWindow);
-    };
-  }, [dispatch, isLoading, page]);
+  //   return () => {
+  //     window.removeEventListener("scroll", scrollWindow);
+  //   };
+  // }, [dispatch, isLoading, page]);
 
   const handleSearch = (value) => {
-    setPage(1);
+    // setPage(1);
     setQuery(value);
   };
   const handleModal = (index) => {

@@ -79,7 +79,7 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
 
       <CommentAction onClick={showComment}>
         <Icon icon="fluent:comment-24-regular" />
-        <span>Comment</span>
+        {/* <span>Comment</span> */}
       </CommentAction>
 
       <MoreAction ref={menuNode} onClick={() => setIsOpen(!isOpen)}>

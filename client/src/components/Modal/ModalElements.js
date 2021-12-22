@@ -36,6 +36,7 @@ export const ModalPhotoWrapper = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 60%;
   height: 100%;
   background: rgba(0, 0, 0, 0.1);
@@ -48,6 +49,7 @@ export const ModalPhotoWrapper = styled.div`
 
 export const ModalPhoto = styled.div`
   width: 100%;
+  max-width: 1000px;
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;

@@ -18,11 +18,21 @@ import { commentState$ } from "redux/selectors";
 import { fetchComments } from "redux/actions";
 import CommentAPI from "api/comments";
 import ModalComments from "./ModalComments";
+import ModalReport from "./ModalReport";
+import useScrollBlock from "hooks/useScrollBlock";
 
 export default function Modal({ post, isShow, closeModal }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
   const comments = useSelector(commentState$);
+  const [blockScroll, allowScroll] = useScrollBlock();
+
+  useEffect(() => {
+    blockScroll();
+
+    return () => allowScroll();
+  }, [blockScroll, allowScroll]);
 
   useEffect(() => {
     const fetchCommentsByPostId = async () => {
@@ -50,17 +60,27 @@ export default function Modal({ post, isShow, closeModal }) {
         </ModalPhotoWrapper>
 
         <ModalContentContainer>
-          <ModalActions post={post} />
+          <ModalActions post={post} handleEdit={setIsEditing} />
           <ModalContentWrapper>
-            <ModalContent post={post} />
-            <ModalInfo
-              post={post}
-              comments={comments.data.filter((comment) => comment.postId === post._id && comment)}
-            />
-            <ModalComments
-              post={post}
-              comments={comments.data.filter((comment) => comment.postId === post._id && comment)}
-            />
+            {!isEditing ? (
+              <>
+                <ModalContent post={post} />
+                <ModalInfo
+                  post={post}
+                  comments={comments.data.filter(
+                    (comment) => comment.postId === post._id && comment
+                  )}
+                />
+                <ModalComments
+                  post={post}
+                  comments={comments.data.filter(
+                    (comment) => comment.postId === post._id && comment
+                  )}
+                />
+              </>
+            ) : (
+              <ModalReport handleEdit={setIsEditing} postId={post._id} />
+            )}
           </ModalContentWrapper>
         </ModalContentContainer>
 

@@ -36,6 +36,7 @@ export const LoadingSection = styled.div`
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.3) url(${Loading}) no-repeat center center;
+  background-size: 100px;
 `;
 
 export const Top = styled.div`

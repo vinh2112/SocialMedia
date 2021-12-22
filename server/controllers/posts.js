@@ -125,14 +125,13 @@ export const getTopLikedPosts = async (req, res) => {
 
 export const searchPosts = async (req, res) => {
   try {
-    const { query, page } = req.query;
+    const { query } = req.query;
     const posts = await PostModel.find({
       $or: [
         { category: { $regex: query, $options: "i" } },
         { desc: { $regex: query, $options: "i" } },
       ],
     })
-      .limit(20)
       .populate({
         path: "userId",
         select: "name email avatar",
@@ -141,8 +140,7 @@ export const searchPosts = async (req, res) => {
         path: "likes",
         select: "name email avatar",
       })
-      .sort("-createdAt")
-      .skip((page - 1) * 20);
+      .sort("-createdAt");
     res.json(posts);
   } catch (error) {
     res.status(500).json({ msg: error.message });

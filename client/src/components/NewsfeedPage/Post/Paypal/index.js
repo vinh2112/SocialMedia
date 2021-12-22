@@ -1,13 +1,20 @@
 import React, { useRef, useEffect } from "react";
-import { PaypalContainer, PaypalWrapper, PaypalInfo,PaypalItem, PaypalButton,Header } from "./PaypalElement";
+import {
+  PaypalContainer,
+  PaypalWrapper,
+  PaypalInfo,
+  PaypalItem,
+  PaypalButton,
+  Header,
+} from "./PaypalElement";
 import { useHistory } from "react-router-dom";
-import { PaymentAPI,UserAPI } from "api";
+import { PaymentAPI } from "api";
 import { saveAs } from "file-saver";
 
 const Paypal = ({ post }) => {
   const history = useHistory();
   const paypal = useRef();
-  const value = post.price*0.95
+  // const value = post.price*0.95
   useEffect(() => {
     window.paypal
       .Buttons({
@@ -26,35 +33,37 @@ const Paypal = ({ post }) => {
         },
         onApprove: async (data, actions) => {
           //   await actions.order.capture();
-          const token = await PaymentAPI.getPaypalToken()
-          const value = post.price*0.95
+          // const token = await PaymentAPI.getPaypalToken()
+          const value = post.price * 0.95;
           PaymentAPI.payout({
-            sender_batch_header:{
-
-            },
-            items:[{
-              recipient_type:'EMAIL',
-              amount:{
-                currency: "USD",
-                value: value,
+            sender_batch_header: {},
+            items: [
+              {
+                recipient_type: "EMAIL",
+                amount: {
+                  currency: "USD",
+                  value: value,
+                },
+                recipent_wallet: "PAYPAL",
+                receiver: "sb-r6ghe8860325@personal.example.com",
               },
-              recipent_wallet:'PAYPAL',
-              receiver:'sb-r6ghe8860325@personal.example.com'
-            },{
-              recipient_type:'PAYPAL_ID',
-              amount:{
-                currency: "USD",
-                value: value,
+              {
+                recipient_type: "PAYPAL_ID",
+                amount: {
+                  currency: "USD",
+                  value: value,
+                },
+                recipent_wallet: "PAYPAL",
+                receiver: "6M32LLPZYL7EQ", //post.userId.CreditCard
               },
-              recipent_wallet:'PAYPAL',
-              receiver:'6M32LLPZYL7EQ' //post.userId.CreditCard
-            }],
+            ],
           });
           PaymentAPI.createPayment({
             postId: post._id,
             postBody: {
               price: post.price,
               isSuccess: true,
+              posterId: post.userId,
             },
           });
           saveAs(post.image.url, `${post.image.public_id}.png`);
@@ -65,38 +74,27 @@ const Paypal = ({ post }) => {
         },
       })
       .render(paypal.current);
-      // const getProfileUser = async() =>{
-      //   const user = await UserAPI.getProfileUser(post.)
-      // }
-      // const user = UserAPI.getProfileUser(post.UserId);
-      // console.log(user)
+    // const getProfileUser = async() =>{
+    //   const user = await UserAPI.getProfileUser(post.)
+    // }
+    // const user = UserAPI.getProfileUser(post.UserId);
+    // console.log(user)
   }, [post, history]);
-  return(
+  return (
     <>
       <PaypalContainer>
         <PaypalWrapper>
-          <Header>
-            Checkout section
-          </Header>
+          <Header>Checkout section</Header>
           <PaypalInfo>
-            <PaypalItem>
-                Price:
-            </PaypalItem>
-            <PaypalItem>
-                ${post.price}
-            </PaypalItem>
+            <PaypalItem>Price:</PaypalItem>
+            <PaypalItem>${post.price}</PaypalItem>
           </PaypalInfo>
           <PaypalInfo>
-            <PaypalItem>
-                Author:
-            </PaypalItem>
-            <PaypalItem>
-                {post.userId.email}
-            </PaypalItem>
+            <PaypalItem>Author:</PaypalItem>
+            <PaypalItem>{post.userId.email}</PaypalItem>
           </PaypalInfo>
           <PaypalButton ref={paypal}></PaypalButton>
         </PaypalWrapper>
-
       </PaypalContainer>
     </>
   );
