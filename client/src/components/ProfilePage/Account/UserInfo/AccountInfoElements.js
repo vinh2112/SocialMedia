@@ -100,8 +100,8 @@ export const Details = styled.div`
   margin-top: 12px;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
   }
 `;
 
@@ -149,6 +149,7 @@ export const ButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   grid-column: span 3/4;
+  flex: 1;
 
   @media (max-width: 1024px) {
     grid-column: auto;

@@ -13,16 +13,19 @@ import * as api from "api";
 import { authState$ } from "redux/selectors";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import LoadingSection from "components/LoadingSection";
 
 export default function PaymentHistory() {
   const [payments, setPayments] = useState([]);
   const { currentUser } = useSelector(authState$);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getPayments = async () => {
       try {
         const res = await api.PaymentAPI.getPayments();
         setPayments(res.data);
+        setIsLoading(false);
       } catch (error) {
         console.log(error.response);
       }
@@ -30,18 +33,21 @@ export default function PaymentHistory() {
 
     getPayments();
   }, []);
-  if (!payments.length) return null;
 
   return (
     <>
       <PaymentHistoryContainer>
-        {payments.map((payment) => (
-          <PaymentItem
-            key={payment._id}
-            type={currentUser._id === payment.posterId._id ? "received" : "payment"}
-            payment={payment}
-          />
-        ))}
+        {isLoading ? (
+          <LoadingSection />
+        ) : (
+          payments.map((payment) => (
+            <PaymentItem
+              key={payment._id}
+              type={currentUser._id === payment.posterId._id ? "received" : "payment"}
+              payment={payment}
+            />
+          ))
+        )}
       </PaymentHistoryContainer>
     </>
   );

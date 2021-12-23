@@ -7,6 +7,7 @@ import { Switch, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { authState$ } from "redux/selectors";
 import { useHistory } from "react-router-dom";
+import Dashboard from "components/Administrator/Dashboard";
 
 const AdminContainer = styled.div`
   display: flex;
@@ -16,7 +17,7 @@ const AdminContainer = styled.div`
   padding: 54px 0 0;
   margin: 0 auto;
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
@@ -50,6 +51,9 @@ export default function AdminPage() {
 
         <AdminMainbar>
           <Switch>
+            <Route path="/administrator/dashboard">
+              <Dashboard />
+            </Route>
             <Route path="/administrator/report">
               <ReportedPosts />
             </Route>

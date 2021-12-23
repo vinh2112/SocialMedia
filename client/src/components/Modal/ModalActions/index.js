@@ -55,7 +55,7 @@ export default function ModalActions({ post, handleEdit }) {
         <ButtonTooltip className="danger">Report</ButtonTooltip>
       </ButtonWrapper>
 
-      {post.userId._id === currentUser._id && (
+      {currentUser && post.userId._id === currentUser._id && (
         <ButtonWrapper>
           <Button className="danger">
             <Icon icon="feather:delete" />

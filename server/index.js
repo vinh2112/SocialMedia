@@ -12,6 +12,7 @@ import upload from "./routers/upload.js";
 import payments from "./routers/payments.js";
 import detect from "./routers/detect.js";
 import reports from "./routers/reports.js";
+import dashboard from "./routers/dashboard.js";
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use("/api", comments);
 app.use("/api", upload);
 app.use("/api", payments);
 app.use("/api", reports);
+app.use("/api", dashboard);
 
 mongoose
   .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })

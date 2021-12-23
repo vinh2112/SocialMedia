@@ -17,7 +17,7 @@ export const lightTheme = {
   hoverColor: "#dfdfdf",
   textColor: "#333",
   subTextColor: "#999",
-  borderColor: "#ddd",
+  borderColor: "#d4d4d4",
   toastColor: "#fff",
   ...globalTheme,
 };

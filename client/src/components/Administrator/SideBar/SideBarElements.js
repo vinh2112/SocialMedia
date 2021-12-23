@@ -12,7 +12,7 @@ export const AdminSidebarContainer = styled.div`
     max-width: 260px;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     padding: 8px 16px;
     min-height: 60px;
     max-width: 100%;
@@ -27,7 +27,7 @@ export const AdminSidebarTitle = styled.div`
   font-weight: 700;
   filter: opacity(0.6);
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     margin-left: 0;
   }
 `;
@@ -39,7 +39,7 @@ export const AdminSidebarMenu = styled.div`
   margin-top: 12px;
   padding-right: 8px;
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     flex-direction: row;
     overflow: hidden;
     overflow-x: auto;
@@ -76,7 +76,7 @@ export const AdminMenuItem = styled(NavLink)`
     background: ${({ theme }) => theme.hoverColor};
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
     border: 1px solid ${({ theme }) => theme.hoverColor};
   }
 `;

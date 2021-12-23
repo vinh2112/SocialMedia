@@ -14,8 +14,6 @@ export const ReportedPostList = styled.div`
 `;
 
 export const ReportedPostContainer = styled.div`
-  width: 100%;
-
   &:not(:first-child) {
     margin-top: 20px;
   }
@@ -124,8 +122,7 @@ export const ReportTop = styled.div`
   display: flex;
   /* justify-content: space-between; */
   align-items: center;
-  width: 100%;
-  max-width: 670px;
+  width: 670px;
   padding: 0 48px;
   margin-bottom: 16px;
 
@@ -155,5 +152,9 @@ export const ReportTop = styled.div`
 
   @media (max-width: 1024px) {
     padding: 0 16px;
+  }
+
+  @media (max-width: 700px) {
+    width: 100%;
   }
 `;

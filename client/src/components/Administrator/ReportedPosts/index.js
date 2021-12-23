@@ -23,7 +23,7 @@ import * as api from "api";
 import moment from "moment";
 import * as actions from "redux/actions";
 import { useDispatch } from "react-redux";
-import LoadingSection from "../LoadingSection";
+import LoadingSection from "../../LoadingSection";
 
 export default function ReportedPosts() {
   const [reports, setReports] = useState([]);
