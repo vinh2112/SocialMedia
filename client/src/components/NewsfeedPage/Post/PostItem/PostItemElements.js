@@ -166,3 +166,20 @@ export const CustomOutlinedInput = styled(OutlinedInput)`
     }
   }
 `;
+
+export const DescriptionWrapper = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > pre {
+    flex: 1;
+  }
+
+  & > .post-price {
+    color: var(--success-color);
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 80px;
+    text-align: center;
+  }
+`;

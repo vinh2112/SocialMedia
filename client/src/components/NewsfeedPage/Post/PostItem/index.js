@@ -17,6 +17,7 @@ import {
   CustomInputLabel,
   CustomInputAdornment,
   CustomOutlinedInput,
+  DescriptionWrapper,
 } from "./PostItemElements";
 import moment from "moment";
 import { saveAs } from "file-saver";
@@ -214,7 +215,12 @@ const PostItem = ({ post }) => {
                   </Stack>
                 </Stack>
               ) : (
-                <pre className="post__desc">{post.desc}</pre>
+                <DescriptionWrapper>
+                  <pre className="post__desc">{post.desc}</pre>
+                  <div className="post-price">
+                    {post.isPaymentRequired ? "$" + post.price : "Free"}
+                  </div>
+                </DescriptionWrapper>
               )}
             </Description>
           </PostAuthor>

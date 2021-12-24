@@ -55,20 +55,9 @@ export default function InformationSection({ user }) {
   const handleChangeValue = (e) => {
     var { name, value } = e.target;
     if (name === "creditCard") {
-      if (value.length < 20) {
-        value = value.replaceAll("-", "");
-        const re = /^[0-9\b]+$/;
-        if (e.target.value === "" || re.test(value)) {
-          let loop = Math.floor((value.length - 1) / 4);
-          for (var i = 1; i <= loop; i++) {
-            value =
-              value.substring(0, i * 4 + i - 1) +
-              "-" +
-              value.substring(i * 4 + i - 1, value.length);
-          }
-        } else {
-          return;
-        }
+      if (value.length < 14 && /^[A-Za-z0-9]+$/.test(value)) {
+        value = value.toUpperCase();
+        value = value.replace(" ", "");
       } else {
         return;
       }
