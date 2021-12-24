@@ -13,7 +13,7 @@ const Navbar = ({ toggle }) => {
   return (
     <Nav>
       <NavContainer>
-        <NavLogo onClick={handleNewFeedsClick}>Logo</NavLogo>
+        <NavLogo onClick={handleNewFeedsClick}>Quamon</NavLogo>
         <NavRight>
           <Search onClick={handleSearchClick}>
             <span className="iconify" data-icon="feather:search"></span>
