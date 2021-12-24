@@ -176,10 +176,18 @@ export const DescriptionWrapper = styled.div`
   }
 
   & > .post-price {
-    color: var(--success-color);
-    font-size: 20px;
-    font-weight: 700;
-    min-width: 80px;
+    color: #fefefe;
+    font-size: 16px;
+    font-weight: 500;
+    min-width: 60px;
     text-align: center;
+    padding: 8px;
+    background-color: var(--primary-color);
+    border-radius: 6px;
+
+    @media (max-width: 1024px) {
+      font-size: 14px;
+      min-width: 60px;
+    }
   }
 `;
