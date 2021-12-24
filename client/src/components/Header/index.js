@@ -49,27 +49,27 @@ const Header = ({ toggle }) => {
     };
   });
 
-  const handleLogin = React.useCallback(() => {
-    dispatch(
-      actions.login.loginRequest({
-        email: "vuongquocvinh.bh@gmail.com",
-        password: "123456",
-      })
-    );
-  }, [dispatch]);
+  // const handleLogin = React.useCallback(() => {
+  //   dispatch(
+  //     actions.login.loginRequest({
+  //       email: "vuongquocvinh.bh@gmail.com",
+  //       password: "123456",
+  //     })
+  //   );
+  // }, [dispatch]);
 
   return (
     <HeaderContainer id="header">
       <HeaderWrapper>
         <HeaderLeft>
           <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
-            <h2>Logo</h2>
+            <h2>Quamon</h2>
           </LogoLink>
 
-          {!user.loggedIn && <button onClick={handleLogin}>Login</button>}
+          {/* {!user.loggedIn && <button onClick={handleLogin}>Login</button>} */}
         </HeaderLeft>
 
-        {user.isLoading && <p>Loading...</p>}
+        {/* {user.isLoading && <p>Loading...</p>} */}
 
         <HeaderRight>
           {user.currentUser ? (
