@@ -49,10 +49,12 @@ function App() {
             <Route path="/search" component={SearchPage} />
             <Route path="/login">{handleLoggedIn() ? <Redirect to="/" /> : <NotFoundPage />}</Route>
             <Route path="/setting" component={EditProfilePage} />
+            <Redirect from="/detail/" to="/" exact />
             <Route path="/profile/:userId" component={ProfilePage} />
             <Route path="/checkout" component={PaypalPage} />
             <Route path="/administrator" component={AdminPage} />
             <Route path="*" component={NotFoundPage} />
+            <Redirect to="/" />
           </Switch>
 
           <Toast />

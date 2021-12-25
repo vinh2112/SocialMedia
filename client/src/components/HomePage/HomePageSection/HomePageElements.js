@@ -50,11 +50,11 @@ export const InfoContainer = styled.div`
   position: absolute;
   flex-direction: column;
   z-index: 3;
-  max-width: 1280px;
+  max-width: var(--max-width);
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  padding: 60px 40px;
+  padding: 60px 20px;
 
   @media screen and (max-width: 550px) {
     width: 100%;

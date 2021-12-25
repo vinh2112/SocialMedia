@@ -63,7 +63,7 @@ const Header = ({ toggle }) => {
       <HeaderWrapper>
         <HeaderLeft>
           <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
-            <h2>Quamon</h2>
+            <h2>Photoos</h2>
           </LogoLink>
 
           {/* {!user.loggedIn && <button onClick={handleLogin}>Login</button>} */}
