@@ -38,6 +38,8 @@ export const PostImage = styled.img`
   object-fit: contain;
   max-height: 550px;
   background-color: rgba(0, 0, 0, 0.1);
+  user-select: none;
+  pointer-events: none;
 `;
 
 export const AuthorInfo = styled.div`
