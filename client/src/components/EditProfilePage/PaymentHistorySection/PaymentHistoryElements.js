@@ -76,6 +76,10 @@ export const NameUser = styled(NavLink)`
   color: ${({ theme }) => theme.textColor};
   text-decoration: none;
   align-self: center;
+  width: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 export const DownloadButton = styled.div`
