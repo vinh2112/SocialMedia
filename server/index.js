@@ -10,7 +10,7 @@ import posts from "./routers/posts.js";
 import comments from "./routers/comments.js";
 import upload from "./routers/upload.js";
 import payments from "./routers/payments.js";
-import detect from "./routers/detect.js";
+import aws from "./routers/aws.js";
 import reports from "./routers/reports.js";
 import dashboard from "./routers/dashboard.js";
 
@@ -32,7 +32,7 @@ app.use(
 );
 
 app.use("/user", users);
-app.use("/api", detect);
+app.use("/api", aws);
 app.use("/api", posts);
 app.use("/api", comments);
 app.use("/api", upload);

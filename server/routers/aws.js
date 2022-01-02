@@ -14,6 +14,23 @@ AWS.config.update({
   region: "us-east-1",
 });
 
+const translate = new AWS.Translate({ apiVersion: "2017-07-01" });
+
+router.get("/translate", async (req, res) => {
+  try {
+    const { text } = req.body;
+    const params = {
+      SourceLanguageCode: "vi",
+      TargetLanguageCode: "en",
+      Text: text,
+    };
+    const data = await translate.translateText(params).promise();
+    res.status(200).json(data);
+  } catch (err) {
+    return res.status(500).json({ msg: error.message });
+  }
+});
+
 router.post("/detect", async (req, res) => {
   try {
     const file = req.files.image;
