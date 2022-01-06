@@ -54,6 +54,8 @@ const Home = ({ toggle, isOpen }) => {
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         )
       ) {
+        setIsLoading(false);
+
         setErrors({ ...errors, email: "Format is incorrect." });
         return;
       } else {
@@ -172,7 +174,9 @@ const Home = ({ toggle, isOpen }) => {
 
           {activeStep === 0 ? (
             <React.Fragment>
-              <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+              <Typography sx={{ mt: 2, mb: 1, color: "text.secondary" }}>
+                Step {activeStep + 1}
+              </Typography>
               <TextField
                 name="email"
                 error={errors.email ? true : false}
@@ -201,7 +205,9 @@ const Home = ({ toggle, isOpen }) => {
             </React.Fragment>
           ) : activeStep === 1 ? (
             <React.Fragment>
-              <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+              <Typography sx={{ mt: 2, mb: 1, color: "text.secondary" }}>
+                Step {activeStep + 1}
+              </Typography>
 
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <TextField
@@ -211,6 +217,7 @@ const Home = ({ toggle, isOpen }) => {
                   onChange={handleChangeValue}
                   value={state.pin}
                   helperText={errors.pin ? errors.pin : null}
+                  inputProps={{ maxLength: 6 }}
                 />
               </Box>
 
@@ -219,7 +226,7 @@ const Home = ({ toggle, isOpen }) => {
                   color="inherit"
                   disabled={activeStep === 0}
                   onClick={handleBack}
-                  sx={{ mr: 1 }}
+                  sx={{ mr: 1, color: "text.primary" }}
                 >
                   Back
                 </Button>
@@ -233,7 +240,9 @@ const Home = ({ toggle, isOpen }) => {
           ) : (
             activeStep === 2 && (
               <React.Fragment>
-                <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+                <Typography sx={{ mt: 2, mb: 1, color: "text.secondary" }}>
+                  Step {activeStep + 1}
+                </Typography>
 
                 <Box sx={{ display: "flex", flexDirection: "column", width: "300px", gap: "16px" }}>
                   <TextField
@@ -262,7 +271,7 @@ const Home = ({ toggle, isOpen }) => {
                     color="inherit"
                     disabled={activeStep === 0}
                     onClick={handleBack}
-                    sx={{ mr: 1 }}
+                    sx={{ mr: 1, color: "text.primary" }}
                   >
                     Back
                   </Button>
