@@ -25,7 +25,7 @@ import { authState$ } from "redux/selectors";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
 
-const Signin = ({ toggle, isOpen }) => {
+const Signin = ({ toggle, isOpen, handleModal }) => {
   const overlayModal = useRef();
   const dispatch = useDispatch();
   const user = useSelector(authState$);
@@ -42,6 +42,11 @@ const Signin = ({ toggle, isOpen }) => {
       history.push("/");
     }
   });
+
+  const handleOpenForgetPWModal = () => {
+    toggle();
+    handleModal();
+  };
 
   const handleCloseModal = (e) => {
     if (overlayModal.current === e.target) toggle();
@@ -108,8 +113,7 @@ const Signin = ({ toggle, isOpen }) => {
             </i>
           </TxbWrapper>
           <SignupDiv>
-            Don't have account yet?
-            <SignupInfo to="/signup">Sign up</SignupInfo>
+            <SignupInfo onClick={handleOpenForgetPWModal}>Forget password ?</SignupInfo>
           </SignupDiv>
           {user.errMsg ? <ErrorWrapper>{user.errMsg}</ErrorWrapper> : null}
           <ButtonLogin to="#" onClick={handleLogin}>

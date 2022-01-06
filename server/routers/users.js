@@ -9,6 +9,9 @@ import {
   updateUser,
   getProfileUser,
   checkPassword,
+  checkEmail,
+  changePassword,
+  checkPinCode,
 } from "../controllers/users.js";
 import { verifyToken } from "../middlewares/auth.js";
 
@@ -21,6 +24,12 @@ router.get("/", verifyToken, getUser);
 // @route GET user/check_password
 // @desc Check Password
 router.get("/check_password", verifyToken, checkPassword);
+
+router.post("/check_email", checkEmail);
+
+router.post("/check_pincode", checkPinCode);
+
+router.put("/change_password", changePassword);
 
 // @route GET user/:userId
 // @desc Get Profile User

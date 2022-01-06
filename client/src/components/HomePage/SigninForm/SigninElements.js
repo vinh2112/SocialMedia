@@ -178,7 +178,7 @@ export const SignupDiv = styled.div`
   padding: 0 5px;
 `;
 
-export const SignupInfo = styled(LinkR)`
+export const SignupInfo = styled.div`
   margin-left: 5px;
   cursor: pointer;
   text-decoration: none;

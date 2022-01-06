@@ -1,6 +1,11 @@
 import { UserModel } from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import randomstring from "randomstring";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const login = async (req, res) => {
   try {
@@ -44,6 +49,101 @@ export const logout = (req, res) => {
     return res.json({ msg: "Logged out" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+};
+
+let PINs = [];
+export const checkEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(PINs);
+    // Validate User
+    if (
+      !email.match(
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+    )
+      return res.status(400).json({ msg: "Email format is incorrect." });
+
+    const user = await UserModel.findOne({ email });
+    if (!user) return res.status(200).json(false);
+    else {
+      const pinCode = randomstring.generate({ length: 6, capitalization: "uppercase" });
+      PINs.push({
+        email: email,
+        pin: pinCode,
+      });
+
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_ADDRESS,
+          pass: process.env.PASSWORD_EMAIL,
+        },
+      });
+      var mailOptions = {
+        from: "vuongquocvinh.bh21@gmail.com",
+        to: email,
+        subject: "Recover your password from Photoos",
+        html: `
+          <div
+            classname="container"
+            style="display: block; padding: 0px; justtify-content: center;"
+          >
+            <h1
+              style="fontWeight: bold, color: #fe3456, width:200px; height: auto;  display: block; margin-left: auto; margin-right: auto;"
+            >Photoos</h1>
+            <h1 style=" font-weight: 600; margin: 0px; font-family: Gill Sans Extrabold, sans-serif; ">
+              RESET YOUR PASSWORD
+            </h1>
+            <div style="display: flex">
+              <h2>
+                Xin chào !
+              </h2>
+            </div>
+            <h3 style="color: #434242; font-weight: 500; margin: 0px; font-family: Gill Sans Extrabold, sans-serif; ">
+              Bạn nhận được email này bởi vì chúng tôi đã nhận được yêu cầu quên mật khẩu từ bạn. Mã
+              xác thực để lấy lại mật khẩu là:
+            </h3>
+            <h2 style="padding: 10px; background-color: black; width: max-content; font-family: Gill Sans Extrabold, sans-serif; font-weight: 700; color: yellow; display: block; marign: auto; margin-left: auto; margin-right: auto;">
+              ${pinCode}
+            </h2>
+            <h3 style="color: #434242; font-weight: 500; margin: 0px; font-family: Gill Sans Extrabold, sans-serif; ">
+              Nếu bạn không muốn đổi lại mật khẩu, bạn có thể bỏ qua email này. Cảm ơn bạn đã lựa
+              chọn sử dụng dịch vụ của chúng tôi
+            </h3>
+          </div>
+        `,
+      };
+
+      await transporter.sendMail(mailOptions, async function (error, info) {
+        if (error) {
+          return await res.status(400).json({
+            message: "Không thể gửi email ngay bây giờ. Vui lòng thử lại sau",
+          });
+        } else {
+          return res.status(200).json(true);
+        }
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const checkPinCode = async (req, res) => {
+  try {
+    const { email, pin } = req.body;
+
+    const isCorrect = PINs.some((obj) => obj.email === email && obj.pin === pin);
+
+    if (!isCorrect) {
+      return res.status(200).json(false);
+    } else {
+      return res.status(200).json(true);
+    }
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
   }
 };
 
@@ -254,6 +354,34 @@ export const checkPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
+};
+
+export const changePassword = async (req, res) => {
+  const { email, password } = req.body;
+  // Check Password and Hash Password
+  var newPassword;
+  if (password) {
+    if (password.length < 6)
+      return res.status(400).json({ msg: "Password must have at least 6 letters." });
+    try {
+      newPassword = await bcrypt.hash(password, 10);
+    } catch (error) {
+      return res.status(500).json({ msg: error.message });
+    }
+  }
+
+  try {
+    await UserModel.findOneAndUpdate(
+      { email: email },
+      {
+        password: newPassword,
+      }
+    );
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+
+  res.status(200).json("Updated user");
 };
 
 // -------- Create Token Function ------------

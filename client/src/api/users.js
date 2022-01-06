@@ -45,6 +45,30 @@ const UserAPI = {
       return error;
     }
   },
+  checkEmail: async (payload) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/user/check_email`, payload);
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
+  checkPinCode: async (payload) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/user/check_pincode`, payload);
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
+  changePassword: async (payload) => {
+    try {
+      const res = await axios.put(`${BASE_URL}/user/change_password`, payload);
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 export default UserAPI;
