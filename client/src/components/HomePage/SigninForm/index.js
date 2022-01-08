@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-
+import { GoogleLogin } from "react-google-login";
 import { Icon } from "@iconify/react";
 import {
   SigninContainer,
@@ -26,6 +26,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { useHistory } from "react-router-dom";
 
 const Signin = ({ toggle, isOpen, handleModal }) => {
+  const clientId = "828741880621-pqvtk7ei98q91lno41bclfnkjhdsou4l.apps.googleusercontent.com";
   const overlayModal = useRef();
   const dispatch = useDispatch();
   const user = useSelector(authState$);
@@ -73,15 +74,25 @@ const Signin = ({ toggle, isOpen, handleModal }) => {
         password: data.password,
       })
     );
-    // if (user.loggedIn) {
-    //   history.push("/");
-    // } else {
-    //   setMessage(user.errMsg);
-    //   console.log(user.errMsg);
-    // }
 
     isLogin();
   }, [dispatch, data, isLogin]);
+
+  const onLoginSuccess = (res) => {
+    console.log("Login Success: ", res);
+
+    if (res.profileObj) {
+      dispatch(
+        actions.login.loginRequest({
+          idToken: res.tokenId,
+        })
+      );
+    }
+  };
+
+  const onFailureSuccess = (res) => {
+    console.log("Login Failed: ", res);
+  };
 
   return (
     <SigninContainer id="home/signin" isOpen={isOpen} onClick={handleCloseModal} ref={overlayModal}>
@@ -129,9 +140,16 @@ const Signin = ({ toggle, isOpen, handleModal }) => {
           </ButtonLoginGG> */}
 
           <ItemsWrapper>
-            <span className="iconify" data-icon="akar-icons:facebook-fill"></span>
+            {/* <span className="iconify" data-icon="akar-icons:facebook-fill"></span>
             <span className="iconify" data-icon="fa-brands:instagram"></span>
-            <span className="iconify" data-icon="entypo-social:twitter-with-circle"></span>
+            <span className="iconify" data-icon="entypo-social:twitter-with-circle"></span> */}
+            <GoogleLogin
+              clientId={clientId}
+              buttonText="Sign In with Google"
+              onSuccess={onLoginSuccess}
+              onFailure={onFailureSuccess}
+              cookiePolicy={"single_host_origin"}
+            />
           </ItemsWrapper>
         </FormBottom>
       </SigninMenu>

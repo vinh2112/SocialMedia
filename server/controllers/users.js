@@ -4,37 +4,134 @@ import jwt from "jsonwebtoken";
 import randomstring from "randomstring";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { auth } from "google-auth-library";
+const client = auth.fromAPIKey("AIzaSyBkYGbkbQMADdCkqTLqmYO8OZz4R9oH51A");
 
 dotenv.config();
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { idToken } = req.body;
 
     // Validate User
-    if (
-      !email.match(
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    if (idToken) {
+      const infoGoogle = await client.verifyIdToken({ idToken });
+      const { email, name, picture } = infoGoogle.getPayload();
+
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        const password = randomstring.generate({ length: 12 });
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        const newUser = new UserModel({
+          email,
+          password: passwordHash,
+          name: name,
+          fullName: name,
+          avatar: picture,
+        });
+
+        await newUser.save();
+
+        // Send Password to Gmail
+
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.EMAIL_ADDRESS,
+            pass: process.env.PASSWORD_EMAIL,
+          },
+        });
+        var mailOptions = {
+          from: "vuongquocvinh.bh21@gmail.com",
+          to: email,
+          subject: "Recover your password from Photoos",
+          html: `
+            <div
+              classname="container"
+              style="display: block; padding: 0px; justtify-content: center;"
+            >
+              <h1
+                style="fontWeight: bold, color: #fe3456, width:200px; height: auto;  display: block; margin-left: auto; margin-right: auto;"
+              >Photoos</h1>
+              <h1 style=" font-weight: 600; margin: 0px; font-family: Gill Sans Extrabold, sans-serif; ">
+                YOUR DEFAULT PASSWORD
+              </h1>
+              <div style="display: flex">
+                <h2>
+                  Xin chào !
+                </h2>
+              </div>
+              <h3 style="color: #434242; font-weight: 500; margin: 0px; font-family: Gill Sans Extrabold, sans-serif; ">
+                Đây là mật khẩu mặc định của bạn khi đến với Photoos của chúng tôi.
+              </h3>
+              <h2 style="padding: 10px; background-color: black; width: max-content; font-family: Gill Sans Extrabold, sans-serif; font-weight: 700; color: yellow; display: block; marign: auto; margin-left: auto; margin-right: auto;">
+                ${password}
+              </h2>
+              <h3 style="color: #434242; font-weight: 500; margin: 0px; font-family: Gill Sans Extrabold, sans-serif; ">
+                Nếu bạn muốn đổi lại mật khẩu. Vui lòng vào Setting ➔ Security ➔ Đổi mật khẩu.
+              </h3>
+            </div>
+          `,
+        };
+
+        await transporter.sendMail(mailOptions, async function (error, info) {
+          if (error) {
+            return await res.status(400).json({
+              message: "Không thể gửi email ngay bây giờ. Vui lòng thử lại sau",
+            });
+          }
+        });
+        //
+
+        // Create Token to Authentication/Authorization
+        const accessToken = createAccessToken({ id: newUser._id });
+        const refreshToken = createRefreshToken({ id: newUser._id });
+
+        res.cookie("refreshtoken", refreshToken, {
+          httpOnly: true,
+          path: "/user/refresh_token",
+        });
+
+        return res.status(200).json({ accessToken });
+      }
+
+      const accessToken = createAccessToken({ id: user._id });
+      const refreshToken = createRefreshToken({ id: user._id });
+
+      res.cookie("refreshtoken", refreshToken, {
+        httpOnly: true,
+        path: "/user/refresh_token",
+      });
+
+      return res.status(200).json({ accessToken });
+    } else {
+      const { email, password } = req.body;
+
+      if (
+        !email.match(
+          /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
       )
-    )
-      return res.status(400).json({ msg: "Email format is incorrect." });
+        return res.status(400).json({ msg: "Email format is incorrect." });
 
-    const user = await UserModel.findOne({ email });
-    if (!user) return res.status(403).json({ msg: "User does not exist." });
+      const user = await UserModel.findOne({ email });
+      if (!user) return res.status(403).json({ msg: "User does not exist." });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Incorrect Password." });
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ msg: "Incorrect Password." });
 
-    // If login success, create access and refresh token
-    const accessToken = createAccessToken({ id: user._id });
-    const refreshToken = createRefreshToken({ id: user._id });
+      // If login success, create access and refresh token
+      const accessToken = createAccessToken({ id: user._id });
+      const refreshToken = createRefreshToken({ id: user._id });
 
-    res.cookie("refreshtoken", refreshToken, {
-      httpOnly: true,
-      path: "/user/refresh_token",
-    });
+      res.cookie("refreshtoken", refreshToken, {
+        httpOnly: true,
+        path: "/user/refresh_token",
+      });
 
-    res.json({ accessToken });
+      res.json({ accessToken });
+    }
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
