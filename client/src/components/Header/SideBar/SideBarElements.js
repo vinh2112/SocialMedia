@@ -5,7 +5,6 @@ export const OverLay = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
-  transition: all 0.1s ease-out 0s;
 
   @media (max-width: 1024px) {
     position: fixed;
@@ -19,14 +18,14 @@ export const OverLay = styled.div`
 
 export const Container = styled.div`
   position: absolute;
-  top: 50px;
+  top: 42px;
   right: 0;
   border-radius: 5px;
   padding: 8px;
   background-color: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
   transition: right 0.2s ease-in-out 0s, top 0.1s linear 0s;
-  opacity: 0.97;
+  opacity: 1;
 
   @media (max-width: 1024px) {
     position: fixed;
@@ -44,13 +43,13 @@ export const Container = styled.div`
 `;
 
 export const Top = styled.div`
-  display: none;
+  display: flex;
 
-  &.md {
+  /* &.md {
     @media (max-width: 1024px) {
       display: flex;
     }
-  }
+  } */
 `;
 
 // MenuItem
@@ -127,13 +126,13 @@ export const Separate = styled.div`
   margin: 8px 0;
   background-color: ${({ theme }) => theme.contrastColor};
 
-  &.md {
+  /* &.md {
     display: none;
 
     @media (max-width: 1024px) {
       display: flex;
     }
-  }
+  } */
 `;
 
 export const MenuIcon = styled.div`

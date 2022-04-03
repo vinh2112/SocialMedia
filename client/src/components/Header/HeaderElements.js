@@ -36,6 +36,10 @@ export const HeaderRight = styled.div`
   justify-content: flex-end;
 `;
 
+export const NotificationContainer = styled.div`
+  position: relative;
+`;
+
 export const SideBarContainer = styled.div`
   position: relative;
 
@@ -59,30 +63,14 @@ const roundButton = css`
   height: 35px;
   border-radius: 50%;
   font-size: 1.1rem;
+  margin-left: 8px;
   color: ${({ theme }) => theme.textColor};
   background-color: ${({ theme }) => theme.contrastColor};
   transition: all 0.1s ease-in-out 0s;
   cursor: pointer;
   user-select: none;
-`;
 
-export const RoundLabelButton = styled.label`
-  ${roundButton}
-  margin-left: 8px;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.hoverColor};
-  }
-`;
-
-export const RoundActionButton = styled(Link)`
-  ${roundButton}
-  position: relative;
-  margin-right: 8px;
-  font-size: 1.4rem;
-
-  &:before {
-    content: "Administrator";
+  & > span.tooltip {
     position: absolute;
     top: 110%;
     font-size: 12px;
@@ -94,6 +82,7 @@ export const RoundActionButton = styled(Link)`
     transition: all 0.1s ease;
     user-select: none;
     pointer-events: none;
+    z-index: 1;
     cursor: default;
   }
 
@@ -101,10 +90,48 @@ export const RoundActionButton = styled(Link)`
     background-color: ${({ theme }) => theme.hoverColor};
   }
 
-  &:hover:before {
+  &:hover > span {
     opacity: 1;
     transform: scale(1);
   }
+`;
+
+export const RoundLabelButton = styled.label`
+  ${roundButton}
+  position: relative;
+
+  &.fs-14 {
+    font-size: 1.4rem;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.hoverColor};
+  }
+
+  & > span.badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: white;
+    background-color: var(--danger-color);
+    user-select: none;
+    pointer-events: none;
+    cursor: default;
+  }
+`;
+
+export const RoundActionButton = styled(Link)`
+  ${roundButton}
+  position: relative;
+  font-size: 1.4rem;
 `;
 
 // -----------------
@@ -141,7 +168,7 @@ export const UserName = styled.div`
   font-weight: 500;
   padding: 0 4px 0 4px;
   color: ${({ theme }) => theme.textColor};
-  max-width: 130px;
+  max-width: 125px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

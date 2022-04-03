@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { GlobalStyles } from "./styles/global";
 import { ThemeProvider } from "styled-components";
 import { ThemeContext } from "./context/themeContext";
+import { socket, SocketContext } from "context/socketContext";
 import { lightTheme, darkTheme } from "./styles/theme";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import NewsFeedPage from "./pages/NewsFeedPage";
@@ -39,7 +40,7 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-        <>
+        <SocketContext.Provider value={socket}>
           <GlobalStyles />
 
           <Switch>
@@ -58,7 +59,7 @@ function App() {
           </Switch>
 
           <Toast />
-        </>
+        </SocketContext.Provider>
       </ThemeProvider>
     </BrowserRouter>
   );

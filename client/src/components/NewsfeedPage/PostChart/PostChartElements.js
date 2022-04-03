@@ -2,10 +2,9 @@ import { Card, Skeleton } from "@mui/material";
 import styled from "styled-components";
 
 export const PostChartContainer = styled.div`
-  position: fixed;
-  top: 72px;
-  left: calc(100vw - ((100vw - var(--max-width) + 48px) / 2));
-  transform: translateX(-100%);
+  position: relative;
+  top: 0;
+  right: 0;
   width: 332px;
   background: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
@@ -65,7 +64,6 @@ export const PostChartWrapper = styled.div`
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    margin: 0 0 20px;
     box-sizing: content-box;
 
     & > div {
@@ -76,7 +74,7 @@ export const PostChartWrapper = styled.div`
   }
 
   @media (max-width: 700px) {
-    margin: 0 -6px 20px;
+    margin: 0 -6px 0px;
     padding: 10px;
   }
 

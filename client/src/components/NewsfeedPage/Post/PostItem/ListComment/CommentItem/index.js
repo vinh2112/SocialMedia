@@ -30,7 +30,7 @@ import { CommentAPI } from "api";
 import ReplyComment from "./ReplyComment";
 import DefaultAvatar from "images/DefaultAvatar.png";
 
-const CommentItem = ({ comment, post }) => {
+const CommentItem = ({ comment, post, socket }) => {
   const [isOpen, setIsOpen] = useState(false);
   const currentReply = useRef();
   const menuNode = useRef();
@@ -73,9 +73,20 @@ const CommentItem = ({ comment, post }) => {
           type: "success",
         })
       );
+      socket?.emit("sendDeleteComment", {
+        comment: res.data,
+      });
       setIsOpen(false);
     }
   };
+
+  useEffect(() => {
+    socket?.on("getDeleteComment", (data) => {
+      if (comment._id === data.comment._id) {
+        dispatch(actions.deleteComment.deleteCommentSuccess(data.comment));
+      }
+    });
+  }, [comment, socket, dispatch]);
 
   return (
     <Container>
@@ -131,11 +142,12 @@ const CommentItem = ({ comment, post }) => {
                   commentId={comment._id}
                   currentUser={currentUser}
                   post={post}
+                  socket={socket}
                 />
               ))}
             </ReplyWrapper>
 
-            <BoxComment isReply={true} commentId={comment._id} />
+            <BoxComment isReply={true} comment={comment} socket={socket} />
           </>
         ) : null}
 

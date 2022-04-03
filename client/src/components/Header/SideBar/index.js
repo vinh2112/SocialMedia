@@ -25,7 +25,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
   const [blockScroll, allowScroll] = useScrollBlock();
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && window.innerWidth <= 1024) {
       blockScroll();
     }
 

@@ -76,7 +76,7 @@ export default function SearchSection() {
     <SearchContainer>
       <SearchHeader onSubmit={handleSearch} />
       <SearchList posts={data} showModal={handleModal} />
-      {(index || index === 0) && (
+      {(index || index === 0) && isShowModal && (
         <Modal post={data[index]} isShow={isShowModal} closeModal={handleModal} />
       )}
     </SearchContainer>

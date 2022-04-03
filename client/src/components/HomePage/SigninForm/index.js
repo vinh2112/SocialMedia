@@ -64,7 +64,10 @@ const Signin = ({ toggle, isOpen, handleModal }) => {
   };
 
   const isLogin = React.useCallback(() => {
-    if (user.loggedIn) history.push("/");
+    console.log("login");
+    if (user.loggedIn) {
+      history.push("/");
+    }
   }, [history, user]);
 
   const handleLogin = React.useCallback(() => {

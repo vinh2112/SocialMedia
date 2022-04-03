@@ -24,7 +24,7 @@ import * as actions from "redux/actions";
 import moment from "moment";
 import DefaultAvatar from "images/DefaultAvatar.png";
 
-export default function ReplyComment({ reply, commentId, currentUser, post }) {
+export default function ReplyComment({ reply, commentId, currentUser, post, socket }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuNode = useRef();
   const dispatch = useDispatch();
@@ -54,8 +54,19 @@ export default function ReplyComment({ reply, commentId, currentUser, post }) {
           type: "success",
         })
       );
+      socket?.emit("sendDeleteReply", {
+        comment: res.data,
+      });
     }
   };
+
+  useEffect(() => {
+    socket?.on("getDeleteReply", (data) => {
+      if (commentId === data.comment._id) {
+        dispatch(actions.deleteReply.deleteReplySuccess(data.comment));
+      }
+    });
+  }, [commentId, socket, dispatch]);
 
   return (
     <Container>

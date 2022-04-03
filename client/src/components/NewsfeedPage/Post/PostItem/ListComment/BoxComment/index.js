@@ -5,20 +5,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { authState$ } from "redux/selectors";
 import * as actions from "redux/actions";
 
-export default function BoxComment({ boxComment, isReply, postId, commentId }) {
-  const [comment, setComment] = useState("");
+export default function BoxComment({ boxComment, isReply, postId, comment, socket }) {
+  const [text, setText] = useState("");
   const dispatch = useDispatch();
   const { currentUser } = useSelector(authState$);
 
   useEffect(() => {
     return () => {
-      setComment("");
+      setText("");
     };
   }, []);
 
   const handleTextarea = (e) => {
     if (e.target.value.length <= 200) {
-      setComment(e.target.value);
+      setText(e.target.value);
       e.target.style.height = "32px";
       e.target.style.height = e.target.scrollHeight + "px";
     }
@@ -33,22 +33,28 @@ export default function BoxComment({ boxComment, isReply, postId, commentId }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (currentUser) {
-      if (postId && comment.length > 0) {
+      if (postId && text.length > 0) {
         dispatch(
           actions.createComment.createCommentRequest({
             postId,
-            comment: comment.trim(),
+            comment: text.trim(),
           })
         );
-        setComment("");
-      } else if (commentId && comment.length > 0) {
+        socket?.emit("sendUpdateCommentPost", {
+          postId: postId,
+        });
+        setText("");
+      } else if (comment && text.length > 0) {
         dispatch(
           actions.createReply.createReplyRequest({
-            commentId,
-            comment: comment.trim(),
+            commentId: comment._id,
+            comment: text.trim(),
           })
         );
-        setComment("");
+        socket?.emit("sendUpdateCommentPost", {
+          postId: comment.postId,
+        });
+        setText("");
       }
     } else {
       dispatch(
@@ -67,17 +73,17 @@ export default function BoxComment({ boxComment, isReply, postId, commentId }) {
         placeholder="Leave your comment ..."
         onChange={handleTextarea}
         onKeyDown={handleTextareaEnter}
-        value={comment}
+        value={text}
       />
       <RightSide>
         <SubmitButton
-          className={comment.length > 0 ? "" : "disable"}
-          disabled={comment.length > 0 ? false : true}
+          className={text.length > 0 ? "" : "disable"}
+          disabled={text.length > 0 ? false : true}
           onClick={handleSubmit}
         >
           <Icon icon="fluent:send-16-regular" />
         </SubmitButton>
-        <TextCount>{comment.length}/200</TextCount>
+        <TextCount>{text.length}/200</TextCount>
       </RightSide>
     </CommentForm>
   );

@@ -9,6 +9,7 @@ export const Container = styled.div`
 
 export const ContentTop = styled.div`
   display: flex;
+  justify-content: flex-end;
 `;
 
 export const AvatarWrapper = styled.div``;

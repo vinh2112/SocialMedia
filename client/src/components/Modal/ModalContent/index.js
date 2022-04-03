@@ -85,20 +85,24 @@ export default function ModalContent({ post }) {
   return (
     <Container>
       <ContentTop>
-        <AvatarWrapper>
-          <AvatarLink to={`/profile/${post.userId._id}`}>
-            <Avatar src={`${post.userId.avatar}`} />
-          </AvatarLink>
-        </AvatarWrapper>
+        {isOnEdit ? null : (
+          <>
+            <AvatarWrapper>
+              <AvatarLink to={`/profile/${post.userId._id}`}>
+                <Avatar src={`${post.userId.avatar}`} />
+              </AvatarLink>
+            </AvatarWrapper>
 
-        <AuthorWrapper>
-          <AuthorName to={`/profile/${post.userId._id}`}>@{post.userId.name}</AuthorName>
-          <CreatedDate>{moment(post.createdAt).fromNow()}</CreatedDate>
-        </AuthorWrapper>
+            <AuthorWrapper>
+              <AuthorName to={`/profile/${post.userId._id}`}>@{post.userId.name}</AuthorName>
+              <CreatedDate>{moment(post.createdAt).fromNow()}</CreatedDate>
+            </AuthorWrapper>
+          </>
+        )}
 
         {post.userId._id === currentUser?._id &&
           (isOnEdit ? (
-            <Stack spacing={1} direction="row">
+            <Stack spacing={1} direction="row" alignItems="flex-end">
               <CustomButton size="small" variant="string" onClick={() => setIsOnEdit(!isOnEdit)}>
                 Cancel
               </CustomButton>
@@ -114,9 +118,11 @@ export default function ModalContent({ post }) {
               </LoadingButton>
             </Stack>
           ) : (
-            <CustomButton size="small" variant="string" onClick={() => setIsOnEdit(!isOnEdit)}>
-              Edit
-            </CustomButton>
+            <>
+              <CustomButton size="small" variant="string" onClick={() => setIsOnEdit(!isOnEdit)}>
+                Edit
+              </CustomButton>
+            </>
           ))}
       </ContentTop>
       <DescWrapper>

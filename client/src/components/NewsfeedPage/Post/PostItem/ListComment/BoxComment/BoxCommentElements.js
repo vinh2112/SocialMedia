@@ -26,6 +26,9 @@ export const CommentArea = styled.textarea`
   &:not(:placeholder-shown) {
     border-bottom: 2px solid ${({ theme }) => theme.subTextColor};
   }
+  &::placeholder {
+    font-style: italic;
+  }
 `;
 
 export const RightSide = styled.div`

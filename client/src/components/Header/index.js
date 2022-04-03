@@ -14,31 +14,38 @@ import {
   SignIn,
   SignUp,
   RoundActionButton,
+  NotificationContainer,
 } from "./HeaderElements";
 import SideBar from "./SideBar";
 import { Icon } from "@iconify/react";
-import { useDispatch, useSelector } from "react-redux";
-import * as actions from "redux/actions";
-import { authState$, modalState$ } from "redux/selectors";
+import { useSelector } from "react-redux";
+import { authState$ } from "redux/selectors";
 import DefaultAvatar from "images/DefaultAvatar.png";
+import NotificationSection from "./NotificationSection";
 
 const Header = ({ toggle }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  let initialState = {
+    notify: false,
+    sideBar: false,
+  };
+  const [isOpen, setIsOpen] = useState(initialState);
   const domNode = useRef();
-  const dispatch = useDispatch();
+  const notiNode = useRef();
   const user = useSelector(authState$);
-  const { isShow } = useSelector(modalState$);
 
-  const handleSideBar = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen) isShow && dispatch(actions.hideModal());
+  const handleSideBar = (e) => {
+    setIsOpen({ sideBar: !isOpen.sideBar, notify: false });
+  };
+
+  const handleNotifyPopup = () => {
+    setIsOpen({ sideBar: false, notify: !isOpen.notify });
   };
 
   useEffect(() => {
     let handleOutSide = (e) => {
-      if (!domNode.current.contains(e.target)) {
+      if (!domNode.current.contains(e.target) && !notiNode.current.contains(e.target)) {
         document.body.style.overflowY = null;
-        setIsOpen(false);
+        setIsOpen(initialState);
       }
     };
 
@@ -49,15 +56,6 @@ const Header = ({ toggle }) => {
     };
   });
 
-  // const handleLogin = React.useCallback(() => {
-  //   dispatch(
-  //     actions.login.loginRequest({
-  //       email: "vuongquocvinh.bh@gmail.com",
-  //       password: "123456",
-  //     })
-  //   );
-  // }, [dispatch]);
-
   return (
     <HeaderContainer id="header">
       <HeaderWrapper>
@@ -65,20 +63,11 @@ const Header = ({ toggle }) => {
           <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
             <h2>Photoos</h2>
           </LogoLink>
-
-          {/* {!user.loggedIn && <button onClick={handleLogin}>Login</button>} */}
         </HeaderLeft>
-
-        {/* {user.isLoading && <p>Loading...</p>} */}
 
         <HeaderRight>
           {user.currentUser ? (
             <>
-              {user.currentUser.isAdmin && (
-                <RoundActionButton to="/administrator/dashboard">
-                  <Icon icon="eos-icons:admin-outlined" />
-                </RoundActionButton>
-              )}
               <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
                 <Avatar
                   src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar}
@@ -86,6 +75,13 @@ const Header = ({ toggle }) => {
                 />
                 <UserName>@{user.currentUser.name}</UserName>
               </RoundButtonLink>
+
+              {user.currentUser.isAdmin && (
+                <RoundActionButton to="/administrator/dashboard">
+                  <Icon icon="eos-icons:admin-outlined" />
+                  <span className="tooltip">Administrator</span>
+                </RoundActionButton>
+              )}
             </>
           ) : (
             <AuthGroupButton>
@@ -96,13 +92,33 @@ const Header = ({ toggle }) => {
             </AuthGroupButton>
           )}
 
+          <RoundActionButton to="#">
+            <Icon icon="ant-design:message-outlined" />
+            <span className="tooltip">Message</span>
+          </RoundActionButton>
+
+          <NotificationContainer ref={notiNode}>
+            <RoundLabelButton
+              htmlFor="notify-checkbox"
+              className="mg-r fs-14"
+              onClick={handleNotifyPopup}
+            >
+              <Icon icon="codicon:bell" />
+              <span className="tooltip">Notification</span>
+              <span className="badge">2</span>
+            </RoundLabelButton>
+            <input type="checkbox" id="notify-checkbox" hidden />
+
+            <NotificationSection isOpen={isOpen.notify} />
+          </NotificationContainer>
+
           <SideBarContainer ref={domNode}>
             <RoundLabelButton htmlFor="activeCheckBox" onClick={handleSideBar}>
               <Icon icon="feather:menu" />
             </RoundLabelButton>
-            <input type="checkbox" id="activeCheckBox"></input>
+            {/* <input type="checkbox" id="activeCheckBox"></input> */}
 
-            <SideBar isOpen={isOpen} handleSideBar={handleSideBar} user={user} />
+            <SideBar isOpen={isOpen.sideBar} handleSideBar={handleSideBar} user={user} />
           </SideBarContainer>
         </HeaderRight>
       </HeaderWrapper>

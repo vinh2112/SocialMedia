@@ -5,9 +5,11 @@ import PostUpdateModal from "./Post/PostUpdateModal";
 import { authState$ } from "redux/selectors";
 import { useSelector } from "react-redux";
 import PostChart from "./PostChart";
+import OnlineUserSection from "./OnlineUserSection";
 
 const NewsFeedContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   max-width: var(--max-width);
   width: 100%;
   padding: 72px 16px 0;
@@ -22,13 +24,18 @@ const NewsFeedContainer = styled.div`
   }
 `;
 
+const NewsFeedRight = styled.div``;
+
 const NewsFeed = () => {
   const { currentUser } = useSelector(authState$);
 
   return (
     <NewsFeedContainer>
       <PostList direction="left" />
-      <PostChart />
+      <NewsFeedRight>
+        <PostChart />
+        <OnlineUserSection />
+      </NewsFeedRight>
       {currentUser && <PostUpdateModal user={currentUser} />}
     </NewsFeedContainer>
   );
