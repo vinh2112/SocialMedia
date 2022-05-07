@@ -27,7 +27,7 @@ export default function OnlineUserSection() {
 
   useEffect(() => {
     socket?.on("getOnlineUsers", ({ onlineUsers }) => {
-      listOnlineUsers.current = user?.currentUser?.followings.reduce((acc, element) => {
+      listOnlineUsers.current = user?.currentUser?.followings?.reduce((acc, element) => {
         if (onlineUsers.some((ou) => ou.userId === element._id)) {
           element.online = true;
           return [element, ...acc];

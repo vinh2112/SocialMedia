@@ -117,9 +117,10 @@ export const RoundLabelButton = styled.label`
     align-items: center;
     font-size: 11px;
     font-weight: 700;
-    width: 16px;
+    min-width: 16px;
     height: 16px;
-    border-radius: 50%;
+    padding: 2px 4px;
+    border-radius: 9px;
     color: white;
     background-color: var(--danger-color);
     user-select: none;
@@ -178,7 +179,7 @@ export const AuthGroupButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 145px;
+  width: 135px;
 
   @media (max-width: 1024px) {
     display: none;
@@ -191,6 +192,8 @@ export const SignIn = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: ${({ theme }) => theme.textColor};
+  font-size: 14px;
+  font-weight: 700;
   height: 32px;
   padding: 0 16px;
   background-color: ${({ theme }) => theme.contrastColor};
@@ -206,6 +209,8 @@ export const SignUp = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.textColor};
   padding: 2px 4px;
+  font-size: 14px;
+  font-weight: 700;
 
   &:hover {
     text-decoration: underline;

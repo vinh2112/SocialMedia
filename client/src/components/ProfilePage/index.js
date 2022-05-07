@@ -11,7 +11,7 @@ const ProfileContainer = styled.div`
   justify-content: space-between;
   max-width: var(--max-width);
   width: 100%;
-  padding: 80px 16px 0;
+  padding: 72px 0px 0;
   margin: 0 auto;
 
   @media (max-width: 1024px) {

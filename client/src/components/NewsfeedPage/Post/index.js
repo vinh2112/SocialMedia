@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, CustomCard, CustomSkeleton, PostTopTitle } from "./PostElements";
 import PostItem from "./PostItem";
 import PostUpdate from "./PostUpdate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authState$, postState$ } from "../../../redux/selectors";
 import { useParams } from "react-router";
 import { CardContent, CardHeader } from "@mui/material";
+import InfiniteScroll from "react-infinite-scroll-component";
+import * as actions from "redux/actions";
 
 const Posts = ({ direction }) => {
+  const [page, setPage] = useState(1);
   const { data } = useSelector(postState$);
   const { currentUser } = useSelector(authState$);
+  const dispatch = useDispatch();
 
   const { userId } = useParams();
+
+  useEffect(() => {
+    if (page !== 1) {
+      if (userId) {
+        dispatch(actions.getProfilePosts.getProfilePostsRequest({ userId, page }));
+      } else {
+        dispatch(actions.getPostsLoadMore.getPostsLoadMoreRequest(page));
+      }
+    }
+  }, [page, dispatch, userId]);
 
   return (
     <>
@@ -25,9 +39,18 @@ const Posts = ({ direction }) => {
           <span></span>
         </PostTopTitle>
 
-        {data.map((post, i) => (
-          <PostItem key={i} post={post} />
-        ))}
+        <InfiniteScroll
+          style={{ padding: "20px 16px 0" }}
+          dataLength={data.length}
+          next={() => setPage(page + 1)}
+          hasMore={true}
+        >
+          {data.map((post, i) => (
+            <div key={i}>
+              <PostItem post={post} />
+            </div>
+          ))}
+        </InfiniteScroll>
 
         {[...Array(1)].map((item, index) => (
           <PostLoading key={index} />

@@ -283,6 +283,18 @@ export const register = async (req, res) => {
   }
 };
 
+export const searchUsers = async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    const users = await UserModel.find({ $text: { $search: query } });
+
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
 export const updateUser = async (req, res) => {
   const { fullName, name, avatar, city, from, desc, creditCard, password } = req.body;
   // Check Password and Hash Password
@@ -338,11 +350,11 @@ export const getUser = async (req, res) => {
     const user = await UserModel.findById(req.userId)
       .populate({
         path: "followers",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .populate({
         path: "followings",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .select("-password");
     if (!user) {
@@ -360,11 +372,11 @@ export const getProfileUser = async (req, res) => {
     const user = await UserModel.findById(req.params.userId)
       .populate({
         path: "followers",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .populate({
         path: "followings",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .select("-password");
     if (!user) {
@@ -392,11 +404,11 @@ export const interactUser = async (req, res) => {
           )
             .populate({
               path: "followers",
-              select: "name email avatar",
+              select: "fullName name email avatar",
             })
             .populate({
               path: "followings",
-              select: "name email avatar",
+              select: "fullName name email avatar",
             });
 
           await UserModel.findOneAndUpdate(
@@ -414,11 +426,11 @@ export const interactUser = async (req, res) => {
           )
             .populate({
               path: "followers",
-              select: "name email avatar",
+              select: "fullName name email avatar",
             })
             .populate({
               path: "followings",
-              select: "name email avatar",
+              select: "fullName name email avatar",
             });
 
           await UserModel.findOneAndUpdate(

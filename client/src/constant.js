@@ -16,6 +16,9 @@ export const INIT_STATE = {
     data: [],
     commentId: undefined,
   },
+  notifications: {
+    data: [],
+  },
   modal: {
     isShow: false,
   },

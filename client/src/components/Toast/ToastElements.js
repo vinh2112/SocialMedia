@@ -32,20 +32,21 @@ export const ToastContainer = styled.div`
 
   .toast__message {
     flex: 1;
-    padding: 0 8px 0 0;
-    font-size: 15px;
+    padding: 0 14px 0 0px;
+    font-size: 14px;
     font-weight: 500;
+    text-transform: uppercase;
   }
 
   .toast__icon {
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 12px;
     font-size: 20px;
   }
 
   .toast__close {
-    padding: 0 6px;
+    padding: 0 10px;
     align-self: stretch;
     display: flex;
     align-items: center;

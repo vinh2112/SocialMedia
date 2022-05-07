@@ -12,6 +12,7 @@ import {
   checkEmail,
   changePassword,
   checkPinCode,
+  searchUsers,
 } from "../controllers/users.js";
 import { verifyToken } from "../middlewares/auth.js";
 
@@ -20,6 +21,10 @@ const router = express.Router();
 // @route GET user/
 // @desc Check if user logged in
 router.get("/", verifyToken, getUser);
+
+// @route GET user/search?query=
+// @desc Search users
+router.get("/search", verifyToken, searchUsers);
 
 // @route GET user/check_password
 // @desc Check Password

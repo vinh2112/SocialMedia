@@ -6,13 +6,13 @@
 
 <g id="Layer_1">
 	
-		<circle opacity="0.4" fill="transparent" stroke="#CCCCCC" stroke-width="4" stroke-linecap="square" stroke-linejoin="bevel" stroke-miterlimit="10" cx="75" cy="75.293" r="48.707"/>
+		<circle opacity="0.4" fill="transparent" stroke="#AAAAAA" stroke-width="4" stroke-linecap="square" stroke-linejoin="bevel" stroke-miterlimit="10" cx="75" cy="75.293" r="48.707"/>
 </g>
 <g id="Layer_2">
 	<g>
 		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="36.2957" y1="34.8138" x2="94.5114" y2="34.8138">
-			<stop  offset="0" style="stop-color:#CCCCCC"/>
-			<stop  offset="1" style="stop-color:#CCCCCC;stop-opacity:0"/>
+			<stop  offset="0" style="stop-color:#AAAAAA"/>
+			<stop  offset="1" style="stop-color:#AAAAAA;stop-opacity:0"/>
 		</linearGradient>
 		<path fill="none" stroke="url(#SVGID_1_)" stroke-width="6" stroke-linecap="round" stroke-linejoin="bevel" d="M38.296,43.227
 			c0,0,21.86-26.035,54.216-13.336">

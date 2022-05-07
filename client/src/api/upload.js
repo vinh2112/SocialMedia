@@ -1,9 +1,7 @@
 import axios from "axios";
-// import { storage } from "firebase";
 import uuid from "react-uuid";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-// const BASE_URL_PREDICT = "http://2b40-35-230-190-61.ngrok.io/predict";
 
 const UPLOAD = {
   uploadImage: async (payload) => {
@@ -23,8 +21,11 @@ const UPLOAD = {
           },
         });
 
-        let categories = [];
-        res.data.Labels.forEach((label) => categories.push(label.Name));
+        let categories = res.data.Labels.reduce((result, label, index) => {
+          if (index < 6) result.push(label.Name);
+          return result;
+        }, []);
+        console.log(categories);
 
         const image = await axios.post(`${BASE_URL}/api/upload`, formData, {
           headers: {

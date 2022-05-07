@@ -26,8 +26,7 @@ export const PostTopTitle = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  margin-bottom: 20px;
-
+  padding: 0 16px;
   & > h3 {
     display: inline-block;
     white-space: nowrap;
@@ -54,6 +53,7 @@ export const CustomCard = styled(Card)`
   && {
     background-color: ${({ theme }) => theme.primary};
     margin-bottom: 20px;
+    margin: 0 16px;
   }
 `;
 

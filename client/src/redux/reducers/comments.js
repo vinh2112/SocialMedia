@@ -25,10 +25,7 @@ export default function commentReducers(state = INIT_STATE.comments, action) {
         ...state,
         data: [
           ...new Map(
-            [...state.data, ...action.payload].map((item) => [
-              item["_id"],
-              item,
-            ])
+            [...action.payload, ...state.data].map((item) => [item["_id"], item])
           ).values(),
         ],
       };
@@ -46,9 +43,7 @@ export default function commentReducers(state = INIT_STATE.comments, action) {
     case getType(deleteComment.deleteCommentSuccess):
       return {
         ...state,
-        data: state.data.filter(
-          (comment) => comment._id !== action.payload._id
-        ),
+        data: state.data.filter((comment) => comment._id !== action.payload._id),
       };
     case getType(deleteComment.deleteCommentFailure):
       return {

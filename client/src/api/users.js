@@ -69,6 +69,18 @@ const UserAPI = {
       return error;
     }
   },
+  searchUsers: async (payload) => {
+    try {
+      const TOKEN = localStorage.getItem("access_token");
+      const res = await axios.get(`${BASE_URL}/user/search?query=${payload}`, {
+        headers: { Authorization: TOKEN },
+      });
+
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 export default UserAPI;

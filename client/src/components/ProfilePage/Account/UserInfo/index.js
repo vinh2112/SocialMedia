@@ -27,7 +27,7 @@ export default function UserInfo() {
   const { currentUser } = useSelector(authState$);
   const isYourAccount = profile?._id === currentUser?._id;
 
-  const handleInteract = () => {
+  const handleInteract = async () => {
     if (currentUser) {
       dispatch(actions.interactUser.interactUserRequest(profile?._id));
     } else {

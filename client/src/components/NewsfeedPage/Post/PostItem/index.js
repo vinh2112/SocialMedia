@@ -31,6 +31,7 @@ import * as actions from "redux/actions";
 import { LoadingButton } from "@mui/lab";
 import DefaultAvatar from "images/DefaultAvatar.png";
 import PostReportModal from "./PostReportModal";
+import { Link } from "react-router-dom";
 
 // const getFirstLetter = (name) => {
 //   return name.charAt(0).toUpperCase();
@@ -224,7 +225,9 @@ const PostItem = ({ post }) => {
               )}
             </Description>
           </PostAuthor>
-          <PostImage src={post.image.url} />
+          <Link style={{ display: "flex" }} to={`/post/${post._id}`}>
+            <PostImage src={post.image.url} />
+          </Link>
         </PostTop>
         <ListAction
           showComment={handleShowComment}

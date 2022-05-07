@@ -1,6 +1,7 @@
 import { call, put } from "redux-saga/effects";
 import * as actions from "../actions";
 import * as api from "../../api";
+import { sendNotification } from "./notifications";
 
 function* fetchPosts() {
   const posts = yield call(api.PostAPI.fetchPosts);
@@ -76,7 +77,6 @@ export function* createPostSaga(action) {
     yield put(actions.createPost.createPostSuccess(res.data));
     yield put(actions.hideModal());
   } catch (error) {
-    console.log(error);
     yield put(actions.createPost.createPostFailure(error.response.data.msg));
   }
 }
@@ -84,6 +84,13 @@ export function* createPostSaga(action) {
 export function* reactPost(action) {
   try {
     const res = yield call(api.PostAPI.reactPost, action.payload);
+
+    yield call(sendNotification, {
+      receiverId: res.data.userId._id,
+      type: 0,
+      targetId: res.data._id,
+    });
+
     yield put(actions.reactPost.reactPostSuccess(res.data));
   } catch (error) {
     yield put(actions.reactPost.reactPostFailure);
@@ -94,6 +101,12 @@ export function* interactUser(action) {
   try {
     const res = yield call(api.UserAPI.interact, action.payload);
     yield put(actions.interactUser.interactUserSuccess(res.data));
+
+    yield call(sendNotification, {
+      receiverId: res.data._id,
+      type: 2,
+      targetId: res.data._id,
+    });
   } catch (error) {
     yield put(actions.interactUser.interactUserFailure);
   }

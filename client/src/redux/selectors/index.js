@@ -6,4 +6,6 @@ export const postState$ = (state) => state.posts;
 
 export const commentState$ = (state) => state.comments;
 
+export const notificationState$ = (state) => state.notifications;
+
 export const toastState$ = (state) => state.toast;

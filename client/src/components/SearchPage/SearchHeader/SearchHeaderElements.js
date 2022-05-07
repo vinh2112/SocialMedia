@@ -21,6 +21,7 @@ export const SearchBar = styled.div`
   background: ${({ theme }) => theme.contrastColor};
   padding: 12px 25px 12px 45px;
   border-radius: 24px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
 `;
 
 export const SearchLabel = styled.label`

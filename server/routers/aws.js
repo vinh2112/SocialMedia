@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import AWS from "aws-sdk";
 import fs from "fs";
+import axios from "axios";
 
 dotenv.config();
 
@@ -27,6 +28,31 @@ router.get("/translate", async (req, res) => {
     const data = await translate.translateText(params).promise();
     res.status(200).json(data);
   } catch (err) {
+    return res.status(500).json({ msg: error.message });
+  }
+});
+
+router.get("/detect/url", async (req, res) => {
+  try {
+    const url =
+      "https://res.cloudinary.com/santaclaus/image/upload/v1650635884/Social-Media/nn2wnnhdod3arpqgg9rc.jpg";
+    const r = await axios.get(url, { responseType: "arraybuffer" });
+    const buffer = new Buffer.from(r.data, "base64");
+    var params = {
+      Image: {
+        Bytes: buffer,
+      },
+    };
+    const rekognition = new AWS.Rekognition();
+    rekognition.detectLabels(params, (err, data) => {
+      if (err) res.status(500).json(err);
+      else {
+        res.status(200).json(data);
+      }
+    });
+    // const data = rekognition.detectLabels(params);
+    // res.json(data);
+  } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
 });

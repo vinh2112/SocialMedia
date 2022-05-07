@@ -18,10 +18,12 @@ import {
 } from "./HeaderElements";
 import SideBar from "./SideBar";
 import { Icon } from "@iconify/react";
-import { useSelector } from "react-redux";
-import { authState$ } from "redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { authState$, notificationState$ } from "redux/selectors";
 import DefaultAvatar from "images/DefaultAvatar.png";
 import NotificationSection from "./NotificationSection";
+import * as api from "api";
+import * as action from "redux/actions";
 
 const Header = ({ toggle }) => {
   let initialState = {
@@ -32,18 +34,48 @@ const Header = ({ toggle }) => {
   const domNode = useRef();
   const notiNode = useRef();
   const user = useSelector(authState$);
+  const notification = useSelector(notificationState$);
+  const dispatch = useDispatch();
 
   const handleSideBar = (e) => {
     setIsOpen({ sideBar: !isOpen.sideBar, notify: false });
   };
 
-  const handleNotifyPopup = () => {
+  const handleNotifyPopup = async () => {
+    if (isOpen.notify && countNotifications(notification.data) !== 0) {
+      await api.NotificationAPI.seenNotifications()
+        .then((res) => {
+          dispatch(action.fetchNotifications.fetchNotificationsSuccess(res.data));
+        })
+        .catch((err) => console.log(err));
+    }
+
     setIsOpen({ sideBar: false, notify: !isOpen.notify });
   };
 
+  const countNotifications = (data) => {
+    const unseenNoti = data.filter((noti) => !noti.seen);
+
+    return unseenNoti.length;
+  };
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (user.currentUser) {
+        await api.NotificationAPI.fetchNotifications()
+          .then((res) => {
+            dispatch(action.fetchNotifications.fetchNotificationsSuccess(res.data));
+          })
+          .catch((err) => console.log(err));
+      }
+    };
+
+    fetchNotifications();
+  }, [dispatch, user]);
+
   useEffect(() => {
     let handleOutSide = (e) => {
-      if (!domNode.current.contains(e.target) && !notiNode.current.contains(e.target)) {
+      if (!domNode.current.contains(e.target) && !notiNode?.current?.contains(e.target)) {
         document.body.style.overflowY = null;
         setIsOpen(initialState);
       }
@@ -82,6 +114,28 @@ const Header = ({ toggle }) => {
                   <span className="tooltip">Administrator</span>
                 </RoundActionButton>
               )}
+
+              <RoundActionButton to="/messages">
+                <Icon icon="ant-design:message-outlined" />
+                <span className="tooltip">Message</span>
+              </RoundActionButton>
+
+              <NotificationContainer ref={notiNode}>
+                <RoundLabelButton
+                  htmlFor="notify-checkbox"
+                  className="mg-r fs-14"
+                  onClick={handleNotifyPopup}
+                >
+                  <Icon icon="codicon:bell" />
+                  <span className="tooltip">Notification</span>
+                  {countNotifications(notification.data) !== 0 && (
+                    <span className="badge">{countNotifications(notification.data)}</span>
+                  )}
+                </RoundLabelButton>
+                <input type="checkbox" id="notify-checkbox" hidden />
+
+                <NotificationSection isOpen={isOpen.notify} notifications={notification.data} />
+              </NotificationContainer>
             </>
           ) : (
             <AuthGroupButton>
@@ -91,26 +145,6 @@ const Header = ({ toggle }) => {
               <SignUp to="/signup">Sign up</SignUp>
             </AuthGroupButton>
           )}
-
-          <RoundActionButton to="#">
-            <Icon icon="ant-design:message-outlined" />
-            <span className="tooltip">Message</span>
-          </RoundActionButton>
-
-          <NotificationContainer ref={notiNode}>
-            <RoundLabelButton
-              htmlFor="notify-checkbox"
-              className="mg-r fs-14"
-              onClick={handleNotifyPopup}
-            >
-              <Icon icon="codicon:bell" />
-              <span className="tooltip">Notification</span>
-              <span className="badge">2</span>
-            </RoundLabelButton>
-            <input type="checkbox" id="notify-checkbox" hidden />
-
-            <NotificationSection isOpen={isOpen.notify} />
-          </NotificationContainer>
 
           <SideBarContainer ref={domNode}>
             <RoundLabelButton htmlFor="activeCheckBox" onClick={handleSideBar}>

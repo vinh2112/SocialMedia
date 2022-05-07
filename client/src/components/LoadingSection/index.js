@@ -7,7 +7,6 @@ const LoadingContainer = styled.div`
   background-size: 80px;
   padding-bottom: 100px;
   width: 100%;
-  min-width: 400px;
 `;
 
 export default function LoadingSection() {

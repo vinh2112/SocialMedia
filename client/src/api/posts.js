@@ -3,6 +3,8 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const PostAPI = {
+  fetchPost: (payload) => axios.get(`${BASE_URL}/api/post/${payload}`),
+  fetchRelativePosts: (payload) => axios.get(`${BASE_URL}/api/post/${payload}/relative`),
   fetchPosts: (payload) => axios.get(`${BASE_URL}/api/post?page=${payload || 1}`),
   fetchPostsTimeline: () => {
     try {

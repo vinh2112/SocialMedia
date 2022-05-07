@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authState$ } from "redux/selectors";
 import * as actions from "redux/actions";
 
-export default function BoxComment({ boxComment, isReply, postId, comment, socket }) {
+export default function BoxComment({ boxComment, isReply, post, comment, socket }) {
   const [text, setText] = useState("");
   const dispatch = useDispatch();
   const { currentUser } = useSelector(authState$);
@@ -30,20 +30,23 @@ export default function BoxComment({ boxComment, isReply, postId, comment, socke
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (currentUser) {
-      if (postId && text.length > 0) {
+      if (post._id && text.length > 0) {
         dispatch(
           actions.createComment.createCommentRequest({
-            postId,
+            postId: post._id,
             comment: text.trim(),
+            receiverId: post.userId._id,
           })
         );
-        socket?.emit("sendUpdateCommentPost", {
-          postId: postId,
-        });
+
         setText("");
+
+        socket?.emit("sendUpdateCommentPost", {
+          postId: post._id,
+        });
       } else if (comment && text.length > 0) {
         dispatch(
           actions.createReply.createReplyRequest({
@@ -54,6 +57,7 @@ export default function BoxComment({ boxComment, isReply, postId, comment, socke
         socket?.emit("sendUpdateCommentPost", {
           postId: comment.postId,
         });
+
         setText("");
       }
     } else {

@@ -17,14 +17,14 @@ export default function ModalActions({ post, handleEdit }) {
     if (post.isPaymentRequired) {
       if (currentUser) {
         if (post.userId._id === currentUser._id) {
-          await saveAs(post.image.url, `${post.image.public_id}.png`);
+          saveAs(post.image.url, `${post.image.public_id}.png`);
         } else {
           const isPaid = await PaymentAPI.checkPayment(post._id);
 
           if (isPaid.data) {
-            await saveAs(post.image.url, `${post.image.public_id}.png`);
+            saveAs(post.image.url, `${post.image.public_id}.png`);
           } else {
-            history.push("/checkout", { post });
+            history.push(`/checkout/${post._id}`);
           }
         }
       } else {

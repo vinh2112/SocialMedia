@@ -11,8 +11,8 @@ const globalTheme = {
 };
 
 export const lightTheme = {
-  primary: "#fefefe",
-  secondary: "#f4f4f4",
+  primary: "#ffffff",
+  secondary: "#fcfdfd",
   contrastColor: "#eaeaea",
   hoverColor: "#dfdfdf",
   textColor: "#333",
@@ -27,7 +27,7 @@ export const darkTheme = {
   secondary: "#1e1e1e",
   contrastColor: "#444444",
   hoverColor: "#505050",
-  textColor: "#fff",
+  textColor: "#E4E6EB",
   subTextColor: "#666",
   borderColor: "#444",
   toastColor: "#181818",

@@ -76,6 +76,8 @@ export default function InformationSection({ user }) {
           .then((r) => r.blob())
           .then((blobFile) => new File([blobFile], "Avatar", { type: "image/png" }));
 
+        console.log(file);
+
         let formData = new FormData();
         formData.append("image", file);
 

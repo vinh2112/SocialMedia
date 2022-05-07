@@ -41,43 +41,18 @@ const PaymentApi = {
   },
   getPaypalToken: async (payload) => {
     try {
-      // const querystring = require('query-string')
       const string = queryString.stringify({ grant_type: "client_credentials" });
       const clientId =
-        "AfkOD-oXxY4qyuVSiK0snmzZN6PX3Jt397TXnbW4vtuPubej1Kd8OabdTW0LRtOVJIYP0LtWyT6FXL8i";
+        "AXTHX41OY79amHiVG6zW8JPNBFeSIJ46JPU-JqUeM1738odaegVO1UZZjXcgUYFki0dwGrqEJO6a8-FP";
       const SecretKey =
-        "EC_D2O-OfnnXQWRXhERm6584DrTG_HIH3iefcBftM4jd0sJ3pwAKJYBX6_AuBwElyrKNwPTL5TtXfqva";
+        "EC8PfebphxgB-1cAQm9pjtkDmqA5gDRDBK9SskUWAkxmh5VKuTG22OQ8fcj55cXcTYGfXm_kC_Cyzxit";
       const author = Buffer.from(`${clientId}:${SecretKey}`, "utf8").toString("base64");
-      const res = await axios.post(
-        `https://api.sandbox.paypal.com/v1/oauth2/token`,
-        // {
-        //     // queryString.stringify({'grant_type': 'client_credentials'})
-        //     string,
-        //     // data:{
-        //     //     "grant_type": "client_credentials"
-        //     // }
-        //     // "grant_type": "client_credentials",
-        // },
-        string,
-        {
-          // data:{
-          //     "grant_type": "client_credentials"
-          // },
-          headers: {
-            // Authorization: {
-            //     username: clientId,
-            //     password: SecretKey
-            // },
-            Authorization: `Basic ${author}`,
-            // auth: {
-            //     username: clientId,
-            //     password:SecretKey
-
-            // },
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
+      const res = await axios.post(`https://api.sandbox.paypal.com/v1/oauth2/token`, string, {
+        headers: {
+          Authorization: `Basic ${author}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
       localStorage.setItem("paypal_token", `Bearer ${res.data.access_token}`);
       return res;
     } catch (error) {

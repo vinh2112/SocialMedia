@@ -13,6 +13,11 @@ import payments from "./routers/payments.js";
 import aws from "./routers/aws.js";
 import reports from "./routers/reports.js";
 import dashboard from "./routers/dashboard.js";
+import notifications from "./routers/notifications.js";
+import messages from "./routers/messages.js";
+import conversations from "./routers/conversations.js";
+import fakeData from "./routers/fakeData.js";
+import momo from "./routers/momo.js";
 import { Server } from "socket.io";
 
 dotenv.config();
@@ -41,6 +46,11 @@ app.use("/api", upload);
 app.use("/api", payments);
 app.use("/api", reports);
 app.use("/api", dashboard);
+app.use("/api", notifications);
+app.use("/api", messages);
+app.use("/api", conversations);
+app.use("/api", fakeData);
+app.use("/api", momo);
 
 let onlineUsers = [];
 
@@ -66,7 +76,9 @@ mongoose
 
     const io = new Server(server, {
       cors: {
-        origin: "https://social-media-lv.netlify.app",
+        origin: "http://localhost:3000",
+
+        // https://social-media-lv.netlify.app
       },
     });
 
@@ -85,6 +97,13 @@ mongoose
         });
       });
 
+      socket.on("sendNotification", ({ userId }) => {
+        const receiver = getUser(userId);
+        io.to(receiver?.socketId).emit("getNotification");
+      });
+
+      // Comment Section
+
       socket.on("sendUpdateCommentPost", ({ postId }) => {
         io.emit("getUpdateCommentPost", {
           postId,
@@ -102,6 +121,20 @@ mongoose
           comment,
         });
       });
+
+      //
+
+      // Message Section
+
+      socket.on("sendMessage", ({ receiverId, message }) => {
+        const user = getUser(receiverId);
+
+        io.to(user?.socketId).emit("getMessage", {
+          message,
+        });
+      });
+
+      //
 
       socket.on("sendOnlineUsers", () => {
         io.emit("getOnlineUsers", {

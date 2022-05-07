@@ -49,7 +49,7 @@ const ListComment = ({ boxComment, post }) => {
         <LoadingSection />
       ) : (
         <>
-          <BoxComment boxComment={boxComment} postId={post._id} socket={socket} />
+          <BoxComment boxComment={boxComment} post={post} socket={socket} />
 
           {data &&
             data.map((comment) => {

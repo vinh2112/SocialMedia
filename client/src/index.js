@@ -12,13 +12,10 @@ import mySaga from "./redux/sagas";
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
-  reducers,
-  composeWithDevTools(applyMiddleware(sagaMiddleware))
-);
+const store = createStore(reducers, composeWithDevTools(applyMiddleware(sagaMiddleware)));
 
 sagaMiddleware.run(mySaga);
-
+// https://sm-api12.herokuapp.com
 ReactDOM.render(
   <Provider store={store}>
     <ThemeContextProvider>

@@ -10,12 +10,12 @@ import Modal from "components/Modal";
 const SearchContainer = styled.div`
   max-width: var(--max-width);
   width: 100%;
-  padding: 74px 16px 0;
+  padding: 72px 16px 0;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
     flex-direction: column;
-    padding: 74px 16px 0;
+    padding: 72px 16px 0;
   }
 `;
 
@@ -38,27 +38,6 @@ export default function SearchSection() {
     };
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const scrollWindow = () => {
-  //     if (
-  //       Math.abs(
-  //         window.innerHeight +
-  //           document.documentElement.scrollTop -
-  //           document.documentElement.offsetHeight
-  //       ) <= 1
-  //     ) {
-  //       if (!isLoading) {
-  //         setPage(page + 1);
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener("scroll", scrollWindow);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", scrollWindow);
-  //   };
-  // }, [dispatch, isLoading, page]);
-
   const handleSearch = (value) => {
     // setPage(1);
     setQuery(value);
@@ -72,6 +51,7 @@ export default function SearchSection() {
       setIndex(index);
     }
   };
+
   return (
     <SearchContainer>
       <SearchHeader onSubmit={handleSearch} />

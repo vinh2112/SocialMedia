@@ -10,6 +10,7 @@ export const PostChartContainer = styled.div`
   box-shadow: var(--box-shadow);
   border-radius: 5px;
   padding: 12px;
+  margin-right: 16px;
 
   @media (max-width: 1024px) {
     position: relative;

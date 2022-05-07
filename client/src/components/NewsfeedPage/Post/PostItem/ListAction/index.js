@@ -50,13 +50,12 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
     };
   }, [setIsOpen]);
 
-  const handleReact = () => {
+  const handleReact = async () => {
     // Check Log in status - if false redirect to login page
     if (currentUser) {
       setIsLiked(!isLiked);
       dispatch(actions.reactPost.reactPostRequest(post._id));
     } else {
-      // history.push("/login");
       dispatch(
         actions.toast.showToast({
           message: "Please Login",
@@ -67,11 +66,9 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
   };
 
   const handleDeletePost = () => {
-    console.log("123");
     if (currentUser) {
       dispatch(actions.deletePost.deletePostRequest(post._id));
     } else {
-      // history.push("/login");
       dispatch(
         actions.toast.showToast({
           message: "Please Login",

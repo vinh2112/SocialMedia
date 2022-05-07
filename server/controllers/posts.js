@@ -8,11 +8,11 @@ export const getPosts = async (req, res) => {
     const posts = await PostModel.find()
       .populate({
         path: "userId",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .populate({
         path: "likes",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .sort("-createdAt")
       .skip((page - 1) * 5)
@@ -28,11 +28,11 @@ export const getPost = async (req, res) => {
   const post = await PostModel.findById(req.params.postId)
     .populate({
       path: "userId",
-      select: "name email avatar",
+      select: "fullName name email avatar",
     })
     .populate({
       path: "likes",
-      select: "name email avatar",
+      select: "fullName name email avatar",
     })
     .sort("-createdAt");
 
@@ -47,11 +47,11 @@ export const getProfilePost = async (req, res) => {
   const posts = await PostModel.find({ userId: req.params.userId })
     .populate({
       path: "userId",
-      select: "name email avatar",
+      select: "fullName name email avatar",
     })
     .populate({
       path: "likes",
-      select: "name email avatar",
+      select: "fullName name email avatar",
     })
     .sort("-createdAt")
     .skip((page - 1) * 5)
@@ -70,11 +70,11 @@ export const getPostsTimeline = async (req, res) => {
         return PostModel.find({ userId: following.toString() })
           .populate({
             path: "userId",
-            select: "name email avatar",
+            select: "fullName name email avatar",
           })
           .populate({
             path: "likes",
-            select: "name email avatar",
+            select: "fullName name email avatar",
           })
           .sort("-createdAt")
           .limit(3);
@@ -84,11 +84,11 @@ export const getPostsTimeline = async (req, res) => {
       .limit(5)
       .populate({
         path: "userId",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .populate({
         path: "likes",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .sort("-createdAt");
 
@@ -111,11 +111,11 @@ export const getTopLikedPosts = async (req, res) => {
       .limit(6)
       .populate({
         path: "userId",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .populate({
         path: "likes",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       });
 
     res.status(200).json(posts);
@@ -135,16 +135,44 @@ export const searchPosts = async (req, res) => {
     })
       .populate({
         path: "userId",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .populate({
         path: "likes",
-        select: "name email avatar",
+        select: "fullName name email avatar",
       })
       .sort("-createdAt");
     res.json(posts);
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getRelativePosts = async (req, res) => {
+  try {
+    const post = await PostModel.findById(req.params.id);
+
+    if (post) {
+      const data = await PostModel.find({
+        category: { $in: post.category },
+        _id: { $nin: post._id },
+      })
+        .populate({
+          path: "userId",
+          select: "fullName name email avatar",
+        })
+        .populate({
+          path: "likes",
+          select: "fullName name email avatar",
+        })
+        .sort("-createdAt");
+
+      return res.status(200).json(data);
+    } else {
+      return res.status(403).json({ msg: "Post does not exist." });
+    }
+  } catch (error) {
+    return res.status(500).json({ msg: error });
   }
 };
 
@@ -167,7 +195,7 @@ export const createPost = async (req, res) => {
 
     await PostModel.populate(newPost, {
       path: "userId",
-      select: "name email avatar",
+      select: "fullName name email avatar",
     });
 
     res.status(200).json(newPost);
@@ -193,11 +221,11 @@ export const reactPost = async (req, res) => {
       )
         .populate({
           path: "userId",
-          select: "name email avatar",
+          select: "fullName name email avatar",
         })
         .populate({
           path: "likes",
-          select: "name email avatar",
+          select: "fullName name email avatar",
         })
         .exec();
 
@@ -212,11 +240,11 @@ export const reactPost = async (req, res) => {
       )
         .populate({
           path: "userId",
-          select: "name email avatar",
+          select: "fullName name email avatar",
         })
         .populate({
           path: "likes",
-          select: "name email avatar",
+          select: "fullName name email avatar",
         })
         .exec();
 
@@ -245,11 +273,11 @@ export const updatePost = async (req, res) => {
       )
         .populate({
           path: "userId",
-          select: "name email avatar",
+          select: "fullName name email avatar",
         })
         .populate({
           path: "likes",
-          select: "name email avatar",
+          select: "fullName name email avatar",
         });
 
       return res.status(200).json(newPost);

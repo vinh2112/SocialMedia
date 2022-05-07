@@ -41,6 +41,10 @@ const schema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    wallet: {
+      type: Number,
+      default: 0,
+    },
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,

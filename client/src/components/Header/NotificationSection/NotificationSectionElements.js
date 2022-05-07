@@ -67,6 +67,7 @@ export const NotifyText = styled.div`
   overflow: hidden;
   color: ${({ seen, theme }) => (seen ? theme.subTextColor : theme.textColor)};
   font-weight: 300;
+  font-size: 15px;
 
   & > .notify-sender {
     font-weight: 700;

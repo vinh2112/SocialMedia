@@ -5,6 +5,8 @@ export const GlobalStyles = createGlobalStyle`
         scroll-behavior: smooth;
     }
 
+
+
     /* ::-webkit-scrollbar {
         -webkit-appearance: none;
         width: 6px;
@@ -34,6 +36,14 @@ export const GlobalStyles = createGlobalStyle`
         min-height: 100vh;
         font-family: 'Roboto', sans-serif;
         /* transition: all 0.1s linear; */
+    }
+
+    body, html {
+        height :100%;
+    }
+
+    #root {
+        height: 100%;
     }
 
     textarea, pre {

@@ -1,14 +1,25 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
-import Paypal from "components/NewsfeedPage/Post/Paypal";
+import PaySection from "components/PayPage";
 import Header from "components/Header";
+import { useParams } from "react-router";
+import { PostAPI } from "api";
 
 const PaypalPage = () => {
-  const { state } = useLocation();
+  const [post, setPost] = React.useState(null);
+  const { postId } = useParams();
+
+  React.useEffect(() => {
+    const fetchPost = async () => {
+      await PostAPI.fetchPost(postId).then((res) => setPost(res.data));
+    };
+
+    fetchPost();
+  }, [postId]);
+
   return (
     <>
       <Header />
-      <Paypal post={state.post} />
+      {post !== null && <PaySection post={post} />}
     </>
   );
 };

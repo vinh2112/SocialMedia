@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 
 export const PostContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
