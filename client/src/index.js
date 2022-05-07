@@ -15,7 +15,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(sagaMiddleware)));
 
 sagaMiddleware.run(mySaga);
-// https://sm-api12.herokuapp.com
+// http://localhost:5000
 ReactDOM.render(
   <Provider store={store}>
     <ThemeContextProvider>
