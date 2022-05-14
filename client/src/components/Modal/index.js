@@ -54,7 +54,7 @@ export default function Modal({ post, isShow, closeModal }) {
         <ModalPhotoWrapper>
           <ModalPhoto
             style={{
-              backgroundImage: `url(${post.image.url})`,
+              backgroundImage: `url(${post.image.watermark})`,
             }}
           />
         </ModalPhotoWrapper>

@@ -22,6 +22,7 @@ import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
 import * as actions from "redux/actions";
+import DefaultAvatar from "images/DefaultAvatar.png";
 
 export default function ModalContent({ post }) {
   const [newPost, setNewPost] = useState(null);
@@ -89,7 +90,7 @@ export default function ModalContent({ post }) {
           <>
             <AvatarWrapper>
               <AvatarLink to={`/profile/${post.userId._id}`}>
-                <Avatar src={`${post.userId.avatar}`} />
+                <Avatar src={post.userId.avatar || DefaultAvatar} />
               </AvatarLink>
             </AvatarWrapper>
 

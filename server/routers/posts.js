@@ -11,6 +11,8 @@ import {
   searchPosts,
   getTopLikedPosts,
   getRelativePosts,
+  watermarkPost,
+  downloadPhotoPost,
 } from "../controllers/posts.js";
 import { verifyToken } from "../middlewares/auth.js";
 
@@ -19,6 +21,8 @@ const router = express.Router();
 // @router GET api/post/search
 // @desc Get posts by search value
 router.get("/post/search", searchPosts);
+
+// router.get("/post/watermark", watermarkPost);
 
 //@router GET api/post/timeline
 //@desc Get timeline posts
@@ -43,6 +47,9 @@ router.get("/post/:postId", getPost);
 // @router GET api/post/profile/:userId
 // @desc Get user's all posts
 router.get("/post/profile/:userId", getProfilePost);
+
+// @router GET api/post/:postId/download
+router.get("/post/:postId/download", verifyToken, downloadPhotoPost);
 
 // @router POST api/post
 // @desc Create new post

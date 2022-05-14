@@ -22,39 +22,44 @@ export const createPayment = async (req, res) => {
     const { postId } = req.params;
 
     // Create Payment
-    // const payment = new PaymentModel({
-    //   userId: req.userId,
-    //   posterId,
-    //   postId,
-    //   price,
-    //   isSuccess,
-    // });
-    // await payment.save();
-    // await PaymentModel.populate(payment, [
-    //   {
-    //     path: "userId",
-    //     select: "name email avatar",
-    //   },
-    //   { path: "postId" },
-    // ]);
-    // //
-
-    //Update wallet User
-    // type = 1: use photoos wallet, type = 2: use e-wallet
-
-    if (type === 1) {
-      await UserModel.findByIdAndUpdate(posterId, { $inc: { wallet: price } });
-      await UserModel.findByIdAndUpdate(req.userId, {
-        $inc: { wallet: -price },
+    const payment = await PaymentModel.findOne({ postId, userId: req.userId });
+    if (!payment) {
+      const newPayment = new PaymentModel({
+        userId: req.userId,
+        posterId,
+        postId,
+        price,
+        isSuccess,
       });
-    } else if (type === 2) {
-      await UserModel.findByIdAndUpdate(posterId, { $inc: { wallet: price } });
-    }
-    //
+      await newPayment.save();
+      await PaymentModel.populate(newPayment, [
+        {
+          path: "userId",
+          select: "name email avatar",
+        },
+        { path: "postId" },
+      ]);
+      // //
 
-    res.status(200).json(true);
+      //Update wallet User
+      // type = 1: use photoos wallet, type = 2: use e-wallet
+
+      if (type === 1) {
+        await UserModel.findByIdAndUpdate(posterId, { $inc: { wallet: price } });
+        await UserModel.findByIdAndUpdate(req.userId, {
+          $inc: { wallet: -price },
+        });
+      } else if (type === 2) {
+        await UserModel.findByIdAndUpdate(posterId, { $inc: { wallet: price } });
+      }
+      //
+
+      return res.status(200).json(true);
+    }
+
+    return res.status(200).json(false);
   } catch (error) {
-    res.status(500).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
 

@@ -20,7 +20,7 @@ router.post("/momo", async (req, res) => {
   var orderInfo = "MoMo";
   var redirectUrl = process.env.CLIENT_BASE_URL + `/checkout/${postId}`;
   var ipnUrl = process.env.CLIENT_BASE_URL;
-  var amount = price * 2300;
+  var amount = price * 23000;
   var requestType = "captureWallet";
   var extraData = "";
 

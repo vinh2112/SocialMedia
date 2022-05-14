@@ -72,6 +72,17 @@ const PostAPI = {
       return err;
     }
   },
+  downloadPost: async (payload) => {
+    try {
+      const TOKEN = localStorage.getItem("access_token");
+      const res = await axios.get(`${BASE_URL}/api/post/${payload}/download`, {
+        headers: { Authorization: TOKEN },
+      });
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
 };
 
 export default PostAPI;

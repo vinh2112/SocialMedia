@@ -1,6 +1,8 @@
+import { PaymentModel } from "../models/PaymentModel.js";
 import { PostModel } from "../models/PostModel.js";
 import { ReportModel } from "../models/ReportModel.js";
 import { UserModel } from "../models/UserModel.js";
+import { watermarkImage } from "../utils/watermark.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -16,7 +18,8 @@ export const getPosts = async (req, res) => {
       })
       .sort("-createdAt")
       .skip((page - 1) * 5)
-      .limit(5);
+      .limit(5)
+      .select("-image.url -image.public_id");
 
     res.json(posts);
   } catch (error) {
@@ -34,7 +37,8 @@ export const getPost = async (req, res) => {
       path: "likes",
       select: "fullName name email avatar",
     })
-    .sort("-createdAt");
+    .sort("-createdAt")
+    .select("-image.url -image.public_id");
 
   if (!post) return res.status(400).json({ msg: "Post not found" });
 
@@ -55,7 +59,8 @@ export const getProfilePost = async (req, res) => {
     })
     .sort("-createdAt")
     .skip((page - 1) * 5)
-    .limit(5);
+    .limit(5)
+    .select("-image.url -image.public_id");
 
   res.status(200).json(posts);
 };
@@ -77,7 +82,8 @@ export const getPostsTimeline = async (req, res) => {
             select: "fullName name email avatar",
           })
           .sort("-createdAt")
-          .limit(3);
+          .limit(3)
+          .select("-image.url -image.public_id");
       })
     );
     const newPosts = await PostModel.find({})
@@ -90,7 +96,8 @@ export const getPostsTimeline = async (req, res) => {
         path: "likes",
         select: "fullName name email avatar",
       })
-      .sort("-createdAt");
+      .sort("-createdAt")
+      .select("-image.url -image.public_id");
 
     posts = newPosts.concat(...friendPosts);
 
@@ -116,7 +123,8 @@ export const getTopLikedPosts = async (req, res) => {
       .populate({
         path: "likes",
         select: "fullName name email avatar",
-      });
+      })
+      .select("-image.url -image.public_id");
 
     res.status(200).json(posts);
   } catch (error) {
@@ -141,7 +149,8 @@ export const searchPosts = async (req, res) => {
         path: "likes",
         select: "fullName name email avatar",
       })
-      .sort("-createdAt");
+      .sort("-createdAt")
+      .select("-image.url -image.public_id");
     res.json(posts);
   } catch (error) {
     res.status(500).json({ msg: error.message });
@@ -165,7 +174,9 @@ export const getRelativePosts = async (req, res) => {
           path: "likes",
           select: "fullName name email avatar",
         })
-        .sort("-createdAt");
+        .sort("-createdAt")
+        .select("-image.url -image.public_id")
+        .limit(10);
 
       return res.status(200).json(data);
     } else {
@@ -183,6 +194,7 @@ export const createPost = async (req, res) => {
     if (!image) {
       return res.status(400).json({ msg: "Post must have image." });
     }
+    image.watermark = await watermarkImage(image.url);
     const newPost = new PostModel({
       userId: req.userId,
       desc,
@@ -303,5 +315,52 @@ export const deletePost = async (req, res) => {
     res.status(500).json({ msg: "Delete Failed" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
+  }
+};
+
+export const watermarkPost = async (req, res) => {
+  try {
+    const posts = await PostModel.find({ "image.watermark": { $exists: false } }).limit(50);
+
+    const watermarks = await Promise.all(
+      posts.reduce((acc, post) => {
+        const result = new Promise(async (resolve, reject) => {
+          await watermarkImage(post.image.url).then(async (url) => {
+            await PostModel.findByIdAndUpdate(post._id, {
+              "image.watermark": url,
+            });
+
+            resolve(url);
+          });
+        });
+        return [...acc, result];
+      }, [])
+    );
+
+    return res.json(watermarks);
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
+  }
+};
+
+export const downloadPhotoPost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const post = await PostModel.findById(postId);
+
+    if (post.isPaymentRequired) {
+      const payment = await PaymentModel.findOne({ postId, userId: req.userId });
+
+      if (payment) {
+        return res.status(200).json(post.image);
+      }
+
+      return res.status(200).json({ msg: "Please pay for this photo" });
+    } else {
+      return res.status(200).json(post.image);
+    }
+  } catch (error) {
+    return res.status(500).json({ msg: error.message });
   }
 };

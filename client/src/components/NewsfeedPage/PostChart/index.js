@@ -43,7 +43,7 @@ export default function PostChart() {
                   key={index}
                   onClick={() => handleViewPost(index)}
                   style={{
-                    backgroundImage: `url(${post.image.url})`,
+                    backgroundImage: `url(${post.image.watermark})`,
                   }}
                 />
               ))

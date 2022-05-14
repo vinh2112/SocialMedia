@@ -10,7 +10,7 @@ export default function SearchItem({ post, index, showModal }) {
   return (
     <SearchItemContainer
       style={{
-        backgroundImage: `url(${post.image.url})`,
+        backgroundImage: `url(${post.image.watermark})`,
       }}
       onClick={handleShowModal}
     >

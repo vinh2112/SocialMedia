@@ -1,26 +1,12 @@
 import axios from "axios";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
 import { UserModel } from "../models/UserModel.js";
 import querystring from "query-string";
 import { PostModel } from "../models/PostModel.js";
-import cloudinary from "cloudinary";
-import AWS from "aws-sdk";
-
-dotenv.config();
-
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  sessionToken: process.env.AWS_SESSION_TOKEN,
-  region: "us-east-1",
-});
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import cloudinary from "../services/cloudinary.js";
+import AWS from "../services/aws.js";
+import detectImage from "../utils/detectImage.js";
+import { watermarkImage } from "../utils/watermark.js";
 
 const realUsers = [
   "6145e281d0de2256d6a23b2e",
@@ -100,7 +86,7 @@ export const fakePosts = async (req, res) => {
     }
 
     // Generate random post image
-    let loopCount = 5; // loop limit
+    let loopCount = 1; // loop limit
     let postURLs = await Promise.all(await handlePostImages(loopCount)); // Post handled
     let newPosts = []; // List post prepare to be inserted into DB
 
@@ -110,11 +96,14 @@ export const fakePosts = async (req, res) => {
           .get("https://api.quotable.io/random")
           .then((res) => res.data.content);
 
+        const watermark = await watermarkImage(postURL.image.url);
+
         newPosts.push({
           userId: listUsers[Math.floor(Math.random() * listUsers.length)],
           image: {
             url: postURL.image.url,
             public_id: postURL.image.public_id,
+            watermark: watermark,
           },
           category: postURL.tags,
           desc,
@@ -204,34 +193,33 @@ async function handleUserData(data) {
 
   return user;
 }
-const rekognition = new AWS.Rekognition();
 
-async function detectImage(url) {
-  try {
-    let data = await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
-      var params = {
-        Image: {
-          Bytes: res.data,
-        },
-      };
+// async function detectImage(url) {
+//   try {
+//     let data = await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
+//       var params = {
+//         Image: {
+//           Bytes: res.data,
+//         },
+//       };
 
-      let categories = new Promise((resolve, reject) => {
-        rekognition.detectLabels(params, (err, data) => {
-          if (err) return err;
-          else {
-            const cates = data.Labels.reduce((result, label, index) => {
-              if (index < 6) result.push(label.Name);
-              return result;
-            }, []);
-            resolve(cates);
-          }
-        });
-      });
-      return categories;
-    });
+//       let categories = new Promise((resolve, reject) => {
+//         rekognition.detectLabels(params, (err, data) => {
+//           if (err) return err;
+//           else {
+//             const cates = data.Labels.reduce((result, label, index) => {
+//               if (index < 6) result.push(label.Name);
+//               return result;
+//             }, []);
+//             resolve(cates);
+//           }
+//         });
+//       });
+//       return categories;
+//     });
 
-    return data;
-  } catch (error) {
-    return error;
-  }
-}
+//     return data;
+//   } catch (error) {
+//     return error;
+//   }
+// }

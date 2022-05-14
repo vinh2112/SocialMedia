@@ -51,6 +51,11 @@ export const SideBarContainer = styled.div`
 export const LogoLink = styled(Link)`
   color: var(--primary-color);
   text-decoration: none;
+
+  & > img {
+    height: 30px;
+    object-fit: contain;
+  }
 `;
 
 // Round Button

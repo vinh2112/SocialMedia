@@ -76,9 +76,10 @@ mongoose
 
     const io = new Server(server, {
       cors: {
-        origin: "https://social-media-lv.netlify.app",
-
-        // http://localhost:3000
+        origin: "http://localhost:3000",
+        credentials: true,
+        withCredentials: true,
+        // https://social-media-lv.netlify.app
       },
     });
 

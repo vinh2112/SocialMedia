@@ -25,7 +25,6 @@ const UPLOAD = {
           if (index < 6) result.push(label.Name);
           return result;
         }, []);
-        console.log(categories);
 
         const image = await axios.post(`${BASE_URL}/api/upload`, formData, {
           headers: {

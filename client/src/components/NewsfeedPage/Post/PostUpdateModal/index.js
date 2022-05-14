@@ -29,11 +29,10 @@ import {
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, hideModal } from "redux/actions";
-import { authState$, modalState$, postState$ } from "redux/selectors";
+import { modalState$, postState$ } from "redux/selectors";
 import Switch from "@mui/material/Switch";
 import DefaultAvatar from "images/DefaultAvatar.png";
 import useScrollBlock from "hooks/useScrollBlock";
-import * as actions from "redux/actions";
 
 const initial_post = {
   desc: "",
@@ -48,7 +47,6 @@ const PostUpdateModal = ({ user }) => {
   const dispatch = useDispatch();
   const { isShow } = useSelector(modalState$);
   const { isLoading } = useSelector(postState$);
-  const { currentUser } = useSelector(authState$);
 
   const [post, setPost] = useState(initial_post);
   const [isSmall, setIsSmall] = useState(false);
@@ -92,20 +90,7 @@ const PostUpdateModal = ({ user }) => {
   };
 
   const handlePayment = () => {
-    if (!post.isPaymentRequired) {
-      if (currentUser.creditCard) {
-        setPost({ ...post, isPaymentRequired: !post.isPaymentRequired });
-      } else {
-        dispatch(
-          actions.toast.showToast({
-            message: "Please update your Paypal",
-            type: "warning",
-          })
-        );
-      }
-    } else {
-      setPost({ ...post, isPaymentRequired: !post.isPaymentRequired });
-    }
+    setPost({ ...post, isPaymentRequired: !post.isPaymentRequired });
   };
 
   const handlePrice = (e) => {

@@ -74,12 +74,16 @@ const PostItem = ({ post }) => {
     if (post.isPaymentRequired) {
       if (currentUser) {
         if (post.userId._id === currentUser._id) {
-          saveAs(post.image.url, `${post.image.public_id}.png`);
+          await PostAPI.downloadPost(post._id).then((res) => {
+            saveAs(res.data.url, `${res.data.public_id}.png`);
+          });
         } else {
           const isPaid = await PaymentAPI.checkPayment(post._id);
 
           if (isPaid.data) {
-            saveAs(post.image.url, `${post.image.public_id}.png`);
+            await PostAPI.downloadPost(post._id).then((res) => {
+              saveAs(res.data.url, `${res.data.public_id}.png`);
+            });
           } else {
             history.push("/checkout", { post });
           }
@@ -93,7 +97,9 @@ const PostItem = ({ post }) => {
         );
       }
     } else {
-      saveAs(post.image.url, `${post.image.public_id}.png`);
+      await PostAPI.downloadPost(post._id).then((res) => {
+        saveAs(res.data.url, `${res.data.public_id}.png`);
+      });
     }
   };
 
@@ -226,7 +232,7 @@ const PostItem = ({ post }) => {
             </Description>
           </PostAuthor>
           <Link style={{ display: "flex" }} to={`/post/${post._id}`}>
-            <PostImage src={post.image.url} />
+            <PostImage src={post.image.watermark} />
           </Link>
         </PostTop>
         <ListAction

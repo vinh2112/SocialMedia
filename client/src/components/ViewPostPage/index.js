@@ -48,7 +48,8 @@ export default function ViewPost() {
     <PostContainer>
       <PostWrapper>{post && <PostItem post={post} />}</PostWrapper>
       <CategoryWrapper>
-      {post && post.category.map((cate, index) => <CategoryItem key={index}>#{cate}</CategoryItem>)}
+        {post &&
+          post.category.map((cate, index) => <CategoryItem key={index}>#{cate}</CategoryItem>)}
       </CategoryWrapper>
       <div className="relative__post-container">
         <div className="relative__post-container-title">
@@ -69,7 +70,7 @@ const RelativePostItem = ({ post }) => {
   return (
     <RelativePostItemContainer>
       <RelativeItemPhoto to={`/post/${post._id}`} className="relative__post-item_photo">
-        <img src={post.image.url} alt="" />
+        <img src={post.image.watermark} alt="" />
       </RelativeItemPhoto>
       <Link to={`/profile/${post.userId._id}`} className="relative__post-item_info">
         <Avatar src={post.userId.avatar || DefaultAvatar} alt="" />

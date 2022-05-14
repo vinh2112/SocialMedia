@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { AuthAPI, MomoAPI, PaymentAPI } from "api";
+import { AuthAPI, MomoAPI, PaymentAPI, PostAPI } from "api";
 import LoadingSection from "components/LoadingSection";
 import { ThemeContext } from "context/themeContext";
 import { saveAs } from "file-saver";
@@ -37,7 +37,6 @@ const PaySection = ({ post }) => {
 
   const search = useLocation().search;
   const query = new URLSearchParams(search).toString();
-  console.log(query);
 
   useEffect(() => {
     const confirmMomoPayment = async () => {
@@ -54,6 +53,17 @@ const PaySection = ({ post }) => {
             setIsSuccess(res.data.isSuccess);
           }
         });
+
+        await PaymentAPI.createPayment({
+          postId: post._id,
+          postBody: {
+            price: post.price,
+            isSuccess: true,
+            posterId: post.userId,
+            type: 2,
+          },
+        });
+
         setTimeout(() => {
           setLoading(false);
         }, 1000);
@@ -61,7 +71,7 @@ const PaySection = ({ post }) => {
     };
 
     confirmMomoPayment();
-  }, [query, dispatch]);
+  }, [query, dispatch, post]);
 
   const handlePaymentType = (type) => {
     setPaymentType(type);
@@ -112,9 +122,11 @@ const PaySection = ({ post }) => {
     });
   };
 
-  const handleDownload = () => {
-    saveAs(post.image.url, `${post.image.public_id}.png`);
-    history.push("/");
+  const handleDownload = async () => {
+    await PostAPI.downloadPost(post._id).then((res) => {
+      saveAs(res.data.url, `${res.data.public_id}.png`);
+      history.push("/");
+    });
   };
 
   return (
@@ -122,7 +134,7 @@ const PaySection = ({ post }) => {
       <PaymentContainer>
         <PaymentLeftSide>
           <TopSection>
-            <img src={post.image.url} alt="payment" />
+            <img src={post.image.watermark} alt="payment" />
           </TopSection>
 
           <BottomSection>

@@ -24,6 +24,7 @@ import DefaultAvatar from "images/DefaultAvatar.png";
 import NotificationSection from "./NotificationSection";
 import * as api from "api";
 import * as action from "redux/actions";
+import PhotoosLogo from "images/Photoos.png";
 
 const Header = ({ toggle }) => {
   let initialState = {
@@ -93,7 +94,7 @@ const Header = ({ toggle }) => {
       <HeaderWrapper>
         <HeaderLeft>
           <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
-            <h2>Photoos</h2>
+            <img src={PhotoosLogo} alt="" />
           </LogoLink>
         </HeaderLeft>
 
