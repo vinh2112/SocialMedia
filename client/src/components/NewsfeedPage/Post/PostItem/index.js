@@ -85,7 +85,7 @@ const PostItem = ({ post }) => {
               saveAs(res.data.url, `${res.data.public_id}.png`);
             });
           } else {
-            history.push("/checkout", { post });
+            history.push(`/checkout/${post._id}`, { post });
           }
         }
       } else {
