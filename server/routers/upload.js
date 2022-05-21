@@ -20,16 +20,12 @@ router.post("/upload", (req, res) => {
       return res.status(400).json({ msg: "Format is incorret" });
     }
 
-    cloudinary.v2.uploader.upload(
-      file.tempFilePath,
-      { folder: "Social-Media" },
-      async (err, result) => {
-        if (err) throw err;
+    cloudinary.v2.uploader.upload(file.tempFilePath, { folder: "Image" }, async (err, result) => {
+      if (err) throw err;
 
-        removeTemp(file.tempFilePath);
-        res.json({ public_id: result.public_id, url: result.secure_url });
-      }
-    );
+      removeTemp(file.tempFilePath);
+      res.json({ public_id: result.public_id, url: result.secure_url });
+    });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }

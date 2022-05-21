@@ -112,7 +112,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
       return {
         ...state,
         isLoading: false,
-        error: action.payload,
+        // error: action.payload,
       };
     case getType(updatePost):
       return {

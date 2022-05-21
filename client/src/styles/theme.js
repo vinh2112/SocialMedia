@@ -19,6 +19,7 @@ export const lightTheme = {
   subTextColor: "#999",
   borderColor: "#d4d4d4",
   toastColor: "#fff",
+  boxShadow: "0 0 5px 0 rgba(0 0 0 / 10%)",
   ...globalTheme,
 };
 
@@ -31,5 +32,6 @@ export const darkTheme = {
   subTextColor: "#666",
   borderColor: "#444",
   toastColor: "#181818",
+  boxShadow: "0 0 5px 0 rgba(255 255 255 / 10%)",
   ...globalTheme,
 };

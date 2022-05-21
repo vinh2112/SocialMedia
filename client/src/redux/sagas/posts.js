@@ -67,15 +67,29 @@ export function* fetchTopLikedPosts() {
 
 export function* createPostSaga(action) {
   try {
-    const { categories, image } = yield call(api.UPLOAD.uploadImage, action.payload.image);
+    const { isDuplicate } = yield call(api.UPLOAD.checkDuplicateImage, action.payload.image);
 
-    const res = yield call(api.PostAPI.createPost, {
-      ...action.payload,
-      category: categories,
-      image,
-    });
-    yield put(actions.createPost.createPostSuccess(res.data));
-    yield put(actions.hideModal());
+    if (!isDuplicate) {
+      const { categories, image } = yield call(api.UPLOAD.uploadImage, action.payload.image);
+
+      const res = yield call(api.PostAPI.createPost, {
+        ...action.payload,
+        category: categories,
+        image,
+      });
+      yield put(actions.createPost.createPostSuccess(res.data));
+      yield put(actions.hideModal());
+    } else {
+      yield put(actions.createPost.createPostFailure());
+      yield put(actions.hideModal());
+
+      yield put(
+        actions.toast.showToast({
+          message: "This photo is exist",
+          type: "danger",
+        })
+      );
+    }
   } catch (error) {
     yield put(actions.createPost.createPostFailure(error.response.data.msg));
   }

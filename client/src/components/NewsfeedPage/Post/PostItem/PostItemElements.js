@@ -176,16 +176,18 @@ export const DescriptionWrapper = styled.div`
 
   & > pre {
     flex: 1;
+    margin-right: 10px;
   }
 
   & > .post-price {
-    color: #fefefe;
+    color: var(--primary-color);
     font-size: 16px;
     font-weight: 500;
     min-width: 60px;
     text-align: center;
     padding: 8px;
-    background-color: var(--primary-color);
+    background-color: ${({ theme }) => theme.primary};
+    box-shadow: ${({ theme }) => theme.boxShadow};
     border-radius: 6px;
 
     @media (max-width: 1024px) {
