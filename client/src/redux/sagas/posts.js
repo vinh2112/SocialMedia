@@ -81,7 +81,7 @@ export function* createPostSaga(action) {
       yield put(actions.hideModal());
     } else {
       yield put(actions.createPost.createPostFailure());
-      yield put(actions.hideModal());
+      // yield put(actions.hideModal());
 
       yield put(
         actions.toast.showToast({

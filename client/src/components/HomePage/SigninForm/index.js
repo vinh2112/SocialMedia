@@ -34,7 +34,6 @@ const Signin = ({ toggle, isOpen, handleModal }) => {
   const [hidden, setHidden] = useState(false);
   const isHidden = () => {
     setHidden(!hidden);
-    console.log(hidden);
   };
 
   useEffect(() => {
@@ -64,7 +63,6 @@ const Signin = ({ toggle, isOpen, handleModal }) => {
   };
 
   const isLogin = React.useCallback(() => {
-    console.log("login");
     if (user.loggedIn) {
       history.push("/");
     }
@@ -82,8 +80,6 @@ const Signin = ({ toggle, isOpen, handleModal }) => {
   }, [dispatch, data, isLogin]);
 
   const onLoginSuccess = (res) => {
-    console.log("Login Success: ", res);
-
     if (res.profileObj) {
       dispatch(
         actions.login.loginRequest({
