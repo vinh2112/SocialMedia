@@ -2,15 +2,18 @@ import { LoadingButton } from "@mui/lab";
 import styled from "styled-components";
 
 export const ModalContainer = styled.div`
-  position: fixed;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 350px;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.primary};
   box-shadow: 0 2px 5px 0 rgba(0 0 0 / 40%);
+  z-index: 1;
 `;
 
 export const ModalTop = styled.div`
@@ -24,6 +27,8 @@ export const ModalTop = styled.div`
 export const ModalTitle = styled.h3`
   color: ${({ theme }) => theme.subTextColor};
   text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 1px;
 `;
 
 export const ButtonCloseModal = styled.div`
@@ -62,78 +67,60 @@ export const ButtonCloseModalWrapper = styled.div`
 `;
 
 export const ReportContent = styled.div`
-  margin: 6px;
+  margin: 6px 10px;
 `;
 
-export const ReportOption = styled.p`
-  transition: all 0.1s ease;
+export const ReportOption = styled.label`
+  display: flex;
+  align-items: center;
   border-radius: 5px;
+  padding: 10px 8px;
+  transition: all 0.1s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.hoverColor};
+    background-color: ${({ theme }) => theme.contrastColor};
   }
 
-  [type="radio"]:checked,
-  [type="radio"]:not(:checked) {
-    position: absolute;
-    left: -9999px;
+  & > .report__option-title {
+    margin-left: 8px;
+    font-size: 14px;
+    letter-spacing: 1px;
   }
-  [type="radio"]:checked + label,
-  [type="radio"]:not(:checked) + label {
+
+  & > .report__option-radio {
     position: relative;
-    padding-left: 36px;
-    cursor: pointer;
-    line-height: 20px;
-    display: inline-block;
-    color: ${({ theme }) => theme.textColor};
+    width: 22px;
+    height: 22px;
+    border: 2px solid ${({ theme }) => theme.borderColor};
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      transition: all 0.2s ease;
+    }
   }
-  [type="radio"]:checked + label:before,
-  [type="radio"]:not(:checked) + label:before {
-    content: "";
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
-    border: 1px solid #ddd;
-    border-radius: 100%;
-    background: #fff;
-  }
-  [type="radio"]:checked + label:after,
-  [type="radio"]:not(:checked) + label:after {
-    content: "";
+
+  & > input:checked + .report__option-radio:before {
     width: 12px;
     height: 12px;
-    background: var(--primary-color);
-    position: absolute;
-    top: calc(50%);
-    left: 11px;
-    transform: translateY(-50%);
-    border-radius: 100%;
-    -webkit-transition: all 0.2s ease;
-    transition: all 0.2s ease;
   }
-  [type="radio"]:not(:checked) + label:after {
-    opacity: 0;
-    -webkit-transform: scale(0) translateY(-50%);
-    transform: scale(0) translateY(-50%);
-  }
-  [type="radio"]:checked + label:after {
-    opacity: 1;
-    -webkit-transform: scale(1) translateY(-50%);
-    transform: scale(1) translateY(-50%);
-  }
-`;
 
-export const ReportOptionLabel = styled.label`
-  /* margin-left: 8px; */
-  width: 100%;
-  padding: 14px 8px;
+  & > input:checked + .report__option-radio {
+    border-color: var(--primary-color);
+  }
 `;
 
 export const ReasonAreaWrapper = styled.div`
-  padding: 0 6px 6px;
+  padding: 0 10px 6px;
 `;
 
 export const ReasonArea = styled.textarea`
@@ -148,10 +135,10 @@ export const ReasonArea = styled.textarea`
   color: ${({ theme }) => theme.textColor};
 
   &:focus {
-    outline: 2px solid ${({ theme }) => theme.hoverColor};
+    outline: 2px solid ${({ theme }) => theme.contrastColor};
   }
   &:disabled {
-    background: ${({ theme }) => theme.hoverColor};
+    background: ${({ theme }) => theme.contrastColor};
     color: ${({ theme }) => theme.subTextColor};
   }
 `;
@@ -159,7 +146,7 @@ export const ReasonArea = styled.textarea`
 export const ReportBottom = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 0 6px 10px;
+  margin: 0 10px 10px;
 `;
 
 export const CustomLoadingButton = styled(LoadingButton)`

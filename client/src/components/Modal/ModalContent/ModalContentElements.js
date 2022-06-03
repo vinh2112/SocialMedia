@@ -40,11 +40,11 @@ export const AuthorName = styled(Link)`
 export const CreatedDate = styled.div`
   color: ${({ theme }) => theme.subTextColor};
   font-size: 14px;
-  margin-top: 4px;
+  margin-top: 2px;
 `;
 
 export const DescWrapper = styled.div`
-  margin: 12px 0 0px;
+  margin: 8px 0 0px;
 
   & > div > textarea {
     width: 100%;
@@ -65,6 +65,7 @@ export const DescWrapper = styled.div`
 
 export const Desc = styled.div`
   line-height: 1.4rem;
+  font-size: 14px;
 `;
 
 export const CustomButton = styled(Button)`

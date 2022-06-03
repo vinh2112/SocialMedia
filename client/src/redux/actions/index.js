@@ -1,6 +1,7 @@
 import { createAction } from "redux-actions";
 import { login, logout } from "./auth";
 import { interactUser, getProfileUser, getCurrentUser } from "./users";
+import { fetchDataAdmin, handleReportAdmin } from "./admin";
 import {
   getPosts,
   getPostsLoadMore,
@@ -56,4 +57,6 @@ export {
   createReply,
   deleteReply,
   fetchNotifications,
+  fetchDataAdmin,
+  handleReportAdmin,
 };

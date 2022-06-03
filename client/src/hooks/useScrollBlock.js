@@ -10,7 +10,7 @@ const useScrollBlock = () => {
   const scrollBlocked = useRef();
   const html = safeDocument.documentElement;
   const { body } = safeDocument;
-  const header = document.getElementById("header");
+  const header = document.getElementById("scroll-node");
 
   const blockScroll = () => {
     if (!body || !body.style || scrollBlocked.current) return;

@@ -9,10 +9,10 @@ export const PostContainer = styled.div`
   padding-bottom: 10px;
 
   & .relative__post-container {
-    margin: 0 16px;
+    margin: 32px 16px 0;
 
     @media (max-width: 700px) {
-      margin: 20px 16px 0;
+      margin: 24px 8px 0;
     }
 
     & .relative__post-container-title {
@@ -20,13 +20,15 @@ export const PostContainer = styled.div`
       align-items: center;
       color: ${({ theme }) => theme.subTextColor};
       font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
 
       & > span {
         flex: 1;
         margin-left: 10px;
         height: 1px;
         background-color: ${({ theme }) => theme.subTextColor};
-        opacity: 0.5;
+        opacity: 0.4;
       }
     }
 
@@ -62,16 +64,19 @@ export const PostWrapper = styled.div`
 export const CategoryWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin: 0 16px 20px;
+  margin: 0 16px;
   gap: 12px;
-  
-`
+
+  @media (max-width: 700px) {
+    margin: 0 8px;
+  }
+`;
 
 export const CategoryItem = styled.div`
   padding: 4px 8px;
   background-color: ${({ theme }) => theme.contrastColor};
   border-radius: 4px;
-`
+`;
 
 export const RelativePostItemContainer = styled.div`
   width: 100%;

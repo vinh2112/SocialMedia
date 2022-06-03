@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ModalCloseButton,
   ModalCloseWrapper,
@@ -20,12 +20,15 @@ import CommentAPI from "api/comments";
 import ModalComments from "./ModalComments";
 import ModalReport from "./ModalReport";
 import useScrollBlock from "hooks/useScrollBlock";
+import { SocketContext } from "context/socketContext";
+import { Link } from "react-router-dom";
 
 export default function Modal({ post, isShow, closeModal }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
   const comments = useSelector(commentState$);
+  const socket = useContext(SocketContext);
   const [blockScroll, allowScroll] = useScrollBlock();
 
   useEffect(() => {
@@ -34,19 +37,31 @@ export default function Modal({ post, isShow, closeModal }) {
     return () => allowScroll();
   }, [blockScroll, allowScroll]);
 
-  useEffect(() => {
-    const fetchCommentsByPostId = async () => {
-      const res = await CommentAPI.fetchComments(post._id);
+  const fetchCommentsByPostId = React.useCallback(
+    async (postId) => {
+      const res = await CommentAPI.fetchComments(postId);
 
       if (res.status === 200) {
         dispatch(fetchComments.fetchCommentsSuccess(res.data));
       }
       setIsLoading(false);
-    };
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
     if (isLoading) {
-      fetchCommentsByPostId();
+      fetchCommentsByPostId(post._id);
     }
-  }, [dispatch, isLoading, post]);
+  }, [isLoading, fetchCommentsByPostId, post]);
+
+  useEffect(() => {
+    socket?.on("getUpdateCommentPost", ({ postId }) => {
+      if (postId === post._id) {
+        fetchCommentsByPostId(postId);
+      }
+    });
+  }, [socket, post, fetchCommentsByPostId]);
 
   return (
     <ModalContainer isShow={isShow}>
@@ -56,7 +71,14 @@ export default function Modal({ post, isShow, closeModal }) {
             style={{
               backgroundImage: `url(${post.image.watermark})`,
             }}
-          />
+          ></ModalPhoto>
+          <div className="modal__categories">
+            {post.category.map((cate, index) => (
+              <Link to="#" key={index}>
+                #{cate}
+              </Link>
+            ))}
+          </div>
         </ModalPhotoWrapper>
 
         <ModalContentContainer>
@@ -76,6 +98,7 @@ export default function Modal({ post, isShow, closeModal }) {
                   comments={comments.data.filter(
                     (comment) => comment.postId === post._id && comment
                   )}
+                  socket={socket}
                 />
               </>
             ) : (

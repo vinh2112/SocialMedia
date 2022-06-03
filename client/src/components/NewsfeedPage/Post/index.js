@@ -11,52 +11,52 @@ import * as actions from "redux/actions";
 
 const Posts = ({ direction }) => {
   const [page, setPage] = useState(1);
-  const { data } = useSelector(postState$);
+  const { data, isLoading } = useSelector(postState$);
   const { currentUser } = useSelector(authState$);
   const dispatch = useDispatch();
 
   const { userId } = useParams();
 
   useEffect(() => {
-    if (page !== 1) {
-      if (userId) {
-        dispatch(actions.getProfilePosts.getProfilePostsRequest({ userId, page }));
-      } else {
-        dispatch(actions.getPostsLoadMore.getPostsLoadMoreRequest(page));
-      }
+    if (userId) {
+      dispatch(actions.getProfilePosts.getProfilePostsRequest({ userId, page }));
+    } else {
+      dispatch(actions.getPostsLoadMore.getPostsLoadMoreRequest(page));
     }
   }, [page, dispatch, userId]);
 
+  useEffect(() => {
+    return () => {
+      setPage(1);
+    };
+  }, [userId]);
+
   return (
-    <>
-      <Container direction={direction}>
-        {userId
-          ? [userId === currentUser?._id && <PostUpdate key="0" />]
-          : [currentUser && <PostUpdate key="1" />]}
+    <Container direction={direction}>
+      {userId
+        ? [userId === currentUser?._id && <PostUpdate key="0" />]
+        : [currentUser && <PostUpdate key="1" />]}
 
-        <PostTopTitle>
-          <h3>Activities Recently</h3>
-          <span></span>
-        </PostTopTitle>
+      <PostTopTitle>
+        <h3>Recently Activities</h3>
+        <span></span>
+      </PostTopTitle>
 
-        <InfiniteScroll
-          style={{ padding: "20px 16px 0" }}
-          dataLength={data.length}
-          next={() => setPage(page + 1)}
-          hasMore={true}
-        >
-          {data.map((post, i) => (
-            <div key={i}>
-              <PostItem post={post} />
-            </div>
-          ))}
-        </InfiniteScroll>
-
-        {[...Array(1)].map((item, index) => (
-          <PostLoading key={index} />
+      <InfiniteScroll
+        dataLength={data.length}
+        next={() => setPage(page + 1)}
+        hasMore={true}
+        scrollableTarget="scroll-node"
+        scrollThreshold="200px"
+      >
+        {data.map((post, i) => (
+          <PostItem post={post} key={i} />
         ))}
-      </Container>
-    </>
+        {!data.length && !isLoading && <div className="post__no-post">There is no post</div>}
+      </InfiniteScroll>
+
+      {isLoading && <PostLoading />}
+    </Container>
   );
 };
 

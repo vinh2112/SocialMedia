@@ -5,8 +5,8 @@
   --danger-color: #ed4956;
   --success-color: #47d864;
   --warning-color: #ffc107;
-  --max-width: 1024px;
-  --box-shadow: 0 0 5px 0 rgba(0 0 0 / 10%);
+  --max-width: 950px;
+  --box-shadow: 0 0 10px 0 rgba(0 0 0 / 10%);
 }
 
 @keyframes slideInRight {
@@ -30,3 +30,8 @@
     opacity: 0;
   }
 }
+/* 
+.simplebar-content-wrapper,
+.simplebar-mask {
+  overflow: hidden !important;
+} */

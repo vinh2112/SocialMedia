@@ -57,7 +57,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(getProfilePosts.getProfilePostsRequest):
       return {
         ...state,
-        isLoading: false,
+        isLoading: true,
       };
     case getType(getProfilePosts.getProfilePostsSuccess):
       return {
@@ -91,27 +91,32 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
         ...state,
         isLoading: true,
       };
+    case getType(searchPosts.searchPostsSearching):
+      return {
+        ...state,
+        data: [],
+      };
     case getType(searchPosts.searchPostsSuccess):
       return {
         ...state,
         isLoading: false,
-        data: [...action.payload.posts],
+        data: [...state.data, ...action.payload.posts],
       };
     case getType(createPost.createPostRequest):
       return {
         ...state,
-        isLoading: true,
+        isPosting: true,
       };
     case getType(createPost.createPostSuccess):
       return {
         ...state,
-        isLoading: false,
+        isPosting: false,
         data: [action.payload, ...state.data],
       };
     case getType(createPost.createPostFailure):
       return {
         ...state,
-        isLoading: false,
+        isPosting: false,
         // error: action.payload,
       };
     case getType(updatePost):
@@ -129,7 +134,7 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(reactPost.reactPostSuccess):
       return {
         ...state,
-        topLiked: state.topLiked.map((post) =>
+        topLiked: state?.topLiked?.map((post) =>
           post._id === action.payload._id ? action.payload : post
         ),
         data: state.data.map((post) => (post._id === action.payload._id ? action.payload : post)),
@@ -155,13 +160,11 @@ export default function postsReducers(state = INIT_STATE.posts, action) {
     case getType(deletePost.deletePostRequest):
       return {
         ...state,
-        isLoading: true,
       };
     case getType(deletePost.deletePostSuccess):
       return {
         ...state,
         data: state.data.filter((post) => post._id !== action.payload),
-        isLoading: false,
       };
     default:
       return state;

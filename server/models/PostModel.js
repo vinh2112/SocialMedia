@@ -1,35 +1,44 @@
 import mongoose from "mongoose";
 
-const schema = new mongoose.Schema({
+const schema = new mongoose.Schema(
+  {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     desc: {
-        type: String,
-        max: 500,
-        trim: true,
+      type: String,
+      max: 500,
+      trim: true,
     },
     category: {
-        type: Array,
-        default: [],
+      type: Array,
+      default: [],
     },
     image: {
-        type: Object,
-        required: true,
+      type: Object,
+      required: true,
     },
-    likes: [{
+    likes: [
+      {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-    }, ],
+      },
+    ],
     isPaymentRequired: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
     price: {
-        type: String,
-        default: '',
-    }
-}, { timestamps: true });
+      type: String,
+      default: "",
+    },
+    commentCount: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
 
 export const PostModel = mongoose.model("Post", schema);

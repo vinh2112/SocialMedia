@@ -1,9 +1,11 @@
 import { PostModel } from "../models/PostModel.js";
 import { ReportModel } from "../models/ReportModel.js";
+import UserService from "../services/UserService.js";
+import { deleteImageCloudinary } from "../utils/cloudinary.js";
 
 export const getAllReports = async (req, res) => {
   try {
-    const reports = await ReportModel.find({})
+    const reports = await ReportModel.find({ isDeleted: false })
       .populate({ path: "reporterId", select: "name email avatar" })
       .populate({
         path: "reportedPostId",
@@ -11,9 +13,18 @@ export const getAllReports = async (req, res) => {
           path: "userId",
           select: "name email avatar",
         },
-      })
-      .sort("-createdAt");
-    return res.status(200).json(reports);
+      });
+
+    const totalReports = await ReportModel.estimatedDocumentCount();
+    const deletedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: true });
+    const refusedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: false });
+
+    return res.status(200).json({
+      reports: reports,
+      totalReports,
+      deletedReports,
+      refusedReports,
+    });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
@@ -45,15 +56,26 @@ export const deleteReportedPost = async (req, res) => {
     const report = await ReportModel.findById(reportId);
 
     if (report) {
-      await ReportModel.deleteMany({ reportedPostId: report.reportedPostId })
+      await ReportModel.updateMany(
+        { reportedPostId: report.reportedPostId },
+        { $set: { isDeleted: true, typeDelete: true } }
+      )
         .then(async () => {
-          await PostModel.findByIdAndDelete(report.reportedPostId.toString());
-          return res.status(200).json(report.reportedPostId);
+          await PostModel.findById(report.reportedPostId.toString()).then(async (post) => {
+            await deleteImageCloudinary(post.image.public_id);
+            await post.deleteOne();
+            await UserService.updateCountOfUser(report.reporterId, -1, -post.likes.length);
+            return res.status(200).json(report.reportedPostId);
+          });
         })
         .catch((err) => {
           return res.status(500).json({ msg: err.message });
         });
     }
+    // await PostModel.findById("6266526610c2bdb553f4ca50").then((data) => {
+    //   //DeleteOne
+    //   return res.status(200).json(data);
+    // });
 
     return res.status(500).json({ msg: "Report not found!" });
   } catch (error) {
@@ -67,8 +89,10 @@ export const refuseReportedPost = async (req, res) => {
     const report = await ReportModel.findById(reportId);
 
     if (report) {
-      await ReportModel.findByIdAndDelete(reportId)
-        .then(() => {
+      await ReportModel.findByIdAndUpdate(reportId, {
+        $set: { isDeleted: true, typeDelete: false },
+      })
+        .then((result) => {
           return res.status(200).json({ msg: "success" });
         })
         .catch((err) => {

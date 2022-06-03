@@ -12,14 +12,16 @@ export const NotificationContainer = styled.div`
   border-radius: 5px;
   padding: 8px;
   background-color: ${({ theme }) => theme.primary};
-  box-shadow: var(--box-shadow);
+  box-shadow: ${({ theme }) => theme.boxShadow};
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
 
   & > .notify-title {
     font-weight: 700;
-    font-size: 20px;
+    font-size: 16px;
     margin: 10px;
+    letter-spacing: 1px;
+    /* text-transform: uppercase; */
   }
 `;
 

@@ -12,7 +12,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
-import { authState$ } from "redux/selectors";
+import { authState$, commentState$ } from "redux/selectors";
 
 const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport }) => {
   // const history = useHistory();
@@ -20,6 +20,7 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
   const menuNode = useRef();
   const dispatch = useDispatch();
   const { currentUser } = useSelector(authState$);
+  const { data } = useSelector(commentState$);
   const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
@@ -90,8 +91,10 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
       </LikeAction>
 
       <CommentAction onClick={showComment}>
-        <Icon icon="fluent:comment-24-regular" />
-        {/* <span>Comment</span> */}
+        <Icon icon="akar-icons:chat-bubble" />
+        <span>
+          {data.filter((comment) => comment.postId === post._id).length || post.commentCount}
+        </span>
       </CommentAction>
 
       <MoreAction ref={menuNode} onClick={() => setIsOpen(!isOpen)}>

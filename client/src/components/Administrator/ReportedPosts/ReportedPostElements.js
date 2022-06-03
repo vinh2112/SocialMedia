@@ -1,12 +1,18 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
+export const ReportContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-bottom: 20px;
+`;
+
 export const ReportedPostList = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 670px;
-  padding: 0 48px;
+  max-width: 540px;
 
   @media (max-width: 1024px) {
     padding: 0 16px;
@@ -14,8 +20,8 @@ export const ReportedPostList = styled.div`
 `;
 
 export const ReportedPostContainer = styled.div`
-  &:not(:first-child) {
-    margin-top: 20px;
+  &:not(:nth-child(2)) {
+    margin-top: 30px;
   }
 `;
 
@@ -33,6 +39,10 @@ export const ReportDetailLeft = styled.div`
 
   & > .reason-report {
     color: var(--warning-color);
+  }
+
+  & > .created-date {
+    font-size: 12px;
   }
 `;
 
@@ -68,7 +78,7 @@ export const ReportButton = styled.div`
 `;
 
 export const PostDetail = styled.div`
-  margin-top: 6px;
+  margin-top: 10px;
   background-color: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
 
@@ -78,15 +88,15 @@ export const PostDetail = styled.div`
 
 export const PostDetailTop = styled.div`
   display: flex;
-  padding: 8px 14px;
+  padding: 12px 14px 8px;
 `;
 
 export const AvatarWrapper = styled.div``;
 
 export const Avatar = styled(NavLink)`
   & > img {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -98,17 +108,20 @@ export const DetailRightSide = styled.div`
 
 export const NameAuthorLink = styled(NavLink)`
   text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
   color: ${({ theme }) => theme.textColor};
 `;
 
 export const CreatedDate = styled.div`
   color: ${({ theme }) => theme.subTextColor};
-  font-size: 0.9rem;
-  margin-top: 4px;
+  font-size: 12px;
+  margin-top: 2px;
 `;
 
 export const PostDescription = styled.div`
   padding: 0 14px 8px;
+  font-size: 15px;
 `;
 
 export const PostPhoto = styled.img`
@@ -116,21 +129,23 @@ export const PostPhoto = styled.img`
   width: 100%;
   max-height: 500px;
   object-fit: contain;
+  background-color: rgba(0, 0, 0, 0.1);
+  user-select: none;
 `;
 
 export const ReportTop = styled.div`
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
-  width: 670px;
-  padding: 0 48px;
-  margin-bottom: 16px;
+  width: 500px;
+  margin-bottom: 10px;
 
   & > .report-title {
     padding: 6px 0;
     color: ${({ theme }) => theme.textColor};
     opacity: 0.6;
-    font-size: 1.4rem;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     font-weight: 700;
   }
 
@@ -139,13 +154,14 @@ export const ReportTop = styled.div`
     align-items: center;
     justify-content: center;
     margin-left: 8px;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background-color: var(--danger-color);
 
     & > span {
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 500;
       color: #fefefe;
     }
   }
@@ -157,4 +173,16 @@ export const ReportTop = styled.div`
   @media (max-width: 700px) {
     width: 100%;
   }
+`;
+
+export const ReportChartContainer = styled.div`
+  position: sticky;
+  top: 0px;
+  flex: 1;
+  max-width: 400px;
+  height: fit-content;
+  padding: 20px 0 30px;
+  border-radius: 20px;
+  background-color: ${({ theme }) => theme.primary};
+  box-shadow: var(--box-shadow);
 `;

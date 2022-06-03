@@ -29,9 +29,11 @@ import { authState$, commentState$ } from "redux/selectors";
 import { CommentAPI } from "api";
 import ReplyComment from "./ReplyComment";
 import DefaultAvatar from "images/DefaultAvatar.png";
+import { CircularProgress } from "@mui/material";
 
 const CommentItem = ({ comment, post, socket }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const currentReply = useRef();
   const menuNode = useRef();
   const dispatch = useDispatch();
@@ -39,14 +41,6 @@ const CommentItem = ({ comment, post, socket }) => {
   const { currentUser } = useSelector(authState$);
 
   const handleReply = () => {
-    const prevReply = document.querySelectorAll(".post__comment.replying");
-    if (prevReply.length > 0) {
-      [].forEach.call(prevReply, (el) => {
-        el.classList.remove("replying");
-      });
-    }
-
-    currentReply.current.classList.add("replying");
     dispatch(actions.showBoxComment.showBoxCommentRequest(comment._id));
   };
 
@@ -64,6 +58,8 @@ const CommentItem = ({ comment, post, socket }) => {
   }, []);
 
   const handleDeleteComment = async () => {
+    setIsOpen(false);
+    setIsDeleting(true);
     const res = await CommentAPI.deleteComment(comment._id);
     if (res.status === 200) {
       dispatch(actions.deleteComment.deleteCommentSuccess(res.data));
@@ -76,8 +72,8 @@ const CommentItem = ({ comment, post, socket }) => {
       socket?.emit("sendDeleteComment", {
         comment: res.data,
       });
-      setIsOpen(false);
     }
+    setIsDeleting(false);
   };
 
   useEffect(() => {
@@ -99,7 +95,10 @@ const CommentItem = ({ comment, post, socket }) => {
       <RightSide>
         <CommentContainer>
           <CommentWrapper>
-            <CommentContent ref={currentReply} className="post__comment">
+            <CommentContent
+              ref={currentReply}
+              className={commentId === comment._id ? "post__comment replying" : "post__comment"}
+            >
               <Name to={`/profile/${comment.userId._id}`} className="name__author">
                 @{comment.userId.name}
               </Name>
@@ -120,12 +119,18 @@ const CommentItem = ({ comment, post, socket }) => {
           {currentUser &&
             (currentUser._id === comment.userId._id || currentUser._id === post.userId._id) && (
               <ButtonWrapper ref={menuNode}>
-                <Button onClick={() => setIsOpen(!isOpen)}>
-                  <Icon icon="akar-icons:more-horizontal" />
-                </Button>
-                <MenuActions isOpen={isOpen}>
-                  <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
-                </MenuActions>
+                {isDeleting ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  <>
+                    <Button onClick={() => setIsOpen(!isOpen)}>
+                      <Icon icon="akar-icons:more-horizontal" />
+                    </Button>
+                    <MenuActions isOpen={isOpen}>
+                      <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
+                    </MenuActions>
+                  </>
+                )}
               </ButtonWrapper>
             )}
         </CommentContainer>

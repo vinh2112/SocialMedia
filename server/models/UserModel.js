@@ -37,9 +37,13 @@ const schema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    creditCard: {
-      type: String,
-      trim: true,
+    postCount: {
+      type: Number,
+      default: 0,
+    },
+    likeCount: {
+      type: Number,
+      default: 0,
     },
     wallet: {
       type: Number,

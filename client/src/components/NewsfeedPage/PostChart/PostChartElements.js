@@ -5,20 +5,21 @@ export const PostChartContainer = styled.div`
   position: relative;
   top: 0;
   right: 0;
-  width: 332px;
-  background: ${({ theme }) => theme.primary};
+  width: 100%;
+  /* background: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
   border-radius: 5px;
-  padding: 12px;
-  margin-right: 16px;
+  padding: 8px 12px 12px; */
 
   @media (max-width: 1024px) {
     position: relative;
     order: 1;
     top: 0;
     left: 0;
-    margin: 0 auto 20px;
+    margin: 0 auto;
     transform: translateX(0);
+    padding: 12px;
+
     width: 100%;
   }
 
@@ -29,37 +30,35 @@ export const PostChartContainer = styled.div`
 
 export const PostTopTitle = styled.div`
   width: 100%;
-
+  margin-bottom: 10px;
+  margin-left: 12px;
   & > .title {
     white-space: nowrap;
-    margin-right: 12px;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     color: ${({ theme }) => theme.subTextColor};
   }
 
-  & > div:last-child {
-    width: 30%;
-    background-color: ${({ theme }) => theme.contrastColor};
-    padding-bottom: 2px;
-    margin: 10px 0 12px;
-  }
-
-  @media (max-width: 700px) {
-    padding: 0 8px;
-  }
+  /* & > div:last-child {
+    width: 40%;
+    height: 1.4px;
+    background-color: ${({ theme }) => theme.borderColor};
+    margin: 5px 0 8px;
+  } */
 `;
 
 export const PostChartWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 70px);
-  grid-gap: 10px;
-  grid-template-areas:
+  grid-template-rows: repeat(4, 72px);
+  grid-gap: 4px;
+  /* grid-template-areas:
     "h1 h1 h2 h2"
     "h1 h1 h3 h3"
     "h4 h4 h6 h6"
-    "h5 h5 h6 h6";
+    "h5 h5 h6 h6"; */
 
   @media (max-width: 1024px) {
     display: flex;
@@ -75,12 +74,24 @@ export const PostChartWrapper = styled.div`
   }
 
   @media (max-width: 700px) {
-    margin: 0 -6px 0px;
-    padding: 10px;
+    & > div {
+      flex-shrink: 0;
+      width: 100px;
+      height: 100px;
+    }
   }
 
   @media (min-width: 1025px) {
-    & > div:first-child {
+    & > div:nth-child(2),
+    & > div:nth-child(8) {
+      grid-column: span 2;
+    }
+
+    & > div:nth-child(6n - 5) {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    /* & > div:first-child {
       grid-area: h1;
     }
 
@@ -102,20 +113,21 @@ export const PostChartWrapper = styled.div`
 
     & > div:last-child {
       grid-area: h6;
-    }
+    } */
   }
 `;
 
 export const PostChartItem = styled.div`
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 150%;
   border-radius: 10px;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.1s ease, background 0.5s ease;
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.6);
+    background-size: 170%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
   }
 `;
 
@@ -123,6 +135,7 @@ export const CustomCard = styled(Card)`
   && {
     background-color: ${({ theme }) => theme.primary};
     border-radius: 10px;
+    box-shadow: var(--box-shadow);
   }
 `;
 

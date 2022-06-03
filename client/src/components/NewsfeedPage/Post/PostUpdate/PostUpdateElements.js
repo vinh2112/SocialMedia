@@ -5,13 +5,17 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  margin-bottom: 20px;
-  margin-left: 16px;
   width: calc(100% - 32px);
+  margin: 0 auto 20px;
   height: auto;
   box-shadow: var(--box-shadow);
   border-radius: 5px;
   background-color: ${({ theme }) => theme.primary};
+
+  @media (max-width: 700px) {
+    width: 100%;
+    margin: 10px auto 20px;
+  }
 `;
 
 export const AvatarLink = styled(Link)`

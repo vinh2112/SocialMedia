@@ -34,7 +34,7 @@ export default function PostChart() {
       <PostChartContainer>
         <PostTopTitle>
           <div className="title">Top Liked</div>
-          <div></div>
+          {/* <div></div> */}
         </PostTopTitle>
         <PostChartWrapper>
           {topLiked
@@ -47,7 +47,7 @@ export default function PostChart() {
                   }}
                 />
               ))
-            : [...Array(6)].map((item, index) => <PostChartItemLoading key={index} />)}
+            : [...Array(3)].map((item, index) => <PostChartItemLoading key={index} />)}
         </PostChartWrapper>
       </PostChartContainer>
       {(index || index === 0) && isShowModal && (

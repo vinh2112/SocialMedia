@@ -6,6 +6,7 @@ export const INIT_STATE = {
     errMsg: "",
   },
   posts: {
+    isPosting: false,
     isLoading: false,
     data: [],
     profile: undefined,
@@ -16,6 +17,10 @@ export const INIT_STATE = {
     data: [],
     commentId: undefined,
   },
+  admin: {
+    data: undefined,
+    isLoading: false,
+  },
   notifications: {
     data: [],
   },
@@ -25,6 +30,6 @@ export const INIT_STATE = {
   toast: {
     message: "",
     type: "",
-    duration: 2000,
+    duration: 4000,
   },
 };

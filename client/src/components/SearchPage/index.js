@@ -10,38 +10,38 @@ import Modal from "components/Modal";
 const SearchContainer = styled.div`
   max-width: var(--max-width);
   width: 100%;
-  padding: 72px 16px 0;
+  padding: 78px 16px 0;
   margin: 0 auto;
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    padding: 72px 16px 0;
+  @media (max-width: 700px) {
+    padding: 64px 4px 0;
   }
 `;
 
 export default function SearchSection() {
   const [index, setIndex] = useState(null);
-  const [isShowModal, setIsShowModal] = useState(false);
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
+  const prevQuery = React.useRef("");
+  const [isShowModal, setIsShowModal] = useState(false);
   const dispatch = useDispatch();
-  const { data } = useSelector(postState$);
+  const { data, isLoading } = useSelector(postState$);
 
   useEffect(() => {
-    dispatch(actions.searchPosts.searchPostsRequest(query));
+    if (prevQuery.current === query) {
+      dispatch(actions.searchPosts.searchPostsRequest({ query, page, isSearching: false }));
+    } else {
+      dispatch(actions.searchPosts.searchPostsRequest({ query, page, isSearching: true }));
+    }
     setIndex(null);
-  }, [dispatch, query]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(actions.resetPosts());
-    };
-  }, [dispatch]);
+  }, [dispatch, query, page]);
 
   const handleSearch = (value) => {
-    // setPage(1);
+    setPage(1);
+    prevQuery.current = query;
     setQuery(value);
   };
+
   const handleModal = (index) => {
     if (isShowModal) {
       setIsShowModal(false);
@@ -52,10 +52,15 @@ export default function SearchSection() {
     }
   };
 
+  const handleNext = React.useCallback(() => {
+    prevQuery.current = query;
+    setPage(page + 1);
+  }, [page, query]);
+
   return (
     <SearchContainer>
       <SearchHeader onSubmit={handleSearch} />
-      <SearchList posts={data} showModal={handleModal} />
+      <SearchList posts={data} showModal={handleModal} next={handleNext} isLoading={isLoading} />
       {(index || index === 0) && isShowModal && (
         <Modal post={data[index]} isShow={isShowModal} closeModal={handleModal} />
       )}

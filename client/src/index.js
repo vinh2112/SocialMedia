@@ -9,6 +9,7 @@ import { ThemeContextProvider } from "./context/themeContext";
 import "./index.css";
 import reducers from "./redux/reducers";
 import mySaga from "./redux/sagas";
+import "simplebar/dist/simplebar.min.css";
 
 const sagaMiddleware = createSagaMiddleware();
 

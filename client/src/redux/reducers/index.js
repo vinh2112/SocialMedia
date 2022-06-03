@@ -5,6 +5,7 @@ import modal from "./modal";
 import comments from "./comments";
 import notifications from "./notifications";
 import toast from "./toast";
+import admin from "./admin";
 
 export default combineReducers({
   posts,
@@ -13,4 +14,5 @@ export default combineReducers({
   comments,
   notifications,
   toast,
+  admin,
 });

@@ -41,8 +41,8 @@ const ProfileLoading = () => {
               <CustomSkeleton
                 animation="wave"
                 width="40%"
-                height={20}
-                style={{ marginBottom: 6 }}
+                height={12}
+                style={{ marginBottom: 12 }}
               />
               <CustomSkeleton animation="wave" width="70%" height={10} />
             </CustomCardContent>

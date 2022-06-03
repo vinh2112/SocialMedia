@@ -33,7 +33,7 @@ export default function BoxComment({ boxComment, isReply, post, comment, socket 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (currentUser) {
-      if (post._id && text.length > 0) {
+      if (post?._id && text.length > 0) {
         dispatch(
           actions.createComment.createCommentRequest({
             postId: post._id,
@@ -42,11 +42,11 @@ export default function BoxComment({ boxComment, isReply, post, comment, socket 
           })
         );
 
-        setText("");
-
         socket?.emit("sendUpdateCommentPost", {
           postId: post._id,
         });
+
+        setText("");
       } else if (comment && text.length > 0) {
         dispatch(
           actions.createReply.createReplyRequest({

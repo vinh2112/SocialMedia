@@ -9,7 +9,7 @@ export const HeaderContainer = styled.div`
   height: 54px;
   background-color: ${({ theme }) => theme.primary};
   border-bottom: 1px solid ${({ theme }) => theme.contrastColor};
-  box-shadow: var(--box-shadow);
+  /* box-shadow: var(--box-shadow); */
   z-index: 48;
 `;
 
@@ -20,10 +20,14 @@ export const HeaderWrapper = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  max-width: var(--max-width);
+  max-width: ${({ isAdmin }) => (isAdmin ? "" : "var(--max-width)")};
   margin: 0 auto;
   padding: 0 16px;
   z-index: 101;
+
+  @media (max-width: 700px) {
+    padding: 0 4px;
+  }
 `;
 
 export const HeaderLeft = styled.div`
@@ -79,7 +83,10 @@ const roundButton = css`
     position: absolute;
     top: 110%;
     font-size: 12px;
-    padding: 4px;
+    font-weight: 700;
+    padding: 6px 8px;
+    color: ${({ theme }) => theme.textColor};
+    letter-spacing: 1px;
     border-radius: 4px;
     background-color: ${({ theme }) => theme.hoverColor};
     opacity: 0;
@@ -143,18 +150,44 @@ export const RoundActionButton = styled(Link)`
 // -----------------
 
 export const RoundButtonLink = styled(Link)`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 35px;
   border-radius: 20px;
+  color: ${({ theme }) => theme.textColor};
   text-decoration: none;
   background-color: ${({ theme }) => theme.contrastColor};
   padding: 2px 4px;
   transition: all 0.1s ease-in-out 0s;
 
+  & > span.tooltip {
+    position: absolute;
+    top: 110%;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 6px 8px;
+    color: ${({ theme }) => theme.textColor};
+    border-radius: 4px;
+    background-color: ${({ theme }) => theme.hoverColor};
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.1s ease;
+    user-select: none;
+    pointer-events: none;
+    z-index: 1;
+    cursor: default;
+  }
+
   &:hover {
     background-color: ${({ theme }) => theme.hoverColor};
+  }
+
+  &:hover > span {
+    opacity: 1;
+    transform: scale(1);
   }
 
   @media (max-width: 1024px) {
@@ -184,7 +217,7 @@ export const AuthGroupButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 135px;
+  gap: 5px;
 
   @media (max-width: 1024px) {
     display: none;
@@ -197,8 +230,9 @@ export const SignIn = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: ${({ theme }) => theme.textColor};
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
   height: 32px;
   padding: 0 16px;
   background-color: ${({ theme }) => theme.contrastColor};
@@ -214,8 +248,9 @@ export const SignUp = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.textColor};
   padding: 2px 4px;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
 
   &:hover {
     text-decoration: underline;

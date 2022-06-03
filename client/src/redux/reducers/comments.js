@@ -6,8 +6,8 @@ import {
   createComment,
   createReply,
   deleteReply,
+  deleteComment,
 } from "redux/actions";
-import { deleteComment } from "redux/actions/comments";
 
 export default function commentReducers(state = INIT_STATE.comments, action) {
   switch (action.type) {
@@ -23,11 +23,20 @@ export default function commentReducers(state = INIT_STATE.comments, action) {
     case getType(fetchComments.fetchCommentsSuccess):
       return {
         ...state,
-        data: [
-          ...new Map(
-            [...action.payload, ...state.data].map((item) => [item["_id"], item])
-          ).values(),
-        ],
+        // data: [
+        //   ...new Map(
+        //     [...action.payload, ...state.data].map((item) => [item["_id"], item])
+        //   ).values(),
+        // ],
+        data: [...action.payload].reduce((prev, curr) => {
+          return prev.some(
+            (item) =>
+              item._id === curr._id ||
+              (item._id === curr._id && item.reply.length !== curr.reply.length)
+          )
+            ? (prev[prev.findIndex((el) => el._id === curr._id)] = curr) && [...prev]
+            : [curr, ...prev];
+        }, state.data),
       };
     case getType(createComment.createCommentRequest):
       return {
@@ -38,7 +47,7 @@ export default function commentReducers(state = INIT_STATE.comments, action) {
       return {
         ...state,
         isLoading: false,
-        data: [action.payload, ...state.data],
+        // data: [...state.data, action.payload],
       };
     case getType(deleteComment.deleteCommentSuccess):
       return {

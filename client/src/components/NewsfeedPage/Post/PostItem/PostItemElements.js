@@ -24,13 +24,11 @@ export const PostTop = styled.div`
   flex-direction: column;
   width: 100%;
   height: auto;
-  border-bottom: 0.5px solid ${({ theme }) => theme.contrastColor};
 `;
 
 export const PostAuthor = styled.div`
   color: ${({ theme }) => theme.textColor};
   transition: all 0.2s ease-in-out 0s;
-  border-bottom: 0.5px solid ${({ theme }) => theme.contrastColor};
 `;
 
 export const PostImage = styled.img`
@@ -90,7 +88,7 @@ export const AuthorName = styled(Link)`
 `;
 
 export const PostCreated = styled.div`
-  margin-top: 6px;
+  margin-top: 2px;
   font-size: 12px;
   color: ${({ theme }) => theme.subTextColor};
 `;

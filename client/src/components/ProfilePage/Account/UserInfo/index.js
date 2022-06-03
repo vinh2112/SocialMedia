@@ -59,17 +59,6 @@ export default function UserInfo() {
           <DetailItem>
             <Detail>
               <CustomAvatarGroup max={4}>
-                {profile?.followers.map((user) => {
-                  return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
-                })}
-              </CustomAvatarGroup>
-            </Detail>
-            <Title>Followers</Title>
-          </DetailItem>
-
-          <DetailItem>
-            <Detail>
-              <CustomAvatarGroup max={4}>
                 {profile?.followings.map((user) => {
                   return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
                 })}
@@ -79,25 +68,54 @@ export default function UserInfo() {
           </DetailItem>
 
           <DetailItem>
-            <Detail>Viet Nam</Detail>
+            <Detail>
+              <CustomAvatarGroup max={4}>
+                {profile?.followers.map((user) => {
+                  return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
+                })}
+              </CustomAvatarGroup>
+            </Detail>
+            <Title>Followers</Title>
+          </DetailItem>
+
+          <DetailItem>
+            <Detail>{profile?.likeCount}</Detail>
+            <Title>Likes</Title>
+          </DetailItem>
+
+          <DetailItem>
+            <Detail>{profile?.from}</Detail>
             <Title>From</Title>
+          </DetailItem>
+
+          <DetailItem>
+            <Detail>{profile?.city}</Detail>
+            <Title>City</Title>
           </DetailItem>
 
           {/* Check if user is current user */}
           {profile?._id !== currentUser?._id && (
-            <ButtonWrapper onClick={handleInteract}>
-              {/* Check if current user is follow or following this user */}
-              {profile?.followers.some((follower) => follower._id === currentUser?._id) ? (
-                <Button isFollowed={true}>
-                  <Icon icon="akar-icons:check" />
-                  <span>following</span>
+            <>
+              <ButtonWrapper onClick={handleInteract}>
+                {/* Check if current user is follow or following this user */}
+                {profile?.followers.some((follower) => follower._id === currentUser?._id) ? (
+                  <Button isFollowed={true}>
+                    <Icon icon="akar-icons:check" />
+                    <span>following</span>
+                  </Button>
+                ) : (
+                  <Button isFollowed={false}>
+                    <span>follow</span>
+                  </Button>
+                )}
+              </ButtonWrapper>
+              <ButtonWrapper>
+                <Button isFollowed={false} className="btn-secondary">
+                  <Icon icon="akar-icons:chat-bubble" />
+                  <span>Chat</span>
                 </Button>
-              ) : (
-                <Button isFollowed={false}>
-                  <span>follow</span>
-                </Button>
-              )}
-            </ButtonWrapper>
+              </ButtonWrapper>
+            </>
           )}
         </Details>
       </AccountInfo>

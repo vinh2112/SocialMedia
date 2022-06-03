@@ -11,8 +11,9 @@ const ProfileContainer = styled.div`
   justify-content: space-between;
   max-width: var(--max-width);
   width: 100%;
-  padding: 72px 0px 0;
+  padding: 78px 0px 0;
   margin: 0 auto;
+  gap: 5px;
 
   @media (max-width: 1024px) {
     flex-direction: column;

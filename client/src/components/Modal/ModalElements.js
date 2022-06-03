@@ -16,7 +16,6 @@ export const ModalForm = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  border-radius: 4px;
   background: ${({ theme }) => theme.primary};
   overflow: hidden;
 
@@ -33,30 +32,54 @@ export const ModalForm = styled.div`
 `;
 
 export const ModalPhotoWrapper = styled.div`
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60%;
+  width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.1);
 
   @media (max-width: 800px) {
     width: 100%;
     height: auto;
+    padding: 0;
+  }
+
+  & > .modal__categories {
+    position: absolute;
+    bottom: 14px;
+    right: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+
+    & > a {
+      display: flex
+      align-items: center;
+      text-decoration: none;
+      background-color: ${({ theme }) => theme.primary};
+      font-size: 14px;
+      font-weight: 500;
+      color: ${({ theme }) => theme.textColor};
+      padding: 6px 10px;
+      border-radius: 8px;
+      user-select: none;
+    }
   }
 `;
 
 export const ModalPhoto = styled.div`
   width: 100%;
-  max-width: 1000px;
   height: 100%;
+  /* margin: 20px; */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 
   @media (max-width: 800px) {
-    height: 300px;
+    height: 400px;
   }
 
   @media (max-width: 512px) {
@@ -67,7 +90,11 @@ export const ModalPhoto = styled.div`
 export const ModalContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: 340px;
+
+  @media (min-width: 1440px) {
+    width: 350px;
+  }
 
   @media (max-width: 800px) {
     width: 100%;

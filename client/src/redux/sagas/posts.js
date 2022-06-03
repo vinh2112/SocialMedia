@@ -9,16 +9,16 @@ function* fetchPosts() {
 }
 
 function* fetchPostsTimeline() {
-  const posts = yield call(api.PostAPI.fetchPostsTimeline);
-  if (posts.data.length !== 0) {
-    yield put(actions.getPosts.getPostsSuccess(posts.data));
+  const res = yield call(api.PostAPI.fetchPostsTimeline);
+  if (res.status === 200) {
+    yield put(actions.getPosts.getPostsSuccess(res.data));
   }
 }
 
 function* fetchProfilePosts(userId) {
-  const posts = yield call(api.PostAPI.fetchProfilePosts, userId);
-  if (posts.data.length !== 0) {
-    yield put(actions.getProfilePosts.getProfilePostsSuccess(posts.data));
+  const res = yield call(api.PostAPI.fetchProfilePosts, userId);
+  if (res.status === 200) {
+    yield put(actions.getProfilePosts.getProfilePostsSuccess(res.data));
   }
 }
 
@@ -99,15 +99,17 @@ export function* reactPost(action) {
   try {
     const res = yield call(api.PostAPI.reactPost, action.payload);
 
-    yield call(sendNotification, {
-      receiverId: res.data.userId._id,
-      type: 0,
-      targetId: res.data._id,
-    });
+    if (res.status === 200) {
+      yield put(actions.reactPost.reactPostSuccess(res.data));
 
-    yield put(actions.reactPost.reactPostSuccess(res.data));
+      yield call(sendNotification, {
+        receiverId: res.data.userId._id,
+        type: 0,
+        targetId: res.data._id,
+      });
+    }
   } catch (error) {
-    yield put(actions.reactPost.reactPostFailure);
+    yield put(actions.reactPost.reactPostFailure());
   }
 }
 
@@ -122,18 +124,20 @@ export function* interactUser(action) {
       targetId: res.data._id,
     });
   } catch (error) {
-    yield put(actions.interactUser.interactUserFailure);
+    yield put(actions.interactUser.interactUserFailure());
   }
 }
 
 export function* searchPosts(action) {
   try {
+    if (action.payload.isSearching) {
+      yield put(actions.searchPosts.searchPostsSearching());
+    }
     const res = yield call(api.PostAPI.searchPosts, action.payload);
     yield put(
       actions.searchPosts.searchPostsSuccess({
         posts: res.data,
-        page: action.payload.page,
-        query: action.payload.query,
+        isSearching: action.payload.isSearching,
       })
     );
   } catch (error) {

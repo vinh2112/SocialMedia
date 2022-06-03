@@ -22,6 +22,7 @@ import { UserAPI } from "api";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actions from "redux/actions";
+import DefaultAvatar from "images/DefaultAvatar.jpg";
 
 const SignupSection = () => {
   const history = useHistory();
@@ -37,6 +38,7 @@ const SignupSection = () => {
     name: "",
     password: "",
     repassword: "",
+    avatar: "",
   });
 
   const [message, setMessage] = useState(null);
@@ -54,6 +56,7 @@ const SignupSection = () => {
         password: data.password,
         name: data.name,
         fullName: data.fullName,
+        avatar: DefaultAvatar,
       });
       if (register?.response?.status === 400) {
         setMessage(register.response.data.msg);

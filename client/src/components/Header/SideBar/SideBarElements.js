@@ -23,7 +23,7 @@ export const Container = styled.div`
   border-radius: 5px;
   padding: 8px;
   background-color: ${({ theme }) => theme.primary};
-  box-shadow: var(--box-shadow);
+  box-shadow: ${({ theme }) => theme.boxShadow};
   transition: right 0.2s ease-in-out 0s, top 0.1s linear 0s;
   opacity: 1;
 

@@ -1,18 +1,19 @@
 import ReportedPosts from "components/Administrator/ReportedPosts";
 import AdminSidebar from "components/Administrator/SideBar";
 import Header from "components/Header";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { authState$ } from "redux/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { adminState$, authState$ } from "redux/selectors";
 import { useHistory } from "react-router-dom";
 import Dashboard from "components/Administrator/Dashboard";
+import LoadingSection from "components/LoadingSection";
+import * as actions from "redux/actions";
 
 const AdminContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  max-width: calc(var(--max-width));
   width: 100%;
   padding: 54px 0 0;
   margin: 0 auto;
@@ -23,42 +24,61 @@ const AdminContainer = styled.div`
 `;
 
 export const AdminMainbar = styled.div`
-  margin: 0 auto;
-  padding: 8px 0;
+  padding: 16px 16px 16px calc(16px + 255px);
   height: calc(100vh - 54px);
-  overflow: hidden;
-  overflow-y: auto;
+  width: 100%;
+
+  @media (min-width: 1440px) {
+    padding: 16px 16px 16px calc(16px + 320px);
+  }
+
+  @media (max-width: 900px) {
+    padding: 16px 16px 16px calc(16px + 260px);
+  }
 `;
 
 export default function AdminPage() {
   const { currentUser } = useSelector(authState$);
-  const history = useHistory();
+  const { isLoading } = useSelector(adminState$);
 
-  const checkIsLoggedIn = useCallback(() => {
-    if (!currentUser && !currentUser?.isAdmin) {
-      history.push("/");
-    }
-  }, [currentUser, history]);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    const checkIsLoggedIn = () => {
+      if (!currentUser && !currentUser?.isAdmin) {
+        history.push("/");
+      } else {
+        dispatch(actions.fetchDataAdmin.fetchDataAdminRequest());
+      }
+    };
     checkIsLoggedIn();
-  }, [checkIsLoggedIn]);
+  }, [currentUser, history, dispatch]);
   return (
     <>
-      <Header />
+      <Header isAdmin={true} />
       <AdminContainer>
-        <AdminSidebar />
+        {isLoading ? (
+          <LoadingSection />
+        ) : (
+          <>
+            <AdminSidebar />
 
-        <AdminMainbar>
-          <Switch>
-            <Route path="/administrator/dashboard">
-              <Dashboard />
-            </Route>
-            <Route path="/administrator/report">
-              <ReportedPosts />
-            </Route>
-          </Switch>
-        </AdminMainbar>
+            <AdminMainbar>
+              <Switch>
+                <Route path="/administrator/dashboard">
+                  <Dashboard />
+                </Route>
+                <Route path="/administrator/users">users</Route>
+                <Route path="/administrator/posts">posts</Route>
+                <Route path="/administrator/keywords">keywords</Route>
+                <Route path="/administrator/reports">
+                  <ReportedPosts />
+                </Route>
+              </Switch>
+            </AdminMainbar>
+          </>
+        )}
       </AdminContainer>
     </>
   );

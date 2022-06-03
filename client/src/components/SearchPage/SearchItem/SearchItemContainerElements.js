@@ -3,12 +3,15 @@ import styled from "styled-components";
 export const SearchItemContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 200px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
   border-radius: 10px;
   overflow: hidden;
+
+  & > img {
+    display: flex;
+    height: auto;
+    width: 100%;
+    object-fit: cover;
+  }
 `;
 
 export const OverLay = styled.div`

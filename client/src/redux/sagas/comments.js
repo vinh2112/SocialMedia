@@ -10,7 +10,7 @@ export function* showBoxComment(action) {
 export function* createComment(action) {
   try {
     const res = yield call(api.CommentAPI.createComment, action.payload);
-    yield put(actions.createComment.createCommentSuccess(res.data));
+    // yield put(actions.createComment.createCommentSuccess(res.data));
 
     yield call(sendNotification, {
       receiverId: action.payload.receiverId,

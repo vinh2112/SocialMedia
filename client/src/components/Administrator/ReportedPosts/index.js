@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Avatar,
   AvatarWrapper,
@@ -11,6 +11,8 @@ import {
   PostDetailTop,
   PostPhoto,
   ReportButton,
+  ReportChartContainer,
+  ReportContainer,
   ReportDetail,
   ReportDetailLeft,
   ReportDetailRight,
@@ -23,39 +25,33 @@ import * as api from "api";
 import moment from "moment";
 import * as actions from "redux/actions";
 import { useDispatch } from "react-redux";
-import LoadingSection from "../../LoadingSection";
+import DefaultAvatar from "images/DefaultAvatar.png";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
+import { adminState$ } from "redux/selectors";
+import { useSelector } from "react-redux";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ReportedPosts() {
-  const [reports, setReports] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data } = useSelector(adminState$);
+  const reportData = data?.reportData;
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchReportPosts = async () => {
-      const res = await api.ReportAPI.getAllReports();
-
-      setReports(res.data);
-      setIsLoading(false);
-    };
-
-    fetchReportPosts();
-
-    return () => {
-      setReports([]);
-    };
-  }, []);
 
   const handleAcceptReport = async (reportId) => {
     try {
-      const res = await api.ReportAPI.deleteReport(reportId);
-      const newPosts = reports.filter((report) => report.reportedPostId._id !== res.data && report);
-      setReports(newPosts);
-      dispatch(
-        actions.toast.showToast({
-          message: "Deleted Post",
-          type: "success",
-        })
-      );
+      await api.ReportAPI.deleteReport(reportId).then((res) => {
+        dispatch(
+          actions.handleReportAdmin.handleReportAdminRequest({ isDeleted: true, data: res.data })
+        );
+
+        dispatch(
+          actions.toast.showToast({
+            message: "Deleted Post",
+            type: "success",
+          })
+        );
+      });
     } catch (error) {
       console.log(error);
     }
@@ -63,53 +59,52 @@ export default function ReportedPosts() {
 
   const handleRefuseReport = async (reportId) => {
     try {
-      await api.ReportAPI.refuseReport(reportId);
-      const newPosts = reports.filter((report) => report._id !== reportId);
-      setReports(newPosts);
+      await api.ReportAPI.refuseReport(reportId).then(() => {
+        dispatch(
+          actions.handleReportAdmin.handleReportAdminRequest({ isDeleted: false, data: reportId })
+        );
 
-      dispatch(
-        actions.toast.showToast({
-          message: "Refused Report",
-          type: "success",
-        })
-      );
+        dispatch(
+          actions.toast.showToast({
+            message: "Refused Report",
+            type: "success",
+          })
+        );
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
+  if (!data) return null;
+
   return (
-    <>
-      {isLoading ? (
-        <LoadingSection />
-      ) : (
-        <>
-          <ReportTop>
-            <div className="report-title">Reports</div>
-            <div className="report-count">
-              <span>{reports.length}</span>
-            </div>
-          </ReportTop>
-          <ReportedPostList>
-            {reports.map((report) => (
-              <ReportedPostItem
-                key={report._id}
-                report={report}
-                handleAccept={handleAcceptReport}
-                handleRefuse={handleRefuseReport}
-              />
-            ))}
-          </ReportedPostList>
-        </>
-      )}
-    </>
+    <ReportContainer>
+      <ReportedPostList>
+        <ReportTop>
+          <div className="report-title">Reports</div>
+          <div className="report-count">
+            <span>{reportData.reports.length}</span>
+          </div>
+        </ReportTop>
+        {reportData.reports.map((report) => (
+          <ReportedPostItem
+            key={report._id}
+            report={report}
+            handleAccept={handleAcceptReport}
+            handleRefuse={handleRefuseReport}
+          />
+        ))}
+      </ReportedPostList>
+      <ReportChart dataReport={reportData.reportDataChart} />
+    </ReportContainer>
   );
 }
 
 const ReportedPostItem = ({ report, handleAccept, handleRefuse }) => {
   return (
-    <>
-      <ReportedPostContainer>
+    <ReportedPostContainer>
+      <div>
         <ReportDetail>
           <ReportDetailLeft>
             <div className="reason-report">
@@ -133,13 +128,13 @@ const ReportedPostItem = ({ report, handleAccept, handleRefuse }) => {
             </GroupButton>
           </ReportDetailRight>
         </ReportDetail>
-      </ReportedPostContainer>
+      </div>
 
       <PostDetail>
         <PostDetailTop>
           <AvatarWrapper>
             <Avatar to={`/profile/${report.reportedPostId.userId._id}`}>
-              <img src={report.reportedPostId.userId.avatar} alt="avatar" />
+              <img src={report.reportedPostId.userId.avatar || DefaultAvatar} alt="avatar" />
             </Avatar>
           </AvatarWrapper>
 
@@ -155,6 +150,42 @@ const ReportedPostItem = ({ report, handleAccept, handleRefuse }) => {
 
         <PostPhoto src={report.reportedPostId.image.url} alt="photo" />
       </PostDetail>
-    </>
+    </ReportedPostContainer>
+  );
+};
+
+const ReportChart = ({ dataReport }) => {
+  const options = {
+    responsive: true,
+    stacked: false,
+    plugins: {
+      title: {
+        display: true,
+        text: "REPORT POSTS",
+      },
+    },
+  };
+
+  const data = {
+    labels: ["Total Reports", "Deleted Reports", "RefusedReport"],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: dataReport,
+        backgroundColor: [
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 99, 132, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+        ],
+        borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  return (
+    <ReportChartContainer>
+      <Pie data={data} options={options} />
+    </ReportChartContainer>
   );
 };

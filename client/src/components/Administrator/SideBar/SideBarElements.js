@@ -2,11 +2,18 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 export const AdminSidebarContainer = styled.div`
+  position: fixed;
   width: 100%;
-  max-width: 300px;
+  max-width: 255px;
   min-height: calc(100vh - 54px);
   padding: 14px 0 14px 16px;
   border-right: 1px solid ${({ theme }) => theme.contrastColor};
+  background: ${({ theme }) => theme.primary};
+  box-shadow: var(--box-shadow);
+
+  @media (min-width: 1440px) {
+    max-width: 320px;
+  }
 
   @media (max-width: 900px) {
     max-width: 260px;
@@ -23,8 +30,8 @@ export const AdminSidebarContainer = styled.div`
 
 export const AdminSidebarTitle = styled.div`
   color: ${({ theme }) => theme.textColor};
-  font-size: 25px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 500;
   filter: opacity(0.6);
 
   @media (max-width: 768px) {
@@ -35,9 +42,8 @@ export const AdminSidebarTitle = styled.div`
 export const AdminSidebarMenu = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-top: 12px;
-  padding-right: 8px;
+  row-gap: 5px;
+  padding-right: 16px;
 
   @media (max-width: 768px) {
     flex-direction: row;
@@ -50,26 +56,28 @@ export const AdminSidebarMenu = styled.div`
 export const AdminMenuItem = styled(NavLink)`
   display: flex;
   align-items: center;
-  padding: 12px 8px;
+  padding: 12px 8px 12px 12px;
   border-radius: 5px;
-  min-width: 240px;
-  color: ${({ theme }) => theme.textColor};
   text-decoration: none;
-  font-weight: 500;
+  color: ${({ theme }) => theme.textColor};
   transition: all 0.2s ease;
   cursor: pointer;
   user-select: none;
 
   & > .iconify {
-    font-size: 26px;
+    font-size: 24px;
   }
 
   & > span {
     margin-left: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   &.active {
-    background: ${({ theme }) => theme.hoverColor};
+    background: ${({ theme }) => theme.contrastColor};
   }
 
   &:hover {

@@ -1,12 +1,12 @@
 import axios from "axios";
 import bcrypt from "bcrypt";
-import { UserModel } from "../models/UserModel.js";
 import querystring from "query-string";
+import cloudinary from "../configs/cloudinary.js";
 import { PostModel } from "../models/PostModel.js";
-import cloudinary from "../services/cloudinary.js";
-import AWS from "../services/aws.js";
+import { UserModel } from "../models/UserModel.js";
+import { CommentModel } from "../models/CommentModel.js";
+import { watermarkImage } from "../utils/cloudinary.js";
 import detectImage from "../utils/detectImage.js";
-import { watermarkImage } from "../utils/watermark.js";
 
 const realUsers = [
   "6145e281d0de2256d6a23b2e",
@@ -194,32 +194,77 @@ async function handleUserData(data) {
   return user;
 }
 
-// async function detectImage(url) {
-//   try {
-//     let data = await axios.get(url, { responseType: "arraybuffer" }).then(async (res) => {
-//       var params = {
-//         Image: {
-//           Bytes: res.data,
-//         },
-//       };
+export const fakeLikeOfPost = async (req, res) => {
+  try {
+    const posts = await PostModel.find({ $expr: { $lt: [{ $size: "$likes" }, 10] } });
 
-//       let categories = new Promise((resolve, reject) => {
-//         rekognition.detectLabels(params, (err, data) => {
-//           if (err) return err;
-//           else {
-//             const cates = data.Labels.reduce((result, label, index) => {
-//               if (index < 6) result.push(label.Name);
-//               return result;
-//             }, []);
-//             resolve(cates);
-//           }
-//         });
-//       });
-//       return categories;
-//     });
+    for (const post of posts) {
+      const users = await UserModel.aggregate([
+        { $match: { _id: { $ne: post.userId.toString() } } },
+        { $sample: { size: Math.random() * 50 + 10 } },
+      ]);
 
-//     return data;
-//   } catch (error) {
-//     return error;
-//   }
-// }
+      const listUsersId = users.map((user) => user._id);
+
+      await PostModel.findByIdAndUpdate(
+        post._id,
+        {
+          $set: { likes: listUsersId },
+        },
+        { new: true }
+      );
+    }
+
+    return res.json(posts);
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
+};
+
+export const fakeCommentOfPost = async (req, res) => {
+  try {
+    let comments = [];
+
+    await axios
+      .get(`https://dummyapi.io/data/v1/comment?limit=50`, {
+        headers: { "app-id": "6295fed1f577623fcef074c7" },
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        const listComments = data.data.map((comment) => comment.message);
+        comments = [...comments, ...listComments];
+      });
+
+    const posts = await PostModel.find();
+
+    for (const post of posts) {
+      let listNewComment = [];
+
+      const users = await UserModel.aggregate([
+        { $sample: { size: Math.floor(Math.random() * 2 + 1) } },
+      ]);
+
+      const listUsersId = users.map((user) => user._id);
+
+      for (const userId of listUsersId) {
+        listNewComment.push({
+          postId: post._id,
+          userId: userId,
+          comment: comments[Math.floor(Math.random() * (comments.length - 1))],
+        });
+      }
+
+      await CommentModel.insertMany(listNewComment);
+      const commentsOfPost = await CommentModel.find({ postId: post._id });
+      const commentCount = commentsOfPost.reduce((count, currItem) => {
+        return (count += 1 + currItem.reply.length);
+      }, 0);
+
+      await PostModel.findByIdAndUpdate(post._id, { $set: { commentCount: commentCount } });
+    }
+
+    return res.json("done");
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
+};

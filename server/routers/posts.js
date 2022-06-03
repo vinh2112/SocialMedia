@@ -11,7 +11,6 @@ import {
   searchPosts,
   getTopLikedPosts,
   getRelativePosts,
-  watermarkPost,
   downloadPhotoPost,
 } from "../controllers/posts.js";
 import { verifyToken } from "../middlewares/auth.js";

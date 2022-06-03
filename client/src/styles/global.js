@@ -5,23 +5,18 @@ export const GlobalStyles = createGlobalStyle`
         scroll-behavior: smooth;
     }
 
-
-
-    /* ::-webkit-scrollbar {
-        -webkit-appearance: none;
-        width: 6px;
-        height: 6px;
+    .simplebar-scrollbar::before {
+        background-color: ${({ theme }) => theme.subTextColor} !important;
     }
 
-    ::-webkit-scrollbar-thumb {
-        background-color: rgba(0,0,0,.55);
-        border-radius: 10px;
-        margin: 2px;
+    #scroll-node {
+        scroll-behavior: smooth;
+
     }
 
-    ::-webkit-scrollbar-track {
-        background-color: transparent;
-    } */
+    .infinite-scroll-component {
+        overflow: hidden !important;
+    }
 
     *, *::after, *::before{
         box-sizing: border-box;

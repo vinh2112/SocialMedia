@@ -14,34 +14,29 @@ const ListComment = ({ boxComment, post }) => {
   const { data } = useSelector(commentState$);
   const socket = useContext(SocketContext);
 
-  useEffect(() => {
-    const fetchCommentsByPostId = async () => {
-      const res = await CommentAPI.fetchComments(post._id);
-
-      if (res.status === 200) {
-        dispatch(fetchComments.fetchCommentsSuccess(res.data));
-      }
-      setIsLoading(false);
-    };
-
-    fetchCommentsByPostId();
-  }, [dispatch, setIsLoading, post._id]);
-
-  useEffect(() => {
-    const fetchCommentsByPostId = async (postId) => {
+  const fetchCommentsByPostId = React.useCallback(
+    async (postId) => {
       const res = await CommentAPI.fetchComments(postId);
 
       if (res.status === 200) {
         dispatch(fetchComments.fetchCommentsSuccess(res.data));
       }
       setIsLoading(false);
-    };
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    fetchCommentsByPostId(post._id);
+  }, [post, fetchCommentsByPostId]);
+
+  useEffect(() => {
     socket?.on("getUpdateCommentPost", ({ postId }) => {
       if (postId === post._id) {
         fetchCommentsByPostId(postId);
       }
     });
-  }, [socket, post, dispatch]);
+  }, [socket, post, fetchCommentsByPostId]);
 
   return (
     <Container>

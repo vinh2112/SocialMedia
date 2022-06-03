@@ -1,27 +1,45 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const DashboardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 30px;
-  padding: 16px;
+  grid-template-columns: repeat(8, 1fr);
+  grid-gap: 25px 10px;
 
   @media (max-width: 700px) {
     grid-gap: 10px;
   }
 `;
 
-export const DashboardCardContainer = styled.div`
+export const DashboardTitle = styled.h3`
+  color: ${({ theme }) => theme.subTextColor};
+  margin-bottom: 20px;
+  font-weight: 500;
+  letter-spacing: 1px;
+`;
+
+export const DashboardCardContainer = styled(Link)`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 32px 60px 32px 24px;
-  border-radius: 15px;
+  width: 100%;
+  max-width: 350px;
+  padding: 24px 0px 24px 16px;
+  margin: 0 auto;
+  border-radius: 20px;
   background-color: ${({ theme }) => theme.primary};
-  box-shadow: 0 0 6px 0 rgba(0 0 0 / 7%);
+  box-shadow: var(--box-shadow);
+  text-decoration: none;
 
   @media (max-width: 700px) {
     padding: 24px 48px 24px 24px;
+  }
+
+  &:nth-child(1),
+  &:nth-child(2),
+  &:nth-child(3),
+  &:nth-child(4) {
+    grid-column: span 2;
   }
 `;
 
@@ -31,15 +49,20 @@ export const DashboardCardWrapper = styled.div`
 `;
 
 export const DashboardCardBoxed = styled.div`
-  width: 50px;
-  height: 50px;
-  font-size: 30px;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  top: 0;
+  font-size: 24px;
   border-radius: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: red;
-  position: relative;
+  transition: all 0.5s ease;
+
+  ${DashboardCardContainer}:hover & {
+    top: -10px;
+  }
 
   &:before {
     content: "";
@@ -55,42 +78,43 @@ export const DashboardCardContent = styled.div`
   margin-left: 16px;
 
   & > .card-number {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
     color: ${({ theme }) => theme.textColor};
   }
 
   & > .card-title {
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
     color: ${({ theme }) => theme.subTextColor};
+    letter-spacing: 1px;
     white-space: nowrap;
   }
 `;
 
-export const DashboardReport = styled.div`
+export const DashboardChartContainer = styled.div`
+  grid-column: span 5;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 8px 12px 24px;
-  border-radius: 15px;
-  background-color: ${({ theme }) => theme.primary};
   width: 100%;
-  box-shadow: 0 0 6px 0 rgba(0 0 0 / 7%);
+  padding: 20px 16px 20px 16px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: ${({ theme }) => theme.primary};
+  box-shadow: var(--box-shadow);
+`;
 
-  & > .report-title {
-    font-weight: 700;
-    color: ${({ theme }) => theme.subTextColor};
-  }
-
-  & > .report-count {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    font-weight: 700;
-    color: #fefefe;
-    background-color: var(--danger-color);
-  }
+export const DashboardTemp = styled.div`
+  grid-column: span 3;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  padding: 20px 16px 20px 16px;
+  margin: 0 auto;
+  border-radius: 20px;
+  background-color: ${({ theme }) => theme.primary};
+  box-shadow: var(--box-shadow);
 `;

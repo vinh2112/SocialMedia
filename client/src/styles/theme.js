@@ -15,7 +15,7 @@ export const lightTheme = {
   secondary: "#fcfdfd",
   contrastColor: "#eaeaea",
   hoverColor: "#dfdfdf",
-  textColor: "#333",
+  textColor: "#5a5c69",
   subTextColor: "#999",
   borderColor: "#d4d4d4",
   toastColor: "#fff",

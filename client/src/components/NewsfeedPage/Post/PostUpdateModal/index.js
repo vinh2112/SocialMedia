@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  OverLay,
   Container,
   Top,
   Title,
@@ -32,7 +31,7 @@ import { createPost, hideModal } from "redux/actions";
 import { modalState$, postState$ } from "redux/selectors";
 import Switch from "@mui/material/Switch";
 import DefaultAvatar from "images/DefaultAvatar.png";
-import useScrollBlock from "hooks/useScrollBlock";
+import Modal from "@mui/material/Modal";
 
 const initial_post = {
   desc: "",
@@ -43,29 +42,19 @@ const initial_post = {
 };
 
 const PostUpdateModal = ({ user }) => {
-  const overlayRef = useRef();
   const dispatch = useDispatch();
   const { isShow } = useSelector(modalState$);
-  const { isLoading } = useSelector(postState$);
+  const { isPosting } = useSelector(postState$);
 
   const [post, setPost] = useState(initial_post);
   const [isSmall, setIsSmall] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [blockScroll, allowScroll] = useScrollBlock();
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isPosting) {
       setPost(initial_post);
     }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isShow) {
-      blockScroll();
-    }
-
-    return () => allowScroll();
-  }, [isShow, blockScroll, allowScroll]);
+  }, [isPosting]);
 
   const handleChangeValue = React.useCallback(
     (e) => {
@@ -97,26 +86,21 @@ const PostUpdateModal = ({ user }) => {
     setPost({ ...post, price: e.target.value });
   };
 
-  const closeModal = React.useCallback(
-    (e) => {
-      if (overlayRef.current === e.target) {
-        dispatch(hideModal());
-      }
-    },
-    [dispatch]
-  );
+  const closeModal = React.useCallback(() => {
+    dispatch(hideModal());
+  }, [dispatch]);
 
   const onSubmit = React.useCallback(() => {
     dispatch(createPost.createPostRequest({ ...post }));
   }, [post, dispatch]);
 
   return (
-    <OverLay ref={overlayRef} onMouseDown={closeModal} isShow={isShow}>
+    <Modal onClose={closeModal} open={isShow}>
       <Container isShow={isShow}>
         <Top>
           <Title>New Post</Title>
           <ButtonWrapper>
-            <CloseButton onClick={() => dispatch(hideModal())}>
+            <CloseButton onClick={closeModal}>
               <Icon icon="akar-icons:cross" />
             </CloseButton>
           </ButtonWrapper>
@@ -187,9 +171,9 @@ const PostUpdateModal = ({ user }) => {
             </PostButton>
           </PostButtonWrapper>
         </Actions>
-        {isLoading && <LoadingSection />}
+        {isPosting && <LoadingSection />}
       </Container>
-    </OverLay>
+    </Modal>
   );
 };
 

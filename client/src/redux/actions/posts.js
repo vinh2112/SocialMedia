@@ -27,6 +27,7 @@ export const getTopLikedPosts = createActions({
 export const searchPosts = createActions({
   searchPostsRequest: (payload) => payload,
   searchPostsSuccess: (payload) => payload,
+  searchPostsSearching: undefined,
 });
 
 export const createPost = createActions({

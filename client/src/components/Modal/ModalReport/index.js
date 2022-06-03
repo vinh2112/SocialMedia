@@ -14,7 +14,6 @@ import {
   ReportBottom,
   ReportContent,
   ReportOption,
-  ReportOptionLabel,
 } from "./ModalReportElements";
 import * as actions from "redux/actions";
 import * as api from "api";
@@ -141,14 +140,16 @@ export default function ModalReport({ postId, handleEdit }) {
         </ModalTop>
         <ReportContent onChange={handleOther}>
           {reportOptions.map((option) => (
-            <ReportOption key={option.id}>
-              <input name="report-option" type="radio" value={option.value} id={option.id} />
-              <ReportOptionLabel htmlFor={option.id}>{option.label}</ReportOptionLabel>
+            <ReportOption key={option.id} htmlFor={option.id}>
+              <input name="report-option" hidden type="radio" value={option.value} id={option.id} />
+              <div className="report__option-radio" />
+              <div className="report__option-title">{option.label}</div>
             </ReportOption>
           ))}
-          <ReportOption>
-            <input name="report-option" type="radio" id="is-other" />
-            <ReportOptionLabel htmlFor="is-other">Others</ReportOptionLabel>
+          <ReportOption htmlFor="is-other">
+            <input name="report-option" hidden type="radio" id="is-other" />
+            <div className="report__option-radio" />
+            <div className="report__option-title">Others</div>
           </ReportOption>
         </ReportContent>
         <ReasonAreaWrapper>

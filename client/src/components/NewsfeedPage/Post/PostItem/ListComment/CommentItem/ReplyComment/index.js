@@ -23,9 +23,11 @@ import { Container } from "./ReplyCommentElements";
 import * as actions from "redux/actions";
 import moment from "moment";
 import DefaultAvatar from "images/DefaultAvatar.png";
+import { CircularProgress } from "@mui/material";
 
 export default function ReplyComment({ reply, commentId, currentUser, post, socket }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const menuNode = useRef();
   const dispatch = useDispatch();
 
@@ -42,6 +44,9 @@ export default function ReplyComment({ reply, commentId, currentUser, post, sock
   }, []);
 
   const handleDeleteComment = async () => {
+    setIsOpen(false);
+    setIsDeleting(true);
+
     const res = await CommentAPI.deleteReplyComment({
       replyId: reply._id,
       commentId,
@@ -58,6 +63,8 @@ export default function ReplyComment({ reply, commentId, currentUser, post, sock
         comment: res.data,
       });
     }
+
+    setIsDeleting(false);
   };
 
   useEffect(() => {
@@ -91,12 +98,18 @@ export default function ReplyComment({ reply, commentId, currentUser, post, sock
           {currentUser &&
             (currentUser._id === reply.user._id || currentUser._id === post.userId._id) && (
               <ButtonWrapper ref={menuNode}>
-                <Button onClick={() => setIsOpen(!isOpen)}>
-                  <Icon icon="akar-icons:more-horizontal" />
-                </Button>
-                <MenuActions isOpen={isOpen}>
-                  <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
-                </MenuActions>
+                {isDeleting ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  <>
+                    <Button onClick={() => setIsOpen(!isOpen)}>
+                      <Icon icon="akar-icons:more-horizontal" />
+                    </Button>
+                    <MenuActions isOpen={isOpen}>
+                      <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
+                    </MenuActions>
+                  </>
+                )}
               </ButtonWrapper>
             )}
         </CommentContainer>

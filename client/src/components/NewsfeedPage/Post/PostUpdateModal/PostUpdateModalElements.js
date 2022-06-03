@@ -1,19 +1,6 @@
 import styled from "styled-components";
 import Loading from "images/Loading.svg";
 
-export const OverLay = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  opacity: ${({ isShow }) => (isShow ? "1" : "0")};
-  visibility: ${({ isShow }) => (isShow ? "visible" : "hidden")};
-  transition: all 0.2s ease-in-out;
-  z-index: 49;
-`;
-
 export const Container = styled.div`
   position: absolute;
   background-color: ${({ theme }) => theme.primary};
@@ -25,7 +12,7 @@ export const Container = styled.div`
   transform: translate(-50%, -50%);
   border-radius: 4px;
   box-shadow: var(--box-shadow);
-  transition: all 0.1s linear 0.1s;
+  transition: all 0.1s linear;
   overflow: hidden;
 `;
 
@@ -36,7 +23,7 @@ export const LoadingSection = styled.div`
   bottom: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.3) url(${Loading}) no-repeat center center;
-  background-size: 100px;
+  background-size: 90px;
 `;
 
 export const Top = styled.div`
@@ -50,7 +37,9 @@ export const Top = styled.div`
 
 export const Title = styled.h3`
   color: ${({ theme }) => theme.subTextColor};
+  font-weight: 500;
   text-transform: uppercase;
+  letter-spacing: 1px;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -92,7 +81,7 @@ export const Content = styled.div`
   position: relative;
   max-height: 400px;
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 export const DescArea = styled.textarea`
@@ -219,6 +208,7 @@ export const PostButton = styled.button`
   padding: 10px 24px;
   border-radius: 5px;
   text-transform: uppercase;
+  letter-spacing: 1px;
   color: #fff;
   transition: all 0.15s ease-in-out 0s;
   cursor: pointer;

@@ -1,5 +1,6 @@
 import { CommentModel } from "../models/CommentModel.js";
 import { PostModel } from "../models/PostModel.js";
+import PostService from "../services/PostService.js";
 
 export const getCommentPost = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const getCommentPost = async (req, res) => {
         path: "userId",
         select: "name email avatar",
       })
-      .sort("-createdAt");
+      .sort("createdAt");
 
     if (!comments.length) {
       return res.status(200).json([]);
@@ -40,6 +41,8 @@ export const createComment = async (req, res) => {
       path: "userId",
       select: "name email avatar",
     });
+
+    await PostService.updateCommentCount(postId, 1);
 
     res.status(200).json(newComment);
   } catch (error) {
@@ -69,15 +72,19 @@ export const deleteComment = async (req, res) => {
     if (!comment) return res.status(403).json({ msg: "Comment not found" });
     if (comment.userId.toString() === req.userId || post.userId.toString() === req.userId) {
       await comment.deleteOne();
+      let commentCount = comment.reply.length + 1;
+      await PostService.updateCommentCount(comment.postId, -commentCount);
 
-      await CommentModel.populate(comment, {
-        path: "userId",
-        select: "name email avatar",
-      });
-      await CommentModel.populate(comment, {
-        path: "reply.user",
-        select: "name email avatar",
-      });
+      await CommentModel.populate(comment, [
+        {
+          path: "userId",
+          select: "name email avatar",
+        },
+        {
+          path: "reply.user",
+          select: "name email avatar",
+        },
+      ]);
 
       res.status(200).json(comment);
     } else {
@@ -111,9 +118,11 @@ export const replyComment = async (req, res) => {
         path: "userId",
         select: "name email avatar",
       });
-    res.status(200).json(comment);
+    await PostService.updateCommentCount(comment.postId, 1);
+
+    return res.status(200).json(comment);
   } catch (error) {
-    res.status(500).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
 
@@ -142,7 +151,10 @@ export const deleteReplyComment = async (req, res) => {
             path: "userId",
             select: "name email avatar",
           });
-        res.status(200).json(newComment);
+
+        await PostService.updateCommentCount(comment.postId, -1);
+
+        return res.status(200).json(newComment);
       } else {
         const newComment = await CommentModel.findByIdAndUpdate(
           req.params.commentId,
@@ -161,7 +173,10 @@ export const deleteReplyComment = async (req, res) => {
             path: "userId",
             select: "name email avatar",
           });
-        res.status(200).json(newComment);
+
+        await PostService.updateCommentCount(comment.postId, -1);
+
+        return res.status(200).json(newComment);
       }
     }
   } catch (error) {

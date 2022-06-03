@@ -15,7 +15,7 @@ export const AvatarWrapper = styled.div`
   height: 120px;
   border-radius: 50%;
   margin: 16px 0 8px;
-  box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: ${({ theme }) => theme.boxShadow};
   background-color: ${({ theme }) => theme.contrastColor};
 
   @media (max-width: 1024px) {
@@ -59,6 +59,7 @@ export const EditButton = styled(Link)`
 `;
 
 export const AccountInfo = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,12 +75,12 @@ export const AccountInfo = styled.div`
 `;
 
 export const AccountName = styled.div`
-  font-weight: 400;
-  font-size: 1.1rem;
+  font-weight: 500;
+  font-size: 1rem;
 `;
 
 export const Desc = styled.div`
-  margin-top: 4px;
+  margin-top: 16px;
   font-style: italic;
   text-align: center;
   font-size: 0.9rem;
@@ -92,16 +93,16 @@ export const Desc = styled.div`
 
 export const Details = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: ${({ isYourAccount }) =>
-    isYourAccount ? "repeat(2, 1fr)" : "repeat(3, 1fr)"};
-  grid-row-gap: 12px;
+  grid-template-columns: repeat(6, 1fr);
+  grid-row-gap: 24px;
+  grid-column-gap: 10px;
   width: 100%;
-  margin-top: 12px;
+  margin-top: 24px;
 
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(2, 1fr);
+    grid-row-gap: 10px;
   }
 `;
 
@@ -110,24 +111,25 @@ export const DetailItem = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  grid-column: span 3;
 
-  ${Details} &:nth-child(3) {
-    grid-column: span 3/4;
+  &:nth-child(1),
+  &:nth-child(2),
+  &:nth-child(3) {
+    grid-column: span 2;
   }
 
   @media (max-width: 1024px) {
     align-items: flex-start;
     margin-top: 0;
-    ${Details} &:nth-child(3) {
-      grid-column: auto;
-    }
   }
 `;
 
 export const Title = styled.div`
   text-transform: uppercase;
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
   margin-top: 6px;
   color: ${({ theme }) => theme.subTextColor};
 
@@ -142,17 +144,36 @@ export const Title = styled.div`
   }
 `;
 
-export const Detail = styled.div``;
+export const Detail = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  max-width: 140px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  ${DetailItem}:nth-child(1) &,
+  ${DetailItem}:nth-child(2) & {
+    height: 24px;
+  }
+`;
 
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  grid-column: span 3/4;
   flex: 1;
+  grid-column: span 3;
 
   @media (max-width: 1024px) {
-    grid-column: auto;
+    grid-column: span 2;
+  }
+
+  @media (max-width: 700px) {
+    grid-column: span 3;
   }
 `;
 
@@ -166,6 +187,8 @@ export const Button = styled.button`
   border-radius: 5px;
   padding: 8px 16px;
   text-transform: capitalize;
+  font-weight: 600;
+  letter-spacing: 1px;
   background: ${({ isFollowed }) => (isFollowed ? "transparent" : "var(--primary-color)")};
   color: ${({ isFollowed, theme }) => (isFollowed ? theme.textColor : "#fff")};
   transition: all 0.1s ease-in-out;
@@ -175,8 +198,14 @@ export const Button = styled.button`
     filter: brightness(0.9);
   }
 
+  &.btn-secondary {
+    background: ${({ theme }) => theme.contrastColor};
+    border: 1px solid ${({ theme }) => theme.contrastColor};
+    color: ${({ theme }) => theme.textColor};
+  }
+
   & .iconify {
-    font-size: 16px;
+    font-size: 18px;
   }
 `;
 

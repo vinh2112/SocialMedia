@@ -39,6 +39,7 @@ export const CommentWrapper = styled.div`
 
 export const CommentContent = styled.div`
   display: inline-block;
+  width: fit-content;
   line-height: 20px;
 
   &.replying {

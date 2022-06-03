@@ -10,8 +10,8 @@ import ChatBox from "components/MessengerPage/ChatBox";
 
 const Messenger = styled.div`
   display: flex;
-  height: 100%;
-  padding: 72px 16px 16px;
+  height: 100vh;
+  padding: 78px 16px 16px;
   margin: 0 auto;
   max-width: var(--max-width);
 

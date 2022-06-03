@@ -246,7 +246,7 @@ export const checkPinCode = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { email, password, name, fullName } = req.body;
+    const { email, password, name, fullName, avatar } = req.body;
 
     // Validate User
     if (
@@ -263,7 +263,7 @@ export const register = async (req, res) => {
       return res.status(400).json({ msg: "Password is at least 6 letters." });
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = new UserModel({ email, password: passwordHash, name, fullName });
+    const newUser = new UserModel({ email, password: passwordHash, name, fullName, avatar });
 
     await newUser.save();
 

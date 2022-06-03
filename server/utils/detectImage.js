@@ -1,4 +1,4 @@
-import AWS from "../services/aws.js";
+import AWS from "../configs/aws.js";
 import axios from "axios";
 
 const rekognition = new AWS.Rekognition();

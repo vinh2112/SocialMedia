@@ -13,6 +13,13 @@ const schema = new mongoose.Schema(
     reason: {
       type: String,
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    typeDelete: {
+      type: Boolean, // true is delete, false is refuse
+    },
   },
   { timestamps: true }
 );

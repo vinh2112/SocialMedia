@@ -225,7 +225,7 @@ const PostItem = ({ post }) => {
                 <DescriptionWrapper>
                   <pre className="post__desc">{post.desc}</pre>
                   <div className="post-price">
-                    {post.isPaymentRequired ? "$" + post.price : "Free"}
+                    {post.isPaymentRequired ? "$" + post.price : "$0"}
                   </div>
                 </DescriptionWrapper>
               )}
@@ -244,7 +244,9 @@ const PostItem = ({ post }) => {
         />
         {isShowComment && <ListComment boxComment={boxComment} post={post} />}
       </PostContainer>
-      {isReporting && <PostReportModal handleClose={setIsReporting} postId={post._id} />}
+      {isReporting && (
+        <PostReportModal handleClose={setIsReporting} open={isReporting} postId={post._id} />
+      )}
     </>
   );
 };

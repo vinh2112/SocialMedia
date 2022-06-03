@@ -26,7 +26,7 @@ import * as api from "api";
 import * as action from "redux/actions";
 import PhotoosLogo from "images/Photoos.png";
 
-const Header = ({ toggle }) => {
+const Header = ({ toggle, isAdmin }) => {
   let initialState = {
     notify: false,
     sideBar: false,
@@ -91,9 +91,15 @@ const Header = ({ toggle }) => {
 
   return (
     <HeaderContainer id="header">
-      <HeaderWrapper>
+      <HeaderWrapper isAdmin={isAdmin}>
         <HeaderLeft>
-          <LogoLink to="/" onClick={() => window.scrollTo(0, 0)}>
+          <LogoLink
+            to="/"
+            onClick={() => {
+              const scrollNode = document.querySelector("#scroll-node");
+              scrollNode.scrollTop = 0;
+            }}
+          >
             <img src={PhotoosLogo} alt="" />
           </LogoLink>
         </HeaderLeft>
@@ -107,6 +113,7 @@ const Header = ({ toggle }) => {
                   alt="Photo"
                 />
                 <UserName>@{user.currentUser.name}</UserName>
+                <span className="tooltip">Your page</span>
               </RoundButtonLink>
 
               {user.currentUser.isAdmin && (
@@ -150,6 +157,7 @@ const Header = ({ toggle }) => {
           <SideBarContainer ref={domNode}>
             <RoundLabelButton htmlFor="activeCheckBox" onClick={handleSideBar}>
               <Icon icon="feather:menu" />
+              <span className="tooltip">Menu</span>
             </RoundLabelButton>
             {/* <input type="checkbox" id="activeCheckBox"></input> */}
 
