@@ -7,6 +7,7 @@ export const Container = styled.div`
   gap: 10px;
   width: 100%;
   padding-left: 10px;
+  border-bottom: 1px solid ${({ theme }) => theme.contrastColor};
 `;
 
 export const ButtonWrapper = styled.div`

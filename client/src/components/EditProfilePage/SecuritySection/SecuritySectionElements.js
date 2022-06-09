@@ -6,24 +6,9 @@ export const SecurityContainer = styled.div`
 `;
 
 export const SecurityWrapper = styled.div`
-  width: 80%;
-  height: calc(100vh - 40px - 54px);
+  width: 100%;
+  max-width: 350px;
+  height: 100%;
   margin: 0 auto;
-`;
-
-export const Item = styled.div`
-  display: flex;
-  justify-content: center;
-
-  & .MuiOutlinedInput-notchedOutline {
-    border-color: ${({ theme }) => theme.borderColor};
-  }
-
-  & input {
-    color: ${({ theme }) => theme.textColor};
-  }
-
-  & label {
-    color: ${({ theme }) => theme.textColor};
-  }
+  padding: 0 16px;
 `;

@@ -20,11 +20,11 @@ import SideBar from "./SideBar";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { authState$, notificationState$ } from "redux/selectors";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import NotificationSection from "./NotificationSection";
 import * as api from "api";
 import * as action from "redux/actions";
-import PhotoosLogo from "images/Photoos.png";
+import PhotoosLogo from "assets/images/Photoos.png";
 
 const Header = ({ toggle, isAdmin }) => {
   let initialState = {
@@ -108,50 +108,43 @@ const Header = ({ toggle, isAdmin }) => {
           {user.currentUser ? (
             <>
               <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
-                <Avatar
-                  src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar}
-                  alt="Photo"
-                />
+                <Avatar src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar} alt="Photo" />
                 <UserName>@{user.currentUser.name}</UserName>
                 <span className="tooltip">Your page</span>
               </RoundButtonLink>
-
-              {user.currentUser.isAdmin && (
-                <RoundActionButton to="/administrator/dashboard">
-                  <Icon icon="eos-icons:admin-outlined" />
-                  <span className="tooltip">Administrator</span>
-                </RoundActionButton>
-              )}
-
-              <RoundActionButton to="/messages">
-                <Icon icon="ant-design:message-outlined" />
-                <span className="tooltip">Message</span>
-              </RoundActionButton>
-
-              <NotificationContainer ref={notiNode}>
-                <RoundLabelButton
-                  htmlFor="notify-checkbox"
-                  className="mg-r fs-14"
-                  onClick={handleNotifyPopup}
-                >
-                  <Icon icon="codicon:bell" />
-                  <span className="tooltip">Notification</span>
-                  {countNotifications(notification.data) !== 0 && (
-                    <span className="badge">{countNotifications(notification.data)}</span>
-                  )}
-                </RoundLabelButton>
-                <input type="checkbox" id="notify-checkbox" hidden />
-
-                <NotificationSection isOpen={isOpen.notify} notifications={notification.data} />
-              </NotificationContainer>
             </>
           ) : (
             <AuthGroupButton>
-              <SignIn to="/home" onClick={toggle}>
+              <SignIn to="/login" onClick={toggle}>
                 Sign in
               </SignIn>
-              <SignUp to="/signup">Sign up</SignUp>
+              <SignUp to="/register">Sign up</SignUp>
             </AuthGroupButton>
+          )}
+
+          <RoundActionButton to="/">
+            <Icon icon="bx:home-alt" />
+            <span className="tooltip">Home</span>
+          </RoundActionButton>
+
+          <RoundActionButton to="/search">
+            <Icon icon="bi:grid-3x3-gap" />
+            <span className="tooltip">Explore</span>
+          </RoundActionButton>
+
+          {user.currentUser && (
+            <NotificationContainer ref={notiNode}>
+              <RoundLabelButton htmlFor="notify-checkbox" className="mg-r fs-14" onClick={handleNotifyPopup}>
+                <Icon icon="codicon:bell" />
+                <span className="tooltip">Notification</span>
+                {countNotifications(notification.data) !== 0 && (
+                  <span className="badge">{countNotifications(notification.data)}</span>
+                )}
+              </RoundLabelButton>
+              <input type="checkbox" id="notify-checkbox" hidden />
+
+              <NotificationSection isOpen={isOpen.notify} notifications={notification.data} />
+            </NotificationContainer>
           )}
 
           <SideBarContainer ref={domNode}>

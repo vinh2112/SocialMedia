@@ -14,12 +14,14 @@ const EditProfileContainer = styled.div`
   justify-content: space-between;
   max-width: calc(var(--max-width) - 32px);
   width: 100%;
+  min-height: calc(100vh - 96px);
   background: ${({ theme }) => theme.primary};
-  padding: 54px 0 0;
-  margin: 0 auto;
+  border: 1px solid ${({ theme }) => theme.borderColor};
+  margin: 78px auto 16px;
 
   @media (max-width: 700px) {
-    flex-direction: column;
+    margin: 54px auto 0;
+    height: calc(100vh - 54px);
   }
 `;
 

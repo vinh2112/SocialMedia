@@ -45,8 +45,6 @@ export const EditButton = styled(Link)`
   align-items: center;
   bottom: 0;
   right: 0;
-  width: 30px;
-  height: 30px;
   border-radius: 50%;
   color: ${({ theme }) => theme.textColor};
   background-color: ${({ theme }) => theme.contrastColor};
@@ -155,10 +153,10 @@ export const Detail = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 
-  ${DetailItem}:nth-child(1) &,
+  /* ${DetailItem}:nth-child(1) &,
   ${DetailItem}:nth-child(2) & {
     height: 24px;
-  }
+  } */
 `;
 
 export const ButtonWrapper = styled.div`

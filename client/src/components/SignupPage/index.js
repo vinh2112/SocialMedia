@@ -1,177 +1,341 @@
-import React, { useState } from "react";
-import img from "../../images/img3.jpg";
 import { Icon } from "@iconify/react";
+import { LoadingButton } from "@mui/lab";
+import { GoogleLogin } from "react-google-login";
 import {
-  SignupContainer,
-  ImgWrapper,
-  Img,
-  InfoContainer,
-  Txb,
-  TxbWrapper,
-  InfoTop,
-  InfoBottom,
-  ButtonSignup,
-  LoginDiv,
-  Signin,
-  Headline,
-  Subline,
-  Description,
-  ErrorWrapper,
-} from "./SignupElements";
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  InputAdornment,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React from "react";
+import { checkBoxStyle, containedButtonStyle, outlinedButtonStyle, textFieldStyle } from "styles/muiCustom";
+import { SignupContainer } from "./SignupElements";
+import Google from "assets/images/google.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import { UserAPI } from "api";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actions from "redux/actions";
-import DefaultAvatar from "images/DefaultAvatar.jpg";
+
+const errorInitial = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  password: "",
+  repassword: "",
+  avatar: "",
+};
 
 const SignupSection = () => {
-  const history = useHistory();
-  const [hidden, setHidden] = useState(false);
-  const isHidden = () => {
-    setHidden(!hidden);
-  };
-  const dispatch = useDispatch();
-
-  const [data, setData] = useState({
+  const clientId = "828741880621-pqvtk7ei98q91lno41bclfnkjhdsou4l.apps.googleusercontent.com";
+  const [data, setData] = React.useState({
     email: "",
-    fullName: "",
-    name: "",
+    firstName: "",
+    lastName: "",
     password: "",
     repassword: "",
     avatar: "",
   });
-
-  const [message, setMessage] = useState(null);
+  const [isShowPassword, setIsShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [errors, setErrors] = React.useState(errorInitial);
+  const [responseMessage, setResponseMessage] = React.useState("");
+  const nodeRef = React.useRef();
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  const handleSignup = async () => {
-    if (data.password !== data.repassword) {
-      setMessage("Password must be the same");
-    } else {
-      const register = await UserAPI.register({
+
+  const validateField = (e) => {
+    const { name } = e.target;
+
+    if (name === "email") {
+      if (data.email) {
+        if (
+          !data.email.match(
+            /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+          )
+        ) {
+          setErrors({ ...errors, email: "Email format is incorrect" });
+        } else {
+          setErrors({ ...errors, email: "" });
+        }
+      } else {
+        setErrors({ ...errors, email: "Please enter your email" });
+      }
+    } else if (name === "password" || name === "repassword") {
+      if (data.password) {
+        if (data.password.length < 6) {
+          setErrors({ ...errors, password: "Password must be at least 6 letters" });
+        } else {
+          setErrors({ ...errors, password: "" });
+        }
+      } else {
+        setErrors({ ...errors, password: "Please enter your password" });
+      }
+
+      if (data.repassword) {
+        if (data.repassword.length < 6) {
+          setErrors({ ...errors, repassword: "Password must be at least 6 letters" });
+        } else if (data.password !== data.repassword) {
+          setErrors({ ...errors, repassword: "Confirmation password is not match" });
+        } else {
+          setErrors({ ...errors, repassword: "" });
+        }
+      } else {
+        setErrors({ ...errors, repassword: "Please confirm your password" });
+      }
+    }
+  };
+
+  const handleShowPassword = (e) => {
+    setIsShowPassword(e.target.checked);
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    const isValidated = Object.values(errors).every((value) => {
+      if (value) {
+        return false;
+      }
+      return true;
+    });
+
+    if (isValidated) {
+      setLoading(true);
+
+      const res = await UserAPI.register({
         email: data.email,
         password: data.password,
-        name: data.name,
-        fullName: data.fullName,
+        name: [data.firstName, data.lastName].join(" ")
+          ? [data.firstName, data.lastName].join("_").toLowerCase()
+          : data.email.substr(0, data.email.indexOf("@")),
+        fullName: [data.firstName, data.lastName].join(" ")
+          ? [data.firstName, data.lastName].join(" ")
+          : data.email.substr(0, data.email.indexOf("@")),
         avatar: DefaultAvatar,
       });
-      if (register?.response?.status === 400) {
-        setMessage(register.response.data.msg);
-      } else {
-        history.push("/home");
+
+      if (res.status === 200) {
+        history.push("/login");
         dispatch(
           actions.toast.showToast({
             message: "Register Successfully",
             type: "success",
           })
         );
+      } else {
+        setResponseMessage(res.response.data.msg);
       }
+      setLoading(false);
     }
   };
+
+  const onLoginSuccess = (res) => {
+    if (res.profileObj) {
+      dispatch(
+        actions.login.loginRequest({
+          idToken: res.tokenId,
+        })
+      );
+      history.push("/");
+    }
+  };
+
+  const onFailureSuccess = (res) => {
+    console.log("Login Failed: ", res);
+  };
+
   return (
     <SignupContainer>
-      {/* Video background */}
-      <ImgWrapper>
-        <Img src={img} type="image/jpg" />
-      </ImgWrapper>
+      <Box className="signup__form">
+        <Typography sx={{ mb: "16px" }} align="center" variant="h4">
+          Sign up to Photoos
+        </Typography>
 
-      {/* Form sign up */}
-      <InfoContainer>
-        {/* Top form */}
-        <InfoTop>
-          <Headline>SIGN UP</Headline>
-          <Subline>HI!</Subline>
-          <Description>Create your new account</Description>
-        </InfoTop>
-        {/* Bottom form */}
-        <InfoBottom>
-          {/* Email */}
-          <TxbWrapper>
-            <Txb id="user" placeholder=" " name="email" onChange={handleValueChange}></Txb>
-            <label htmlFor="user">Email</label>
-          </TxbWrapper>
+        <GoogleLogin
+          clientId={clientId}
+          render={(renderProps) => (
+            <Button
+              onClick={renderProps.onClick}
+              size="large"
+              sx={{ ...outlinedButtonStyle, textTransform: "unset" }}
+              fullWidth
+              variant="outlined"
+              startIcon={<img style={{ height: "24px" }} src={Google} alt="" />}
+            >
+              Sign up with Google
+            </Button>
+          )}
+          onSuccess={onLoginSuccess}
+          onFailure={onFailureSuccess}
+          cookiePolicy={"single_host_origin"}
+        />
 
-          {/* Full name */}
-          <TxbWrapper>
-            <Txb
-              id="fName"
-              placeholder=" "
-              maxLength="50"
-              name="fullName"
-              onChange={handleValueChange}
-            ></Txb>
-            <label htmlFor="fName">Full name</label>
-          </TxbWrapper>
+        <Divider sx={{ margin: "20px 0" }}>or</Divider>
 
-          {/* Nick name */}
-          <TxbWrapper>
-            <Txb
-              id="name"
-              placeholder=" "
-              maxLength="50"
-              name="name"
-              onChange={handleValueChange}
-            ></Txb>
-            <label htmlFor="name">Nickname</label>
-          </TxbWrapper>
+        {responseMessage && (
+          <Typography sx={{ color: "red", mb: "8px" }} variant="body2">
+            *{responseMessage}
+          </Typography>
+        )}
 
-          {/* Password */}
-          <TxbWrapper>
-            <Txb
-              id="pwd"
-              placeholder=" "
-              type={hidden ? "text" : "password"}
-              name="password"
-              onChange={handleValueChange}
-            ></Txb>
-            <label htmlFor="pwd">Password</label>
-            <i onClick={isHidden} name="repwd" style={{ cursor: "pointer" }}>
-              <Icon icon="dashicons:hidden" />
-            </i>
-          </TxbWrapper>
+        <form
+          onChange={handleValueChange}
+          onSubmitCapture={() => nodeRef.current.focus()}
+          onSubmit={handleSignup}
+          onBlur={validateField}
+        >
+          <Stack spacing={2}>
+            <FormControl>
+              <Typography variant="subtitle2" component="div">
+                Email
+              </Typography>
+              <TextField
+                name="email"
+                value={data.email}
+                placeholder="abc@gmail.com"
+                sx={textFieldStyle}
+                size="small"
+                variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon icon="ic:outline-alternate-email" />
+                    </InputAdornment>
+                  ),
+                }}
+                error={errors.email ? true : false}
+                helperText={errors.email ? errors.email : null}
+                required
+              />
+            </FormControl>
 
-          {/* Repassword */}
-          <TxbWrapper>
-            <Txb
-              id="repwd"
-              placeholder=" "
-              type={hidden ? "text" : "password"}
-              name="repassword"
-              onChange={handleValueChange}
-            ></Txb>
-            <label htmlFor="repwd">Verifying password</label>
-            <i onClick={isHidden} name="repwd" style={{ cursor: "pointer" }}>
-              <Icon icon="dashicons:hidden" />
-            </i>
-          </TxbWrapper>
+            <Stack spacing={1} direction="row">
+              <FormControl fullWidth>
+                <Typography variant="subtitle2" component="div">
+                  First name
+                </Typography>
+                <TextField
+                  name="firstName"
+                  value={data.firstName}
+                  sx={textFieldStyle}
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                />
+              </FormControl>
 
-          {message ? <ErrorWrapper>{message}</ErrorWrapper> : null}
+              <FormControl fullWidth>
+                <Typography variant="subtitle2" component="div">
+                  Last name
+                </Typography>
+                <TextField
+                  name="lastName"
+                  value={data.lastName}
+                  sx={textFieldStyle}
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                />
+              </FormControl>
+            </Stack>
 
-          <ButtonSignup to="#" onClick={handleSignup}>
-            Sign up
-          </ButtonSignup>
+            <Stack spacing={1} direction="row">
+              <FormControl fullWidth>
+                <Typography variant="subtitle2" component="div">
+                  Password
+                </Typography>
+                <TextField
+                  name="password"
+                  value={data.password}
+                  sx={textFieldStyle}
+                  type={isShowPassword ? "text" : "password"}
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Icon icon="bx:lock-alt" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  error={errors.password ? true : false}
+                  helperText={errors.password ? errors.password : null}
+                  fullWidth
+                  required
+                />
+              </FormControl>
 
-          {/* Icons */}
-          {/* <ItemsWrapper>
-            <span
-              className="iconify"
-              data-icon="akar-icons:facebook-fill"
-            ></span>
-            <span className="iconify" data-icon="fa-brands:instagram"></span>
-            <span
-              className="iconify"
-              data-icon="entypo-social:twitter-with-circle"
-            ></span>
-          </ItemsWrapper> */}
+              <FormControl fullWidth>
+                <Typography variant="subtitle2" component="div">
+                  Confirm password
+                </Typography>
+                <TextField
+                  name="repassword"
+                  value={data.repassword}
+                  sx={textFieldStyle}
+                  type={isShowPassword ? "text" : "password"}
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Icon icon="bx:lock-alt" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  error={errors.repassword ? true : false}
+                  helperText={errors.repassword ? errors.repassword : null}
+                  fullWidth
+                  required
+                />
+              </FormControl>
+            </Stack>
+          </Stack>
 
-          <LoginDiv>
-            Already have account ?<Signin to="/home">Sign in</Signin>
-          </LoginDiv>
-        </InfoBottom>
-      </InfoContainer>
+          <Stack sx={{ mt: "4px", mb: "8px" }} direction="row" alignItems="center" justifyContent="space-between">
+            <FormControlLabel
+              sx={{ userSelect: "none" }}
+              control={<Checkbox onChange={handleShowPassword} size="small" sx={checkBoxStyle} />}
+              label={
+                <Typography variant="body2" component="div">
+                  Show password
+                </Typography>
+              }
+            />
+          </Stack>
+
+          <LoadingButton
+            loading={loading}
+            sx={{ ...containedButtonStyle, textTransform: "capitalize" }}
+            variant="contained"
+            size="large"
+            fullWidth
+            type="submit"
+          >
+            Create Account
+          </LoadingButton>
+        </form>
+
+        <Typography sx={{ mt: "10px" }} variant="body2" component="div">
+          Already have an account?{" "}
+          <Link ref={nodeRef} href="/login" sx={{ color: "var(--primary-color)", fontWeight: "500" }} underline="none">
+            Log in
+          </Link>
+        </Typography>
+      </Box>
+      <div className="signup__content-right" />
     </SignupContainer>
   );
 };

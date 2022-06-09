@@ -76,7 +76,11 @@ export const ModalPhoto = styled.div`
   /* margin: 20px; */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 60%;
+
+  @media (max-width: 1280px) {
+    background-size: 80%;
+  }
 
   @media (max-width: 800px) {
     height: 400px;

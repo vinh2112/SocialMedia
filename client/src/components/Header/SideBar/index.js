@@ -13,7 +13,7 @@ import {
   MenuIcon,
   MenuTitle,
 } from "./SideBarElements";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import ToggleSwitch from "./ToggleSwitch";
 import { Icon } from "@iconify/react";
 import { useDispatch } from "react-redux";
@@ -51,7 +51,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
               </UserInfo>
             </MenuItemLink>
           ) : (
-            <MenuItemLink className="justify__center lg" to="/home">
+            <MenuItemLink className="justify__center lg" to="/login">
               <MenuTitle>Sign in</MenuTitle>
             </MenuItemLink>
           )}
@@ -59,25 +59,32 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
 
         <Separate className="md" />
 
-        <MenuItemLink to="/search">
-          <MenuIcon>
-            <Icon icon="bx:bx-search" />
-          </MenuIcon>
+        {user?.currentUser?.isAdmin && (
+          <MenuItemLink to="/administrator/dashboard">
+            <MenuIcon>
+              {/* <Icon icon="eos-icons:admin-outlined" /> */}
+              <Icon icon="eos-icons:admin" />
+            </MenuIcon>
 
-          <MenuTitle>Search</MenuTitle>
-        </MenuItemLink>
+            <MenuTitle>Administrator</MenuTitle>
+          </MenuItemLink>
+        )}
 
-        <MenuItemLink to="/">
-          <MenuIcon>
-            <Icon icon="bx:bx-news" />
-          </MenuIcon>
+        {user.currentUser && (
+          <MenuItemLink to="/messages">
+            <MenuIcon>
+              {/* <Icon icon="ant-design:message-outlined" /> */}
+              <Icon icon="ant-design:message-filled" />
+            </MenuIcon>
 
-          <MenuTitle>Newsfeed</MenuTitle>
-        </MenuItemLink>
+            <MenuTitle>Messages</MenuTitle>
+          </MenuItemLink>
+        )}
 
         <MenuItem htmlFor="switchSideBar">
           <MenuIcon>
-            <Icon icon="ic:outline-dark-mode" />
+            {/* <Icon icon="ic:outline-dark-mode" /> */}
+            <Icon icon="ic:baseline-dark-mode" />
           </MenuIcon>
 
           <MenuTitle>Dark mode</MenuTitle>
@@ -89,7 +96,8 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
           <>
             <MenuItemLink to="/setting/info">
               <MenuIcon>
-                <Icon icon="uil:setting" />
+                {/* <Icon icon="uil:setting" /> */}
+                <Icon icon="ant-design:setting-filled" />
               </MenuIcon>
 
               <MenuTitle>Setting</MenuTitle>
@@ -99,7 +107,8 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
 
             <MenuItem onClick={() => handleLogout()}>
               <MenuIcon>
-                <Icon icon="mdi:exit-to-app" />
+                {/* <Icon icon="mdi:exit-to-app" /> */}
+                <Icon icon="bxs:exit" />
               </MenuIcon>
 
               <MenuTitle>Log out</MenuTitle>

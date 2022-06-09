@@ -13,11 +13,12 @@ export const getAllReports = async (req, res) => {
           path: "userId",
           select: "name email avatar",
         },
-      });
+      })
+      .lean();
 
-    const totalReports = await ReportModel.estimatedDocumentCount();
-    const deletedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: true });
-    const refusedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: false });
+    const totalReports = await ReportModel.estimatedDocumentCount().lean();
+    const deletedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: true }).lean();
+    const refusedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: false }).lean();
 
     return res.status(200).json({
       reports: reports,

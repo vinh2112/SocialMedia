@@ -9,7 +9,8 @@ export const getNotificationsByUserId = async (req, res) => {
         path: "senderId",
         select: "fullName name email avatar",
       })
-      .sort("-createdAt");
+      .sort("-createdAt")
+      .lean();
 
     return res.status(200).json(notifications);
   } catch (error) {

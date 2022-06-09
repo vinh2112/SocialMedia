@@ -4,10 +4,10 @@ import { AuthAPI, MomoAPI, PaymentAPI, PostAPI } from "api";
 import LoadingSection from "components/LoadingSection";
 import { ThemeContext } from "context/themeContext";
 import { saveAs } from "file-saver";
-import Momo from "images/Momo.png";
-import Paypal from "images/Paypal.png";
-import VNPAY from "images/VNPAY.png";
-import ZaloPay from "images/ZaloPay.png";
+import Momo from "assets/images/Momo.png";
+import Paypal from "assets/images/Paypal.png";
+import VNPAY from "assets/images/VNPAY.png";
+import ZaloPay from "assets/images/ZaloPay.png";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
@@ -139,17 +139,10 @@ const PaySection = ({ post }) => {
 
           <BottomSection>
             <div className="payment__options">
-              <PaymentOptionItem
-                name="payment__option"
-                value={1}
-                onChange={handlePaymentType}
-                checked={true}
-              >
+              <PaymentOptionItem name="payment__option" value={1} onChange={handlePaymentType} checked={true}>
                 <div className="payment__option-content_title">Photoos Wallet</div>
                 <div
-                  className={`payment__option-content_body ${
-                    currentUser && currentUser.wallet > 0 ? "green" : "red"
-                  }`}
+                  className={`payment__option-content_body ${currentUser && currentUser.wallet > 0 ? "green" : "red"}`}
                 >
                   ${currentUser && currentUser.wallet}
                 </div>
@@ -212,9 +205,7 @@ const PaySection = ({ post }) => {
 
               <div className="order__detail-item flex">
                 <div className="order__detail-item_title">Method</div>
-                <div className="order__detail-item_subTitle">
-                  {paymentType === 1 ? "Photoos Wallet" : "E-wallet"}
-                </div>
+                <div className="order__detail-item_subTitle">{paymentType === 1 ? "Photoos Wallet" : "E-wallet"}</div>
               </div>
 
               <div className="order__detail-item flex">
@@ -246,12 +237,7 @@ const PaySection = ({ post }) => {
             ) : ewallet === "paypal" ? (
               <PaypalCheckoutButton post={post} handleAppove={handleApprove} />
             ) : ewallet === "momo" ? (
-              <PayButtonContainer
-                onClick={handleMomoCheckout}
-                className="momo"
-                variant="contained"
-                fullWidth
-              >
+              <PayButtonContainer onClick={handleMomoCheckout} className="momo" variant="contained" fullWidth>
                 Check out
               </PayButtonContainer>
             ) : ewallet === "zalopay" ? (

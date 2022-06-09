@@ -77,7 +77,7 @@ const OnlineUserItem = ({ user }) => {
   return (
     <OnlineUserItemContainer to={`/profile/${user._id}`}>
       <OUAvatarWrapper>
-        <OUAvatar src={user.avatar} alt="OU-avatar" online={user.online} />
+        <OUAvatar loading="lazy" src={user.avatar} alt="OU-avatar" online={user.online} />
       </OUAvatarWrapper>
       <OUName online={user.online}>@{user.name}</OUName>
       {user.online && <span />}
@@ -89,12 +89,7 @@ const OnlineUserLoading = () => {
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 10px" }}>
       <CustomSkeleton animation="wave" variant="circular" width={36} height={36} />
-      <CustomSkeleton
-        animation="wave"
-        variant="text"
-        width={Math.random() * 100 + 80}
-        height={12}
-      />
+      <CustomSkeleton animation="wave" variant="text" width={Math.random() * 100 + 80} height={12} />
     </Box>
   );
 };

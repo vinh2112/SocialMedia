@@ -2,17 +2,24 @@ import { PostModel } from "../models/PostModel.js";
 import { UserModel } from "../models/UserModel.js";
 import { ReportModel } from "../models/ReportModel.js";
 import { CommentModel } from "../models/CommentModel.js";
+import { KeywordModel } from "../models/KeywordModel.js";
 
 export const getTotal = async (req, res) => {
   try {
-    const posts = await PostModel.find();
-    const users = await UserModel.estimatedDocumentCount();
-    const reports = await ReportModel.countDocuments({ isDeleted: false });
+    const posts = await PostModel.find().lean();
+    const users = await UserModel.estimatedDocumentCount().lean();
+    const reports = await ReportModel.countDocuments({ isDeleted: false }).lean();
 
     let keywords = [];
     for await (const post of posts) {
       keywords = [...new Map([...keywords, ...post.category].map((item) => [item, item])).values()];
     }
+
+    await KeywordModel.insertMany(
+      keywords.map((keyword) => {
+        return { keyword: keyword.toLowerCase() };
+      })
+    );
 
     const userChart = await getUserCountByMonth();
     const reportData = await getReportData();
@@ -63,20 +70,7 @@ export const getDataCountOfUser = async (req, res) => {
   }
 };
 
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 async function getUserCountByMonth() {
   try {
@@ -88,9 +82,7 @@ async function getUserCountByMonth() {
     let listMonths = [];
     for (let i = -6; i <= 1; i++) {
       const month = new Date(
-        new Date(new Date(new Date().setUTCHours(0, 0, 0, 0)).setUTCDate(1)).setUTCMonth(
-          currentMonth + i
-        )
+        new Date(new Date(new Date().setUTCHours(0, 0, 0, 0)).setUTCDate(1)).setUTCMonth(currentMonth + i)
       ).toISOString();
 
       listMonths.push(month);
@@ -101,7 +93,7 @@ async function getUserCountByMonth() {
     for (let i = 0; i < listMonths.length - 1; i++) {
       const usersCount = await UserModel.countDocuments({
         $and: [{ createdAt: { $gte: listMonths[i] } }, { createdAt: { $lte: listMonths[i + 1] } }],
-      });
+      }).lean();
 
       usersOfMonth.push(usersCount);
     }
@@ -127,11 +119,12 @@ async function getReportData() {
         path: "userId",
         select: "name email avatar",
       },
-    });
+    })
+    .lean();
 
-  const totalReports = await ReportModel.estimatedDocumentCount();
-  const deletedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: true });
-  const refusedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: false });
+  const totalReports = await ReportModel.estimatedDocumentCount().lean();
+  const deletedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: true }).lean();
+  const refusedReports = await ReportModel.countDocuments({ isDeleted: true, typeDelete: false }).lean();
 
   return {
     reports: reports,

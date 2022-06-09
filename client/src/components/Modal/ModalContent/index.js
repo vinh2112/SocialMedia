@@ -22,7 +22,7 @@ import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
 import * as actions from "redux/actions";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 
 export default function ModalContent({ post }) {
   const [newPost, setNewPost] = useState(null);

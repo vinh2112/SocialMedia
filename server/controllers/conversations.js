@@ -4,7 +4,9 @@ export const getConversationsByUserId = async (req, res) => {
   try {
     const conversations = await ConversationModel.find({
       members: { $in: [req.userId] },
-    }).sort("-updatedAt");
+    })
+      .sort("-updatedAt")
+      .lean();
 
     return res.status(200).json(conversations);
   } catch (error) {

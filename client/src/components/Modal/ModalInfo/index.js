@@ -64,7 +64,7 @@ export default function ModalInfo({ post, comments }) {
         <Likes>
           {post.likes.length} {post.likes.length > 1 ? "likes" : "like"}
         </Likes>{" "}
-        ● {countComments()} {countComments() > 1 ? "comments" : "comment"}
+        • {countComments()} {countComments() > 1 ? "comments" : "comment"}
       </div>
     </InfoWrapper>
   );

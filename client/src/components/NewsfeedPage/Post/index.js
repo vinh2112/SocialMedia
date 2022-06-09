@@ -33,9 +33,7 @@ const Posts = ({ direction }) => {
 
   return (
     <Container direction={direction}>
-      {userId
-        ? [userId === currentUser?._id && <PostUpdate key="0" />]
-        : [currentUser && <PostUpdate key="1" />]}
+      {userId ? [userId === currentUser?._id && <PostUpdate key="0" />] : [currentUser && <PostUpdate key="1" />]}
 
       <PostTopTitle>
         <h3>Recently Activities</h3>
@@ -47,7 +45,6 @@ const Posts = ({ direction }) => {
         next={() => setPage(page + 1)}
         hasMore={true}
         scrollableTarget="scroll-node"
-        scrollThreshold="200px"
       >
         {data.map((post, i) => (
           <PostItem post={post} key={i} />
@@ -66,9 +63,7 @@ const PostLoading = () => {
       <CustomCard>
         <CardHeader
           avatar={<CustomSkeleton animation="wave" variant="circular" width={40} height={40} />}
-          title={
-            <CustomSkeleton animation="wave" height={10} width="40%" style={{ marginBottom: 6 }} />
-          }
+          title={<CustomSkeleton animation="wave" height={10} width="40%" style={{ marginBottom: 6 }} />}
           subheader={<CustomSkeleton animation="wave" height={10} width="20%" />}
         />
         <CardContent sx={{ padding: "0 16px 16px" }}>

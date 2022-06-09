@@ -20,7 +20,7 @@ router.post("/momo", async (req, res) => {
   var orderInfo = "MoMo";
   var redirectUrl = process.env.CLIENT_BASE_URL + `/checkout/${postId}`;
   var ipnUrl = process.env.CLIENT_BASE_URL;
-  var amount = price * 23000;
+  var amount = Math.ceil(price * 23000);
   var requestType = "captureWallet";
   var extraData = "";
 
@@ -98,6 +98,7 @@ router.get("/momo/confirm", async (req, res) => {
   const signature = req.query.signature;
 
   delete query.signature;
+  delete query.partnerUserId;
   query.accessKey = process.env.MOMO_ACCESS_KEY;
 
   var secretkey = process.env.MOMO_SECRET_KEY;

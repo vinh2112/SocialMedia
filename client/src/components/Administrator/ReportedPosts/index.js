@@ -25,7 +25,7 @@ import * as api from "api";
 import moment from "moment";
 import * as actions from "redux/actions";
 import { useDispatch } from "react-redux";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { adminState$ } from "redux/selectors";
@@ -41,9 +41,7 @@ export default function ReportedPosts() {
   const handleAcceptReport = async (reportId) => {
     try {
       await api.ReportAPI.deleteReport(reportId).then((res) => {
-        dispatch(
-          actions.handleReportAdmin.handleReportAdminRequest({ isDeleted: true, data: res.data })
-        );
+        dispatch(actions.handleReportAdmin.handleReportAdminRequest({ isDeleted: true, data: res.data }));
 
         dispatch(
           actions.toast.showToast({
@@ -60,9 +58,7 @@ export default function ReportedPosts() {
   const handleRefuseReport = async (reportId) => {
     try {
       await api.ReportAPI.refuseReport(reportId).then(() => {
-        dispatch(
-          actions.handleReportAdmin.handleReportAdminRequest({ isDeleted: false, data: reportId })
-        );
+        dispatch(actions.handleReportAdmin.handleReportAdminRequest({ isDeleted: false, data: reportId }));
 
         dispatch(
           actions.toast.showToast({
@@ -172,11 +168,7 @@ const ReportChart = ({ dataReport }) => {
       {
         label: "# of Votes",
         data: dataReport,
-        backgroundColor: [
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-        ],
+        backgroundColor: ["rgba(54, 162, 235, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(75, 192, 192, 0.2)"],
         borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
         borderWidth: 1,
       },

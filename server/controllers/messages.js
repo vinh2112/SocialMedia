@@ -16,7 +16,7 @@ export const getMessages = async (req, res) => {
   try {
     const messages = await MessageModel.find({
       conversationId: req.params.conversationId,
-    });
+    }).lean();
 
     return res.status(200).json(messages);
   } catch (error) {

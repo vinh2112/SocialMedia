@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Loading from "images/Loading.svg";
+import Loading from "assets/images/Loading.svg";
 
 const LoadingContainer = styled.div`
   background: url(${Loading}) no-repeat center center;

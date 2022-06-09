@@ -28,7 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authState$, commentState$ } from "redux/selectors";
 import { CommentAPI } from "api";
 import ReplyComment from "./ReplyComment";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import { CircularProgress } from "@mui/material";
 
 const CommentItem = ({ comment, post, socket }) => {
@@ -116,23 +116,22 @@ const CommentItem = ({ comment, post, socket }) => {
             </BottomComment>
           </CommentWrapper>
 
-          {currentUser &&
-            (currentUser._id === comment.userId._id || currentUser._id === post.userId._id) && (
-              <ButtonWrapper ref={menuNode}>
-                {isDeleting ? (
-                  <CircularProgress size={20} color="inherit" />
-                ) : (
-                  <>
-                    <Button onClick={() => setIsOpen(!isOpen)}>
-                      <Icon icon="akar-icons:more-horizontal" />
-                    </Button>
-                    <MenuActions isOpen={isOpen}>
-                      <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
-                    </MenuActions>
-                  </>
-                )}
-              </ButtonWrapper>
-            )}
+          {currentUser && (currentUser._id === comment.userId._id || currentUser._id === post.userId._id) && (
+            <ButtonWrapper ref={menuNode}>
+              {isDeleting ? (
+                <CircularProgress size={20} color="inherit" />
+              ) : (
+                <>
+                  <Button onClick={() => setIsOpen(!isOpen)}>
+                    <Icon icon="akar-icons:more-horizontal" />
+                  </Button>
+                  <MenuActions isOpen={isOpen}>
+                    <MenuItem onClick={handleDeleteComment}>Delete comment</MenuItem>
+                  </MenuActions>
+                </>
+              )}
+            </ButtonWrapper>
+          )}
         </CommentContainer>
 
         {/* Reply Comment */}

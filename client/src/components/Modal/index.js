@@ -74,7 +74,7 @@ export default function Modal({ post, isShow, closeModal }) {
           ></ModalPhoto>
           <div className="modal__categories">
             {post.category.map((cate, index) => (
-              <Link to="#" key={index}>
+              <Link to={`/search?query=${cate}`} key={index} onClick={closeModal}>
                 #{cate}
               </Link>
             ))}
@@ -89,15 +89,11 @@ export default function Modal({ post, isShow, closeModal }) {
                 <ModalContent post={post} />
                 <ModalInfo
                   post={post}
-                  comments={comments.data.filter(
-                    (comment) => comment.postId === post._id && comment
-                  )}
+                  comments={comments.data.filter((comment) => comment.postId === post._id && comment)}
                 />
                 <ModalComments
                   post={post}
-                  comments={comments.data.filter(
-                    (comment) => comment.postId === post._id && comment
-                  )}
+                  comments={comments.data.filter((comment) => comment.postId === post._id && comment)}
                   socket={socket}
                 />
               </>

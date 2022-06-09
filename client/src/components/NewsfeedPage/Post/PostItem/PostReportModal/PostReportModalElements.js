@@ -1,4 +1,3 @@
-import { LoadingButton } from "@mui/lab";
 import styled from "styled-components";
 
 export const ModalContainer = styled.div`
@@ -147,26 +146,4 @@ export const ReportBottom = styled.div`
   display: flex;
   justify-content: flex-end;
   margin: 0 10px 10px;
-`;
-
-export const CustomLoadingButton = styled(LoadingButton)`
-  && {
-    color: #fefefe;
-    width: 100%;
-    max-width: 120px;
-    background-color: ${({ loading, theme }) =>
-      loading ? theme.hoverColor : "var(--primary-color)"};
-
-    &:hover {
-      background-color: var(--primary-color);
-    }
-
-    & svg {
-      color: #fefefe;
-    }
-
-    @media (max-width: 700px) {
-      max-width: unset;
-    }
-  }
 `;

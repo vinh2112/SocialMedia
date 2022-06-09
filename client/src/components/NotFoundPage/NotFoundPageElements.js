@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import NotFound from "images/NotFound.svg";
+import NotFound from "assets/images/NotFound.svg";
 
 export const NotFoundContainer = styled.div`
   width: 100vw;

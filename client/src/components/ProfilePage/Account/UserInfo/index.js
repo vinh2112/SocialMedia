@@ -10,16 +10,18 @@ import {
   Title,
   Detail,
   ButtonWrapper,
-  Button,
   AvatarUser,
-  CustomAvatar,
-  CustomAvatarGroup,
+  // CustomAvatar,
+  // CustomAvatarGroup,
 } from "./AccountInfoElements";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import { Icon } from "@iconify/react";
 import { authState$, postState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
+import { Box, Button, IconButton } from "@mui/material";
+import { containedButtonStyle, outlinedButtonStyle } from "styles/muiCustom";
+import countries from "assets/json/countries";
 
 export default function UserInfo() {
   const dispatch = useDispatch();
@@ -47,7 +49,9 @@ export default function UserInfo() {
         <AvatarUser src={profile?.avatar ? profile.avatar : DefaultAvatar} />
         {profile?._id === currentUser?._id && (
           <EditButton to="/setting/info">
-            <Icon icon="akar-icons:edit" />
+            <IconButton size="small">
+              <Icon icon="akar-icons:edit" />
+            </IconButton>
           </EditButton>
         )}
       </AvatarWrapper>
@@ -58,22 +62,24 @@ export default function UserInfo() {
         <Details isYourAccount={isYourAccount}>
           <DetailItem>
             <Detail>
-              <CustomAvatarGroup max={4}>
+              {/* <CustomAvatarGroup max={4}>
                 {profile?.followings.map((user) => {
                   return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
                 })}
-              </CustomAvatarGroup>
+              </CustomAvatarGroup> */}
+              {profile?.followings.length}
             </Detail>
             <Title>Followings</Title>
           </DetailItem>
 
           <DetailItem>
             <Detail>
-              <CustomAvatarGroup max={4}>
+              {/* <CustomAvatarGroup max={4}>
                 {profile?.followers.map((user) => {
                   return <CustomAvatar key={user._id} alt={user.name} src={user.avatar} />;
                 })}
-              </CustomAvatarGroup>
+              </CustomAvatarGroup> */}
+              {profile?.followers.length}
             </Detail>
             <Title>Followers</Title>
           </DetailItem>
@@ -84,8 +90,19 @@ export default function UserInfo() {
           </DetailItem>
 
           <DetailItem>
-            <Detail>{profile?.from}</Detail>
-            <Title>From</Title>
+            <Detail>
+              <Box component="div" sx={{ "& > img": { mr: 1, flexShrink: 0 } }}>
+                <img
+                  loading="lazy"
+                  width="20"
+                  src={`https://flagcdn.com/w20/${profile?.from.toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w40/${profile?.from.toLowerCase()}.png 2x`}
+                  alt=""
+                />
+                {countries[profile?.from]}
+              </Box>
+            </Detail>
+            <Title>Country</Title>
           </DetailItem>
 
           <DetailItem>
@@ -99,20 +116,31 @@ export default function UserInfo() {
               <ButtonWrapper onClick={handleInteract}>
                 {/* Check if current user is follow or following this user */}
                 {profile?.followers.some((follower) => follower._id === currentUser?._id) ? (
-                  <Button isFollowed={true}>
-                    <Icon icon="akar-icons:check" />
-                    <span>following</span>
+                  <Button
+                    sx={{ ...outlinedButtonStyle, textTransform: "capitalize" }}
+                    variant="outlined"
+                    startIcon={<Icon icon="akar-icons:check" />}
+                    fullWidth
+                  >
+                    Following
                   </Button>
                 ) : (
-                  <Button isFollowed={false}>
-                    <span>follow</span>
+                  // <Button isFollowed={false}>
+                  //   <span>follow</span>
+                  // </Button>
+                  <Button sx={{ ...containedButtonStyle, textTransform: "capitalize" }} variant="contained" fullWidth>
+                    Follow
                   </Button>
                 )}
               </ButtonWrapper>
               <ButtonWrapper>
-                <Button isFollowed={false} className="btn-secondary">
-                  <Icon icon="akar-icons:chat-bubble" />
-                  <span>Chat</span>
+                <Button
+                  sx={{ ...outlinedButtonStyle, textTransform: "capitalize" }}
+                  variant="outlined"
+                  startIcon={<Icon icon="akar-icons:chat-bubble" />}
+                  fullWidth
+                >
+                  Chat
                 </Button>
               </ButtonWrapper>
             </>

@@ -23,6 +23,7 @@ import {
 import moment from "moment";
 import { Icon } from "@iconify/react";
 import * as api from "api";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 
 export default function ChatMenu({ onFindConv, conversations, currentUser, setCurrentChat }) {
   const [isSearching, setIsSearching] = React.useState(false);
@@ -84,12 +85,7 @@ export default function ChatMenu({ onFindConv, conversations, currentUser, setCu
           </ChatBackButton>
           <ChatSearchSection>
             <Icon icon="bx:search" id="search-icon" />
-            <ChatSearchInput
-              type="text"
-              placeholder="Search..."
-              value={query}
-              onChange={handleSearch}
-            />
+            <ChatSearchInput type="text" placeholder="Search..." value={query} onChange={handleSearch} />
           </ChatSearchSection>
         </ChatSearchTop>
 
@@ -104,12 +100,7 @@ export default function ChatMenu({ onFindConv, conversations, currentUser, setCu
           {users.length !== 0 && (
             <SearchResults>
               {users.map((user) => (
-                <UserSearch
-                  key={user._id}
-                  user={user}
-                  onFindConv={onFindConv}
-                  handleBack={handleBack}
-                />
+                <UserSearch key={user._id} user={user} onFindConv={onFindConv} handleBack={handleBack} />
               ))}
             </SearchResults>
           )}
@@ -130,7 +121,7 @@ const Conversation = ({ conversation, currentUser }) => {
   return (
     <ConversationContainer to={`/messages/${conversation._id}`} activeClassName="active">
       <div className="conv-content">
-        <ConvAvatar src={friend?.avatar} alt="" />
+        <ConvAvatar src={friend?.avatar || DefaultAvatar} alt="" />
         <div>
           <ConvName seen={true}>{friend?.fullName}</ConvName>
           {conversation.lastMessage && (
@@ -160,7 +151,7 @@ const UserSearch = ({ user, onFindConv, handleBack }) => {
 
   return (
     <UserContainer onClick={() => handleOnClick(user._id)}>
-      <UserAvatar alt="" src={user.avatar} />
+      <UserAvatar alt="" src={user.avatar || DefaultAvatar} />
       <UserName>{user.fullName}</UserName>
     </UserContainer>
   );

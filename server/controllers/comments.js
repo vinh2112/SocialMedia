@@ -15,7 +15,8 @@ export const getCommentPost = async (req, res) => {
         path: "userId",
         select: "name email avatar",
       })
-      .sort("createdAt");
+      .sort("createdAt")
+      .lean();
 
     if (!comments.length) {
       return res.status(200).json([]);

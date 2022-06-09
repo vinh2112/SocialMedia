@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Loading from "images/Loading.svg";
+import Loading from "assets/images/Loading.svg";
 
 export const Container = styled.div`
   border-top: 1px solid ${({ theme }) => theme.contrastColor};

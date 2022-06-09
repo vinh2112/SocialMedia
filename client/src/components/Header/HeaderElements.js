@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { Link } from "react-router-dom";
+import { NavLink as Link } from "react-router-dom";
 
 export const HeaderContainer = styled.div`
   position: fixed;
@@ -71,17 +71,21 @@ const roundButton = css`
   width: 35px;
   height: 35px;
   border-radius: 50%;
-  font-size: 1.1rem;
+  font-size: 1rem;
   margin-left: 8px;
   color: ${({ theme }) => theme.textColor};
   background-color: ${({ theme }) => theme.contrastColor};
-  transition: all 0.1s ease-in-out 0s;
+  /* transition: all 0.1s ease-in-out 0s; */
   cursor: pointer;
   user-select: none;
 
+  & > .iconify {
+    font-size: 20px;
+  }
+
   & > span.tooltip {
     position: absolute;
-    top: 110%;
+    top: 120%;
     font-size: 12px;
     font-weight: 700;
     padding: 6px 8px;
@@ -160,11 +164,10 @@ export const RoundButtonLink = styled(Link)`
   text-decoration: none;
   background-color: ${({ theme }) => theme.contrastColor};
   padding: 2px 4px;
-  transition: all 0.1s ease-in-out 0s;
 
   & > span.tooltip {
     position: absolute;
-    top: 110%;
+    top: 120%;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 1px;
@@ -237,7 +240,7 @@ export const SignIn = styled(Link)`
   padding: 0 16px;
   background-color: ${({ theme }) => theme.contrastColor};
   border-radius: 16px;
-  transition: all 0.1s ease-in-out 0s;
+  /* transition: all 0.1s ease-in-out 0s; */
 
   &:hover {
     background-color: ${({ theme }) => theme.hoverColor};

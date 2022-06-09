@@ -6,8 +6,7 @@ export const ToastContainer = styled.div`
   flex-direction: column;
   bottom: 32px;
   left: 24px;
-  opacity: 0.95;
-  z-index: 9999;
+  z-index: 1301;
 
   @media (max-width: 768px) {
     bottom: 24px;
@@ -35,7 +34,7 @@ export const ToastContainer = styled.div`
     padding: 0 14px 0 0px;
     font-size: 14px;
     font-weight: 500;
-    text-transform: uppercase;
+    color: ${({ theme }) => theme.subTextColor};
   }
 
   .toast__icon {
@@ -55,7 +54,7 @@ export const ToastContainer = styled.div`
   }
 
   .toast__close:hover {
-    background-color: ${({ theme }) => theme.hoverColor};
+    background-color: ${({ theme }) => theme.contrastColor};
     transition: all 0.1s ease;
   }
 

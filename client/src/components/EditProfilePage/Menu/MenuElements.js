@@ -4,43 +4,19 @@ import styled from "styled-components";
 export const MenuContainer = styled.div`
   width: 100%;
   max-width: 300px;
-  min-height: calc(100vh - 54px);
-  padding: 8px 4px;
-  border-right: 1px solid ${({ theme }) => theme.contrastColor};
+  padding: 6px;
+  border-right: 1px solid ${({ theme }) => theme.borderColor};
 
   @media (max-width: 700px) {
-    padding: 8px 16px;
-    min-height: 60px;
-    max-width: 100%;
-    border-right: none;
-    border-bottom: 1px solid ${({ theme }) => theme.contrastColor};
-  }
-`;
-
-export const MenuTitle = styled.div`
-  color: ${({ theme }) => theme.textColor};
-  font-size: 25px;
-  font-weight: 700;
-  filter: opacity(0.6);
-  margin-left: 8px;
-
-  @media (max-width: 700px) {
-    margin-left: 0;
+    max-width: 60px;
   }
 `;
 
 export const MenuListItem = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-top: 12px;
-
-  @media (max-width: 700px) {
-    flex-direction: row;
-    overflow: hidden;
-    overflow-x: auto;
-    gap: 10px;
-  }
+  gap: 4px;
+  overflow: hidden;
 `;
 
 export const MenuItem = styled(NavLink)`
@@ -56,6 +32,15 @@ export const MenuItem = styled(NavLink)`
   cursor: pointer;
   user-select: none;
 
+  @media (max-width: 700px) {
+    justify-content: center;
+    min-width: unset;
+
+    & > span {
+      display: none;
+    }
+  }
+
   & > .iconify {
     font-size: 26px;
   }
@@ -65,14 +50,10 @@ export const MenuItem = styled(NavLink)`
   }
 
   &.active {
-    background: ${({ theme }) => theme.hoverColor};
+    background: ${({ theme }) => theme.contrastColor};
   }
 
   &:hover {
     background: ${({ theme }) => theme.hoverColor};
-  }
-
-  @media (max-width: 700px) {
-    border: 1px solid ${({ theme }) => theme.hoverColor};
   }
 `;

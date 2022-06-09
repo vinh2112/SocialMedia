@@ -7,6 +7,7 @@ export default function userReducers(state = INIT_STATE.auth, action) {
       return {
         ...state,
         isLoading: true,
+        errMsg: "",
       };
     case getType(login.loginSuccess):
       return {

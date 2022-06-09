@@ -63,15 +63,11 @@ const NotificationItem = ({ notification }) => {
 
         <NotifyContent>
           <NotifyText seen={notification.seen}>
-            <span className="notify-sender">
-              {notification.senderId.fullName || notification.senderId.name}
-            </span>{" "}
+            <span className="notify-sender">{notification.senderId.fullName || notification.senderId.name}</span>{" "}
             {displayText(notification.type)}
           </NotifyText>
 
-          <NotifyTime seen={notification.seen}>
-            {moment(notification.createdAt).fromNow()}
-          </NotifyTime>
+          <NotifyTime seen={notification.seen}>{moment(notification.createdAt).fromNow()}</NotifyTime>
         </NotifyContent>
       </NotifyWrapper>
     </NotificationItemContainer>

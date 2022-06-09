@@ -1,9 +1,12 @@
-import { Button, Grid, TextField } from "@mui/material";
+import { Grid, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { Item, SecurityContainer, SecurityWrapper } from "./SecuritySectionElements";
+import { SecurityContainer, SecurityWrapper } from "./SecuritySectionElements";
 import { AuthAPI, UserAPI } from "api";
 import { useDispatch } from "react-redux";
 import * as actions from "redux/actions";
+import { containedButtonStyle, textFieldStyle } from "styles/muiCustom";
+import { LoadingButton } from "@mui/lab";
+import { Icon } from "@iconify/react";
 
 const initialState = {
   password: "",
@@ -17,6 +20,7 @@ const initialError = {
 
 export default function SecuritySection() {
   const [password, setPassword] = useState(initialState);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(initialError);
   const dispatch = useDispatch();
 
@@ -26,6 +30,7 @@ export default function SecuritySection() {
     setPassword({ ...password, [name]: value });
   };
   const handleSubmit = async () => {
+    setLoading(true);
     const newError = {
       password: false,
       newPassword: false,
@@ -51,52 +56,73 @@ export default function SecuritySection() {
         );
       }
     }
+    setLoading(false);
   };
   return (
     <SecurityContainer>
       <SecurityWrapper>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12}>
-            <Item>
+            <Stack spacing={0.2}>
+              <Typography variant="subtitle2" component="div">
+                Current password
+              </Typography>
               <TextField
+                sx={textFieldStyle}
                 error={error.password}
                 name="password"
                 onChange={handleChangeValue}
                 type="password"
-                label="Password"
-                style={{ width: "300px" }}
                 size="small"
                 value={password.password}
-                helperText={`${error.password ? "Incorrect Password" : ""}`}
+                helperText={error.password ? "Incorrect Password" : ""}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon icon="bx:lock-alt" />
+                    </InputAdornment>
+                  ),
+                }}
+                fullWidth
               />
-            </Item>
+            </Stack>
           </Grid>
           <Grid item xs={12}>
-            <Item>
+            <Stack spacing={0.2}>
+              <Typography variant="subtitle2" component="div">
+                New password
+              </Typography>
               <TextField
+                sx={textFieldStyle}
                 error={error.newPassword}
                 name="newPassword"
                 onChange={handleChangeValue}
                 type="password"
-                label="New password"
                 value={password.newPassword}
-                style={{ width: "300px" }}
                 size="small"
-                helperText={`${error.newPassword ? "Password at least 6 letters" : ""}`}
+                helperText={error.newPassword ? "Password at least 6 letters" : ""}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Icon icon="bx:lock-alt" />
+                    </InputAdornment>
+                  ),
+                }}
+                fullWidth
               />
-            </Item>
+            </Stack>
           </Grid>
           <Grid item xs={12} justifyContent="center">
-            <Item>
-              <Button
-                disabled={!password.password || !password.newPassword ? true : false}
-                onClick={handleSubmit}
-                style={{ width: "300px" }}
-                variant="contained"
-              >
-                Change
-              </Button>
-            </Item>
+            <LoadingButton
+              sx={{ ...containedButtonStyle, textTransform: "unset" }}
+              loading={loading}
+              disabled={!password.password || !password.newPassword ? true : false}
+              onClick={handleSubmit}
+              variant="contained"
+              fullWidth
+            >
+              Change Password
+            </LoadingButton>
           </Grid>
         </Grid>
       </SecurityWrapper>

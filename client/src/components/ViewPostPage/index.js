@@ -10,28 +10,16 @@ import {
   CategoryItem,
   CategoryWrapper,
 } from "./ViewPostElements";
-import { useParams } from "react-router-dom";
 import * as api from "api";
 import { Link } from "react-router-dom";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 
-export default function ViewPost() {
-  const [post, setPost] = useState(null);
+export default function ViewPost({ post }) {
   const [relativePosts, setRelativePosts] = useState([]);
-  const { id } = useParams();
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      if (id) {
-        await api.PostAPI.fetchPost(id).then((res) => setPost(res.data));
-      }
-    };
-
-    fetchPost();
-  }, [id]);
 
   useEffect(() => {
     const fetchRelativePosts = async () => {
+      setRelativePosts([]);
       if (post) {
         await api.PostAPI.fetchRelativePosts(post._id).then((res) => setRelativePosts(res.data));
       }
@@ -40,28 +28,25 @@ export default function ViewPost() {
     fetchRelativePosts();
   }, [post]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [id]);
-
   return (
     <PostContainer>
       <PostWrapper>{post && <PostItem post={post} />}</PostWrapper>
       <CategoryWrapper>
-        {post &&
-          post.category.map((cate, index) => <CategoryItem key={index}>#{cate}</CategoryItem>)}
+        {post && post.category.map((cate, index) => <CategoryItem key={index}>#{cate}</CategoryItem>)}
       </CategoryWrapper>
-      <div className="relative__post-container">
-        <div className="relative__post-container-title">
-          Relative posts <span />
-        </div>
+      {relativePosts.length !== 0 && (
+        <div className="relative__post-container">
+          <div className="relative__post-container-title">
+            Relative posts <span />
+          </div>
 
-        <div className="relative__post-container_post__list">
-          {relativePosts.map((post) => (
-            <RelativePostItem key={post._id} post={post} />
-          ))}
+          <div className="relative__post-container_post__list">
+            {relativePosts.map((post) => (
+              <RelativePostItem key={post._id} post={post} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </PostContainer>
   );
 }

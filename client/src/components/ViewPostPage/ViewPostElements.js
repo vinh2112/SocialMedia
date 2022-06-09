@@ -79,6 +79,7 @@ export const CategoryItem = styled.div`
 `;
 
 export const RelativePostItemContainer = styled.div`
+  flex-shrink: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -115,8 +116,8 @@ export const RelativeItemPhoto = styled(Link)`
 `;
 
 export const Avatar = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   object-fit: cover;
 `;
@@ -128,8 +129,8 @@ export const UserInfo = styled.div`
   width: 100%;
 
   & .user__info-name {
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 14px;
     max-width: 120px;
     white-space: nowrap;
     overflow: hidden;
@@ -138,7 +139,7 @@ export const UserInfo = styled.div`
 
   & .user__info-nickName {
     color: ${({ theme }) => theme.subTextColor};
-    font-size: 14px;
+    font-size: 12px;
     max-width: 120px;
     white-space: nowrap;
     overflow: hidden;

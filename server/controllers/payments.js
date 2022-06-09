@@ -8,7 +8,8 @@ export const getPayments = async (req, res) => {
     })
       .populate("postId")
       .populate("userId", "name avatar email")
-      .populate("posterId", "name avatar email");
+      .populate("posterId", "name avatar email")
+      .lean();
 
     res.status(200).json(payments);
   } catch (error) {

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Button, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 
 export const PostContainer = styled.div`
   position: relative;
@@ -75,14 +74,24 @@ export const RightSide = styled.div`
   flex: 1;
 `;
 
-export const AuthorName = styled(Link)`
+export const AuthorNameWrapper = styled.div`
+  display: flex;
+  gap: 4px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #fff;
   text-decoration: none;
-  color: ${({ theme }) => theme.textColor};
+  color: ${({ theme }) => theme.subTextColor};
 
-  &:hover {
+  & > a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  & > a:first-child {
+    color: ${({ theme }) => theme.textColor};
+  }
+
+  & > a:hover {
     text-decoration: underline;
   }
 `;
@@ -138,39 +147,8 @@ export const ToggleButton = styled.div`
   }
 `;
 
-export const CustomButton = styled(Button)`
-  && {
-    height: 30px;
-  }
-`;
-
-export const CustomInputLabel = styled(InputLabel)`
-  && {
-    color: ${({ theme }) => theme.textColor};
-  }
-`;
-
-export const CustomInputAdornment = styled(InputAdornment)`
-  && {
-    & > p {
-      color: ${({ theme }) => theme.textColor};
-    }
-  }
-`;
-
-export const CustomOutlinedInput = styled(OutlinedInput)`
-  && {
-    color: ${({ theme }) => theme.textColor};
-
-    & > fieldset {
-      border-color: ${({ theme }) => theme.contrastColor};
-    }
-  }
-`;
-
 export const DescriptionWrapper = styled.div`
   display: flex;
-  align-items: center;
 
   & > pre {
     flex: 1;
@@ -181,6 +159,7 @@ export const DescriptionWrapper = styled.div`
     color: var(--primary-color);
     font-size: 16px;
     font-weight: 500;
+    height: fit-content;
     min-width: 60px;
     text-align: center;
     padding: 8px;

@@ -48,9 +48,8 @@ export const DescSection = styled.div`
   flex: 1;
   height: 40px;
   border-radius: 20px;
-  margin-left: 8px;
+  margin-left: 12px;
   background-color: ${({ theme }) => theme.contrastColor};
-  transition: all 0.1s ease-in-out 0s;
   cursor: pointer;
 
   &:hover {
@@ -59,9 +58,8 @@ export const DescSection = styled.div`
 
   & > div {
     flex-grow: 1;
-    font-size: 1.1rem;
-    color: ${({ theme }) => theme.textColor};
-    opacity: 0.4;
+    /* color: ${({ theme }) => theme.subTextColor}; */
+    color: #9e9e9e;
     margin-left: 12px;
     user-select: none;
   }

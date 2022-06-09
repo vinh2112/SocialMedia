@@ -1,4 +1,3 @@
-import { LoadingButton } from "@mui/lab";
 import styled from "styled-components";
 
 export const ModalContainer = styled.div`
@@ -54,7 +53,7 @@ export const ButtonCloseModalWrapper = styled.div`
 `;
 
 export const ReportContent = styled.div`
-  margin: 6px;
+  margin: 6px 10px;
 `;
 
 export const ReportOption = styled.label`
@@ -107,53 +106,11 @@ export const ReportOption = styled.label`
 `;
 
 export const ReasonAreaWrapper = styled.div`
-  padding: 0 6px 6px;
-`;
-
-export const ReasonArea = styled.textarea`
-  padding: 4px 8px;
-  width: 100%;
-  resize: none;
-  font-size: 1rem;
-  border: 1px solid ${({ theme }) => theme.borderColor};
-  outline: none;
-  border-radius: 3px;
-  background: none;
-  color: ${({ theme }) => theme.textColor};
-
-  &:focus {
-    outline: 2px solid ${({ theme }) => theme.hoverColor};
-  }
-  &:disabled {
-    background: ${({ theme }) => theme.hoverColor};
-    color: ${({ theme }) => theme.subTextColor};
-  }
+  padding: 0 10px 6px;
 `;
 
 export const ReportBottom = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin: 0 6px 10px;
-`;
-
-export const CustomLoadingButton = styled(LoadingButton)`
-  && {
-    color: #fefefe;
-    width: 100%;
-    max-width: 120px;
-    background-color: ${({ loading, theme }) =>
-      loading ? theme.hoverColor : "var(--primary-color)"};
-
-    &:hover {
-      background-color: var(--primary-color);
-    }
-
-    & svg {
-      color: #fefefe;
-    }
-
-    @media (max-width: 700px) {
-      max-width: unset;
-    }
-  }
+  margin: 0 10px 10px;
 `;

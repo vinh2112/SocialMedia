@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   padding: 10px 10px 4px;
-  border-top: 1px solid ${({ theme }) => theme.borderColor};
 `;
 
 export const ContentTop = styled.div`

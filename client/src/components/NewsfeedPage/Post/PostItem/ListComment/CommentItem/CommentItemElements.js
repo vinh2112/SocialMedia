@@ -136,15 +136,16 @@ export const MenuActions = styled.ul`
   padding: 4px;
   background-color: ${({ theme }) => theme.primary};
   border: 1px solid ${({ theme }) => theme.borderColor};
-  box-shadow: 0 0 8px 0 rgba(0 0 0 / 30%);
+  /* box-shadow: 0 0 8px 0 rgba(0 0 0 / 30%); */
+  box-shadow: ${({ theme }) => theme.boxShadow};
   border-radius: 5px;
   user-select: none;
   z-index: 9999;
 `;
 
 export const MenuItem = styled.li`
-  width: 150px;
   font-size: 14px;
+  font-weight: 500;
   white-space: nowrap;
   padding: 6px 8px;
   border-radius: 4px;

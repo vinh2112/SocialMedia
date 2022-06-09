@@ -30,6 +30,10 @@ const NewsFeedContainer = styled.div`
 const NewsFeedRight = styled.div`
   padding-right: 16px;
   flex: 1;
+
+  @media (max-width: 1024px) {
+    padding-right: 0;
+  }
 `;
 
 const NewsFeed = () => {

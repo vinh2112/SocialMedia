@@ -3,73 +3,73 @@ import { PaymentModel } from "../models/PaymentModel.js";
 import { PostModel } from "../models/PostModel.js";
 import { ReportModel } from "../models/ReportModel.js";
 import { UserModel } from "../models/UserModel.js";
+import PostService from "../services/PostService.js";
 import UserService from "../services/UserService.js";
+import KeywordService from "../services/KeywordService.js";
 import { watermarkImage, deleteImageCloudinary } from "../utils/cloudinary.js";
+
+const POPULATE_OPTS = [
+  {
+    path: "userId",
+    select: "fullName name email avatar",
+  },
+  {
+    path: "likes",
+    select: "fullName name email avatar",
+  },
+];
 
 export const getPosts = async (req, res) => {
   try {
-    const { page } = req.query;
-    const posts = await PostModel.find()
-      .populate({
-        path: "userId",
-        select: "fullName name email avatar",
-      })
-      .populate({
-        path: "likes",
-        select: "fullName name email avatar",
-      })
-      .sort("-createdAt")
-      .skip((page - 1) * 20)
-      .limit(20)
-      .select("-image.url -image.public_id");
+    const fields = req.query.fields || "";
+    const limit = req.query.limit || 20;
+    const page = req.query.page || 1;
 
-    res.json(posts);
+    let filter = {};
+
+    const { results } = await PostService.getAllPosts(fields, limit, page, filter, "createdAt", -1);
+
+    return res.status(200).json(results);
   } catch (error) {
-    res.status(500).json({ msg: error.message });
+    return res.status(500).json({ msg: error.message });
   }
 };
 
 export const getPost = async (req, res) => {
-  const post = await PostModel.findById(req.params.postId)
-    .populate({
-      path: "userId",
-      select: "fullName name email avatar",
-    })
-    .populate({
-      path: "likes",
-      select: "fullName name email avatar",
-    })
-    .sort("-createdAt")
-    .select("-image.url -image.public_id");
+  try {
+    let filter = {};
+    filter["_id"] = req.params.postId;
 
-  if (!post) return res.status(400).json({ msg: "Post not found" });
+    const { results } = await PostService.getAllPosts("", 1, 1, filter, "createdAt", -1);
 
-  res.status(200).json(post);
+    if (!results.length) return res.status(400).json({ msg: "Post not found" });
+
+    handleUpdateScoreByAction(results[0].category, req.socket.remoteAddress, "view", 1);
+
+    return res.status(200).json(results[0]);
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
 };
 
 export const getProfilePost = async (req, res) => {
-  const { page } = req.query;
+  try {
+    const { page, limit } = req.query;
 
-  const posts = await PostModel.find({ userId: req.params.userId })
-    .populate({
-      path: "userId",
-      select: "fullName name email avatar",
-    })
-    .populate({
-      path: "likes",
-      select: "fullName name email avatar",
-    })
-    .sort("-createdAt")
-    .skip((page - 1) * 10)
-    .limit(10)
-    .select("-image.url -image.public_id");
+    let filter = {};
+    filter["userId"] = req.params.userId;
 
-  res.status(200).json(posts);
+    const { results } = await PostService.getAllPosts("", limit, page, filter, "createdAt", -1);
+
+    return res.status(200).json(results);
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
 };
 
 export const getPostsTimeline = async (req, res) => {
   try {
-    const user = await UserModel.findOne({ _id: req.userId });
+    const user = await UserModel.findOne({ _id: req.userId }).lean();
 
     let posts = [];
     let friendsId = user.followings.map((following) => following.toString());
@@ -78,33 +78,21 @@ export const getPostsTimeline = async (req, res) => {
     // return res.json(friendsId);
 
     const friendPosts = await PostModel.find({ userId: { $in: friendsId } })
-      .populate({
-        path: "userId",
-        select: "fullName name email avatar",
-      })
-      .populate({
-        path: "likes",
-        select: "fullName name email avatar",
-      })
+      .populate(POPULATE_OPTS)
       .sort("-createdAt")
       .limit(10)
-      .select("-image.url -image.public_id");
+      .select("-image.url -image.public_id")
+      .lean();
 
     const friendPostsId = friendPosts.map((post) => post._id);
     // return res.json(friendPostsId);
 
     const newPosts = await PostModel.find({ _id: { $nin: friendPostsId } })
       .limit(5)
-      .populate({
-        path: "userId",
-        select: "fullName name email avatar",
-      })
-      .populate({
-        path: "likes",
-        select: "fullName name email avatar",
-      })
+      .populate(POPULATE_OPTS)
       .sort("-createdAt")
-      .select("-image.url -image.public_id");
+      .select("-image.url -image.public_id")
+      .lean();
 
     posts = newPosts.concat(...friendPosts);
 
@@ -120,21 +108,6 @@ export const getPostsTimeline = async (req, res) => {
 
 export const getTopLikedPosts = async (req, res) => {
   try {
-    // const posts = await PostModel.find()
-    //   .sort("-likes.length")
-    //   .limit(6)
-    //   .populate({
-    //     path: "userId",
-    //     select: "fullName name email avatar",
-    //   })
-    //   .populate({
-    //     path: "likes",
-    //     select: "fullName name email avatar",
-    //   })
-    //   .select("-image.url -image.public_id");
-
-    // return res.status(200).json(posts);
-
     const posts = await PostModel.aggregate([
       {
         $project: {
@@ -155,16 +128,7 @@ export const getTopLikedPosts = async (req, res) => {
       { $limit: 8 },
     ]);
 
-    await PostModel.populate(posts, [
-      {
-        path: "userId",
-        select: "fullName name email avatar",
-      },
-      {
-        path: "likes",
-        select: "fullName name email avatar",
-      },
-    ]);
+    await PostModel.populate(posts, POPULATE_OPTS);
 
     return res.status(200).json(posts);
   } catch (error) {
@@ -175,24 +139,21 @@ export const getTopLikedPosts = async (req, res) => {
 export const searchPosts = async (req, res) => {
   try {
     const { query, page } = req.query;
+
     const posts = await PostModel.find({
-      $or: [
-        { category: { $regex: query, $options: "i" } },
-        { desc: { $regex: query, $options: "i" } },
-      ],
+      $or: [{ category: { $regex: query, $options: "i" } }, { desc: { $regex: query, $options: "i" } }],
     })
-      .populate({
-        path: "userId",
-        select: "fullName name email avatar",
-      })
-      .populate({
-        path: "likes",
-        select: "fullName name email avatar",
-      })
+      .populate(POPULATE_OPTS)
       .skip((page - 1) * 20)
       .limit(20)
       .sort("-createdAt")
-      .select("-image.url -image.public_id");
+      .select("-image.url -image.public_id")
+      .lean();
+
+    if (query && posts.length) {
+      handleUpdateScoreByAction([query], req.socket.remoteAddress, "search", 1);
+    }
+
     return res.json(posts);
   } catch (error) {
     return res.status(500).json({ msg: error.message });
@@ -210,16 +171,10 @@ export const getRelativePosts = async (req, res) => {
           category: category,
           _id: { $nin: [post._id, ...listRelativePosts.map((post) => post._id)] },
         })
-          .populate({
-            path: "userId",
-            select: "fullName name email avatar",
-          })
-          .populate({
-            path: "likes",
-            select: "fullName name email avatar",
-          })
+          .populate(POPULATE_OPTS)
           .sort("-createdAt")
-          .select("-image.url -image.public_id");
+          .select("-image.url -image.public_id")
+          .lean();
         listRelativePosts.push(...relativePosts);
         if (listRelativePosts.length > 10) break;
       }
@@ -228,28 +183,6 @@ export const getRelativePosts = async (req, res) => {
     } else {
       return res.status(403).json({ msg: "Post does not exist." });
     }
-
-    // if (post) {
-    //   const data = await PostModel.find({
-    //     category: { $in: post.category },
-    //     _id: { $nin: post._id },
-    //   })
-    //     .populate({
-    //       path: "userId",
-    //       select: "fullName name email avatar",
-    //     })
-    //     .populate({
-    //       path: "likes",
-    //       select: "fullName name email avatar",
-    //     })
-    //     .sort("-createdAt")
-    //     .select("-image.url -image.public_id")
-    //     .limit(10);
-
-    //   return res.status(200).json(data);
-    // } else {
-    //   return res.status(403).json({ msg: "Post does not exist." });
-    // }
   } catch (error) {
     return res.status(500).json({ msg: error });
   }
@@ -273,12 +206,9 @@ export const createPost = async (req, res) => {
     });
     await newPost.save();
 
-    await PostModel.populate(newPost, {
-      path: "userId",
-      select: "fullName name email avatar",
-    });
+    await PostModel.populate(newPost, POPULATE_OPTS);
 
-    await UserService.updateCountOfUser(req.userId, 1, 0);
+    UserService.updateCountOfUser(req.userId, 1, 0);
 
     res.status(200).json(newPost);
   } catch (error) {
@@ -301,17 +231,11 @@ export const reactPost = async (req, res) => {
         },
         { new: true }
       )
-        .populate({
-          path: "userId",
-          select: "fullName name email avatar",
-        })
-        .populate({
-          path: "likes",
-          select: "fullName name email avatar",
-        })
+        .populate(POPULATE_OPTS)
         .exec();
 
-      await UserService.updateCountOfUser(newPost.userId, 0, 1);
+      UserService.updateCountOfUser(newPost.userId, 0, 1);
+      handleUpdateScoreByAction(newPost.category, req.socket.remoteAddress, "react", 1);
 
       return res.status(200).json(newPost);
     } else {
@@ -322,16 +246,10 @@ export const reactPost = async (req, res) => {
         },
         { new: true }
       )
-        .populate({
-          path: "userId",
-          select: "fullName name email avatar",
-        })
-        .populate({
-          path: "likes",
-          select: "fullName name email avatar",
-        })
+        .populate(POPULATE_OPTS)
         .exec();
-      await UserService.updateCountOfUser(newPost.userId, 0, -1);
+      UserService.updateCountOfUser(newPost.userId, 0, -1);
+      handleUpdateScoreByAction(newPost.category, req.socket.remoteAddress, "react", -1);
 
       return res.status(200).json(newPost);
     }
@@ -355,15 +273,7 @@ export const updatePost = async (req, res) => {
           price: price || 0,
         },
         { new: true }
-      )
-        .populate({
-          path: "userId",
-          select: "fullName name email avatar",
-        })
-        .populate({
-          path: "likes",
-          select: "fullName name email avatar",
-        });
+      ).populate(POPULATE_OPTS);
 
       return res.status(200).json(newPost);
     } else {
@@ -379,12 +289,12 @@ export const deletePost = async (req, res) => {
     const post = await PostModel.findById(req.params.postId);
     const public_id = post.image.public_id;
     if (post.userId.toString() === req.userId) {
-      await post.deleteOne().then(async () => {
-        await deleteImageCloudinary(public_id);
-        await ReportModel.deleteMany({ reportedPostId: req.params.postId });
-        await CommentModel.deleteMany({ postId: req.params.postId });
+      await post.deleteOne().then(() => {
+        deleteImageCloudinary(public_id);
+        ReportModel.deleteMany({ reportedPostId: req.params.postId });
+        CommentModel.deleteMany({ postId: req.params.postId });
 
-        await UserService.updateCountOfUser(req.userId, -1, -post.likes.length);
+        UserService.updateCountOfUser(req.userId, -1, -post.likes.length);
 
         return res.status(200).json({ msg: "Delete Post Successfully." });
       });
@@ -429,6 +339,8 @@ export const downloadPhotoPost = async (req, res) => {
     const post = await PostModel.findById(postId);
 
     if (post.userId.toString() === req.userId) {
+      handleUpdateScoreByAction(post.category, req.socket.remoteAddress, "download", 1);
+
       return res.status(200).json(post.image);
     }
 
@@ -436,14 +348,32 @@ export const downloadPhotoPost = async (req, res) => {
       const payment = await PaymentModel.findOne({ postId, userId: req.userId });
 
       if (payment) {
+        handleUpdateScoreByAction(post.category, req.socket.remoteAddress, "download", 1);
+
         return res.status(200).json(post.image);
       }
 
       return res.status(400).json({ msg: "Please pay for this photo" });
     } else {
+      handleUpdateScoreByAction(post.category, req.socket.remoteAddress, "download", 1);
+
       return res.status(200).json(post.image);
     }
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
 };
+
+async function handleUpdateScoreByAction(categories, ipAddress, behaviorType, scoreInc = 1) {
+  let tempCateLength = categories.length;
+
+  for await (const category of categories) {
+    await KeywordService.updateScoreOfKeyword(
+      category,
+      ipAddress,
+      behaviorType,
+      scoreInc,
+      tempCateLength-- / categories.length
+    );
+  }
+}

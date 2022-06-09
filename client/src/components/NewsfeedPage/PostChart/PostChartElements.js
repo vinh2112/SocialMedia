@@ -41,6 +41,10 @@ export const PostTopTitle = styled.div`
     color: ${({ theme }) => theme.subTextColor};
   }
 
+  @media (max-width: 1024px) {
+    margin-left: 0;
+  }
+
   /* & > div:last-child {
     width: 40%;
     height: 1.4px;

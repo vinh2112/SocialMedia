@@ -32,6 +32,7 @@ const schema = new mongoose.Schema(
     from: {
       type: String,
       trim: true,
+      default: "vn",
     },
     desc: {
       type: String,

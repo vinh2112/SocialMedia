@@ -2,11 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ButtonCloseModal,
   ButtonCloseModalWrapper,
-  CustomLoadingButton,
   ModalContainer,
   ModalTitle,
   ModalTop,
-  ReasonArea,
   ReasonAreaWrapper,
   ReportBottom,
   ReportContent,
@@ -18,6 +16,9 @@ import { authState$ } from "redux/selectors";
 import * as actions from "redux/actions";
 import * as api from "api";
 import Modal from "@mui/material/Modal";
+import { LoadingButton } from "@mui/lab";
+import { containedButtonStyle, textFieldStyle } from "styles/muiCustom";
+import { TextField } from "@mui/material";
 
 const reportOptions = [
   {
@@ -125,6 +126,8 @@ export default function PostReportModal({ handleClose, postId, open }) {
       console.log(error);
     }
 
+    console.log(report);
+
     setLoading(false);
   };
 
@@ -154,18 +157,27 @@ export default function PostReportModal({ handleClose, postId, open }) {
           </ReportOption>
         </ReportContent>
         <ReasonAreaWrapper>
-          <ReasonArea
-            onChange={handleChangeValue}
+          <TextField
             ref={areaRef}
-            rows="4"
+            sx={textFieldStyle}
+            id="outlined-textarea"
             placeholder="Report here..."
+            multiline
             disabled={isOther}
+            onChange={handleChangeValue}
+            fullWidth
           />
         </ReasonAreaWrapper>
         <ReportBottom>
-          <CustomLoadingButton loading={loading} onClick={handleSubmit}>
+          <LoadingButton
+            sx={containedButtonStyle}
+            variant="contained"
+            loading={loading}
+            onClick={handleSubmit}
+            fullWidth
+          >
             Submit
-          </CustomLoadingButton>
+          </LoadingButton>
         </ReportBottom>
       </ModalContainer>
     </Modal>

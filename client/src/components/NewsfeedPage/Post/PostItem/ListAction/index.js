@@ -14,9 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$, commentState$ } from "redux/selectors";
 
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { containedButtonStyle, textButtonStyle } from "styles/muiCustom";
+
 const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport }) => {
-  // const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDialog, setIsOpenDialog] = useState(false);
   const menuNode = useRef();
   const dispatch = useDispatch();
   const { currentUser } = useSelector(authState$);
@@ -66,18 +69,23 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
     }
   };
 
-  const handleDeletePost = () => {
-    if (currentUser) {
-      dispatch(actions.deletePost.deletePostRequest(post._id));
-    } else {
-      dispatch(
-        actions.toast.showToast({
-          message: "Please Login",
-          type: "warning",
-        })
-      );
-    }
+  const handleCloseDialog = (e) => {
+    setIsOpenDialog(false);
+    setIsOpen(false);
   };
+
+  // const handleDeletePost = () => {
+  //   if (currentUser) {
+  //     dispatch(actions.deletePost.deletePostRequest(post._id));
+  //   } else {
+  //     dispatch(
+  //       actions.toast.showToast({
+  //         message: "Please Login",
+  //         type: "warning",
+  //       })
+  //     );
+  //   }
+  // };
 
   return (
     <ActionContainer>
@@ -92,16 +100,14 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
 
       <CommentAction onClick={showComment}>
         <Icon icon="akar-icons:chat-bubble" />
-        <span>
-          {data.filter((comment) => comment.postId === post._id).length || post.commentCount}
-        </span>
+        <span>{data.filter((comment) => comment.postId === post._id).length || post.commentCount}</span>
       </CommentAction>
 
       <MoreAction ref={menuNode} onClick={() => setIsOpen(!isOpen)}>
         <Icon icon="carbon:overflow-menu-horizontal" />
         <ActionMenu isOpen={isOpen}>
           {post?.userId._id === currentUser?._id && (
-            <MenuItem onClick={() => handleEdit(true)}>
+            <MenuItem onClick={handleEdit}>
               <Icon icon="ant-design:edit-outlined" />
               <Title>Edit Post</Title>
             </MenuItem>
@@ -116,16 +122,43 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
             <Title>Download</Title>
           </MenuItem>
           {post?.userId._id === currentUser?._id && (
-            <MenuItem
-              className="danger"
-              onClick={(e) => {
-                e.preventDefault();
-                handleDeletePost();
-              }}
-            >
-              <Icon icon="feather:delete" />
-              <Title>Delete post</Title>
-            </MenuItem>
+            <>
+              <MenuItem
+                className="danger"
+                onClick={() => {
+                  setIsOpenDialog(true);
+                  setIsOpen(false);
+                }}
+              >
+                <Icon icon="feather:delete" />
+                <Title>Delete post</Title>
+              </MenuItem>
+
+              <Dialog
+                maxWidth="xs"
+                open={isOpenDialog}
+                onClose={handleCloseDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle sx={{ color: "var(--danger-color)" }} id="alert-dialog-title">
+                  Delete this post?
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    If you want to delete this post, agree with our policies and please press "Agree".
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button sx={textButtonStyle} className="btn-default" onClick={handleCloseDialog}>
+                    Cancel
+                  </Button>
+                  <Button sx={{ ...containedButtonStyle, width: "100px" }} onClick={handleCloseDialog}>
+                    Agree
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </>
           )}
           <MenuItem className="danger" onClick={() => handleReport(true)}>
             <Icon icon="jam:triangle-danger" />

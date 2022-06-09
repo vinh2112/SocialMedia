@@ -14,14 +14,7 @@ import {
   resetPosts,
   deletePost,
 } from "./posts";
-import {
-  showBoxComment,
-  fetchComments,
-  createComment,
-  deleteComment,
-  createReply,
-  deleteReply,
-} from "./comments";
+import { showBoxComment, fetchComments, createComment, deleteComment, createReply, deleteReply } from "./comments";
 import { fetchNotifications } from "./notifications";
 import { toast } from "./toast";
 
@@ -29,9 +22,9 @@ export const getType = (reduxAction) => {
   return reduxAction().type;
 };
 
-export const showModal = createAction("SHOW_CREATE_POST_MODAL");
+export const showModal = createAction("SHOW_MODAL");
 
-export const hideModal = createAction("HIDE_CREATE_POST_MODAL");
+export const hideModal = createAction("HIDE_MODAL");
 
 export {
   toast,

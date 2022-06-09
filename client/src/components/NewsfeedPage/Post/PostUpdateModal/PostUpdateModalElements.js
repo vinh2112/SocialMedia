@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import Loading from "images/Loading.svg";
+import Loading from "assets/images/Loading.svg";
 
 export const Container = styled.div`
   position: absolute;
   background-color: ${({ theme }) => theme.primary};
   max-width: 597.5px;
-  width: 95%;
+  width: 100%;
   height: auto;
   top: ${({ isShow }) => (isShow ? "50%" : "40%")};
   left: 50%;
@@ -77,22 +77,22 @@ export const CloseButton = styled.button`
 `;
 
 export const Content = styled.div`
-  padding: 14px 14px 0 14px;
+  padding: 0 14px 0 14px;
   position: relative;
-  max-height: 400px;
+  max-height: calc(100vh - 200px);
   overflow: hidden;
   overflow-y: auto;
 `;
 
 export const DescArea = styled.textarea`
   width: 100%;
-  height: 115px;
+  height: 105px;
   margin-top: 8px;
   resize: none;
   border: none;
   outline: none;
   color: ${({ theme }) => theme.textColor};
-  font-size: ${({ isSmall }) => (isSmall ? "1.2rem" : "1.6rem")};
+  font-size: ${({ isSmall }) => (isSmall ? "16px" : "20px")};
   font-weight: 300;
   background-color: transparent;
   transition: all 0.1s ease-in-out 0s;
@@ -104,6 +104,7 @@ export const UserWrapper = styled.div`
 
 export const AvatarWrapper = styled.div`
   display: flex;
+  margin-top: 14px;
 `;
 
 export const Avatar = styled.img`
@@ -114,8 +115,17 @@ export const Avatar = styled.img`
 `;
 
 export const Name = styled.div`
-  font-weight: 500;
   margin-left: 8px;
+  margin-top: 14px;
+
+  & > .fullName {
+    font-weight: 500;
+  }
+
+  & > .name {
+    font-size: 14px;
+    color: ${({ theme }) => theme.subTextColor};
+  }
 `;
 
 export const LetterCount = styled.div`
@@ -127,6 +137,7 @@ export const LetterCount = styled.div`
 
 export const PhotoWrapper = styled.div`
   position: relative;
+  display: flex;
   border-radius: 5px;
   overflow: hidden;
   color: #ccc;
@@ -162,109 +173,9 @@ export const RemovePhotoButton = styled.div`
   }
 `;
 
-export const Actions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 14px 10px 14px;
-  flex-direction: column;
-`;
-
-export const UploadButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 40px;
-  font-size: 1.4rem;
-  margin-bottom: 8px;
-`;
-
-export const UploadButton = styled.label`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 40px;
-  transition: all 0.15s ease-in-out 0s;
-  cursor: pointer;
-  border-radius: 5px;
-  border: 1px solid ${({ theme }) => theme.subTextColor};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.hoverColor};
-  }
-`;
-
-export const PostButtonWrapper = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-export const PostButton = styled.button`
-  width: 100%;
-  background-color: var(--primary-color);
-  border: 0;
-  padding: 10px 24px;
-  border-radius: 5px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #fff;
-  transition: all 0.15s ease-in-out 0s;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.contrastColor};
-    color: ${({ theme }) => theme.subTextColor};
-    cursor: not-allowed;
-  }
-
-  &:disabled:hover {
-    opacity: 1;
-  }
-`;
-
 export const PostPayment = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: auto;
   align-items: flex-end;
-`;
-
-export const SwitchWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-
-  & > span {
-    color: ${({ isChecked, theme }) => (isChecked ? "var(--success-color)" : theme.subTextColor)};
-  }
-`;
-export const InputPrice = styled.input`
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-  width: 100%;
-  max-width: 140px;
-  padding: 4px 8px;
-  border: 1px solid ${({ theme }) => theme.borderColor};
-  outline: none;
-  background: none;
-  border-radius: 2px;
-  color: ${({ theme }) => theme.textColor};
-
-  &:disabled {
-    color: ${({ theme }) => theme.subTextColor};
-  }
-
-  &:focus {
-    outline: 2px solid ${({ theme }) => theme.borderColor};
-  }
 `;

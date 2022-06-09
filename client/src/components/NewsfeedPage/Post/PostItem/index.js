@@ -10,28 +10,26 @@ import {
   AvatarLink,
   Avatar,
   RightSide,
-  AuthorName,
+  AuthorNameWrapper,
   PostCreated,
   Description,
-  CustomButton,
-  CustomInputLabel,
-  CustomInputAdornment,
-  CustomOutlinedInput,
   DescriptionWrapper,
 } from "./PostItemElements";
 import moment from "moment";
 import { saveAs } from "file-saver";
 import { PaymentAPI } from "api";
 import { useHistory } from "react-router-dom";
-import { FormControl, Stack, Switch } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
 import * as actions from "redux/actions";
 import { LoadingButton } from "@mui/lab";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import PostReportModal from "./PostReportModal";
 import { Link } from "react-router-dom";
+import { checkBoxStyle, textButtonStyle, textFieldStyle } from "styles/muiCustom";
+import NumberFormat from "react-number-format";
 
 // const getFirstLetter = (name) => {
 //   return name.charAt(0).toUpperCase();
@@ -112,6 +110,11 @@ const PostItem = ({ post }) => {
     }
   };
 
+  const handleEdit = () => {
+    setIsOnEdit(true);
+    setNewPost(post);
+  };
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -157,27 +160,33 @@ const PostItem = ({ post }) => {
                 <Avatar src={post.userId.avatar ? post.userId.avatar : DefaultAvatar} />
               </AvatarLink>
               <RightSide>
-                <AuthorName to={`/profile/${post.userId._id}`}>
-                  @{post.userId.name ? post.userId.name : post.userId.email}
-                </AuthorName>
+                <AuthorNameWrapper>
+                  <a href={`/profile/${post.userId._id}`}>{post.userId.fullName}</a>
+                  <span>•</span>
+                  <a href={`/profile/${post.userId._id}`}>
+                    {post.userId.name ? `@${post.userId.name}` : `@${post.userId.email}`}
+                  </a>
+                </AuthorNameWrapper>
                 <PostCreated>{moment(post.createdAt).fromNow()}</PostCreated>
               </RightSide>
 
               {post.userId._id === currentUser?._id && isOnEdit && (
-                <Stack spacing={1} direction="row">
-                  <CustomButton
+                <Stack sx={{ height: "fit-content" }} spacing={2} direction="row">
+                  <Button
+                    sx={textButtonStyle}
+                    className="btn-default"
                     size="small"
-                    variant="string"
+                    variant="text"
                     onClick={() => setIsOnEdit(!isOnEdit)}
                   >
                     Cancel
-                  </CustomButton>
+                  </Button>
                   <LoadingButton
+                    sx={textButtonStyle}
+                    // className="btn-primary"
                     size="small"
-                    sx={{ height: 30 }}
                     loading={loading}
-                    variant="outlined"
-                    color="success"
+                    variant="text"
                     onClick={handleSubmit}
                   >
                     Update
@@ -188,67 +197,93 @@ const PostItem = ({ post }) => {
             <Description>
               {isOnEdit ? (
                 <Stack spacing={1} direction="row">
-                  <textarea name="desc" onChange={handleChangeValue} value={newPost.desc} />
+                  <TextField
+                    sx={{ ...textFieldStyle, height: "100%" }}
+                    multiline
+                    minRows={2}
+                    name="desc"
+                    onChange={handleChangeValue}
+                    value={newPost.desc}
+                    fullWidth
+                  ></TextField>
 
-                  <Stack spacing={1} alignItems="center" direction="column">
-                    <Switch
-                      checked={newPost.isPaymentRequired}
-                      name="isPaymentRequired"
-                      onChange={handleChangeValue}
-                      size="small"
-                      color="primary"
+                  <Stack alignItems="center">
+                    <FormControlLabel
+                      sx={{ userSelect: "none" }}
+                      control={
+                        <Checkbox
+                          checked={newPost.isPaymentRequired}
+                          name="isPaymentRequired"
+                          onChange={handleChangeValue}
+                          size="small"
+                          sx={checkBoxStyle}
+                        />
+                      }
+                      label={
+                        <Typography variant="caption" component="div">
+                          Fee
+                        </Typography>
+                      }
                     />
-                    <FormControl>
-                      <CustomInputLabel
-                        style={{ color: `${({ theme }) => theme.textColor}` }}
-                        htmlFor="outlined-adornment-amount"
-                      >
-                        Price
-                      </CustomInputLabel>
-                      <CustomOutlinedInput
-                        id="outlined-adornment-amount"
-                        name="price"
-                        value={newPost.price}
-                        disabled={!newPost.isPaymentRequired}
-                        onChange={handleChangeValue}
-                        startAdornment={
-                          <CustomInputAdornment position="start">$</CustomInputAdornment>
-                        }
-                        label="Price"
-                        style={{ color: `${({ theme }) => theme.textColor}` }}
-                        sx={{ width: 100, height: 40 }}
-                      />
-                    </FormControl>
+                    <TextField
+                      sx={{ ...textFieldStyle, width: "100px" }}
+                      size="small"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                        inputComponent: NumberFormatCustom,
+                      }}
+                      name="price"
+                      value={newPost.price}
+                      disabled={!newPost.isPaymentRequired}
+                      onChange={handleChangeValue}
+                    ></TextField>
                   </Stack>
                 </Stack>
               ) : (
                 <DescriptionWrapper>
                   <pre className="post__desc">{post.desc}</pre>
-                  <div className="post-price">
-                    {post.isPaymentRequired ? "$" + post.price : "$0"}
-                  </div>
+                  <div className="post-price">{post.isPaymentRequired ? "$" + post.price : "$0"}</div>
                 </DescriptionWrapper>
               )}
             </Description>
           </PostAuthor>
           <Link style={{ display: "flex" }} to={`/post/${post._id}`}>
-            <PostImage src={post.image.watermark} />
+            <PostImage loading="lazy" src={post.image.watermark} alt="" />
           </Link>
         </PostTop>
         <ListAction
           showComment={handleShowComment}
           post={post}
           downloadImage={handleDownload}
-          handleEdit={setIsOnEdit}
+          handleEdit={handleEdit}
           handleReport={setIsReporting}
         />
         {isShowComment && <ListComment boxComment={boxComment} post={post} />}
       </PostContainer>
-      {isReporting && (
-        <PostReportModal handleClose={setIsReporting} open={isReporting} postId={post._id} />
-      )}
+      {isReporting && <PostReportModal handleClose={setIsReporting} open={isReporting} postId={post._id} />}
     </>
   );
 };
+
+const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+    />
+  );
+});
 
 export default PostItem;

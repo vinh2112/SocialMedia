@@ -15,30 +15,25 @@ import {
   PhotoWrapper,
   Photo,
   RemovePhotoButton,
-  Actions,
-  UploadButtonWrapper,
-  UploadButton,
-  PostButtonWrapper,
-  PostButton,
-  LoadingSection,
   PostPayment,
-  SwitchWrapper,
-  InputPrice,
 } from "./PostUpdateModalElements";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, hideModal } from "redux/actions";
 import { modalState$, postState$ } from "redux/selectors";
-import Switch from "@mui/material/Switch";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import Modal from "@mui/material/Modal";
+import { Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography } from "@mui/material";
+import { checkBoxStyle, containedButtonStyle, outlinedButtonStyle, textFieldStyle } from "styles/muiCustom";
+import { LoadingButton } from "@mui/lab";
+import NumberFormat from "react-number-format";
 
 const initial_post = {
   desc: "",
   category: [],
   image: "",
   isPaymentRequired: false,
-  price: 0,
+  price: "",
 };
 
 const PostUpdateModal = ({ user }) => {
@@ -56,34 +51,28 @@ const PostUpdateModal = ({ user }) => {
     }
   }, [isPosting]);
 
-  const handleChangeValue = React.useCallback(
-    (e) => {
-      if (e.target.value.length <= 250) {
-        setPost({ ...post, desc: e.target.value });
-        if (post.desc.length > 100) {
-          setIsSmall(true);
-        } else {
-          setIsSmall(false);
-        }
-      }
-    },
-    [post]
-  );
+  const handleChangeValue = (e) => {
+    const { name, value, checked } = e.target;
 
+    if (e.target.value.length <= 250 && name === "desc") {
+      if (post.desc.length > 100) {
+        setIsSmall(true);
+      } else {
+        setIsSmall(false);
+      }
+    } else if (name === "isPaymentRequired") {
+      setPost({ ...post, [name]: checked });
+      return;
+    }
+
+    setPost({ ...post, [name]: value });
+  };
   const handleUpload = async (e) => {
     setPost({ ...post, image: URL.createObjectURL(e.target.files[0]) });
   };
 
   const handleRemovePhoto = () => {
     setPost({ ...post, image: "" });
-  };
-
-  const handlePayment = () => {
-    setPost({ ...post, isPaymentRequired: !post.isPaymentRequired });
-  };
-
-  const handlePrice = (e) => {
-    setPost({ ...post, price: e.target.value });
   };
 
   const closeModal = React.useCallback(() => {
@@ -110,20 +99,46 @@ const PostUpdateModal = ({ user }) => {
             <AvatarWrapper>
               <Avatar src={user.avatar ? user.avatar : DefaultAvatar} alt="avatar" />
             </AvatarWrapper>
-            <Name>@{user.name}</Name>
+            <Name>
+              <div className="fullName">{user.fullName}</div>
+              <div className="name">@{user.name}</div>
+            </Name>
             <PostPayment>
-              <SwitchWrapper isChecked={post.isPaymentRequired}>
-                <span>Payment Required</span>
-                <Switch checked={post.isPaymentRequired} onChange={handlePayment} size="small" />
-                <InputPrice
-                  onChange={handlePrice}
-                  type="number"
-                  disabled={post.isPaymentRequired ? "" : "disabled"}
-                ></InputPrice>
-              </SwitchWrapper>
+              <Stack alignItems="center">
+                <FormControlLabel
+                  sx={{ userSelect: "none" }}
+                  control={
+                    <Checkbox
+                      name="isPaymentRequired"
+                      checked={post.isPaymentRequired}
+                      onChange={handleChangeValue}
+                      size="small"
+                      sx={checkBoxStyle}
+                    />
+                  }
+                  label={
+                    <Typography variant="caption" component="div">
+                      Fee
+                    </Typography>
+                  }
+                />
+                <TextField
+                  name="price"
+                  sx={{ ...textFieldStyle, width: "100px" }}
+                  size="small"
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                    inputComponent: NumberFormatCustom,
+                  }}
+                  disabled={!post.isPaymentRequired}
+                  value={post.price}
+                  onChange={handleChangeValue}
+                ></TextField>
+              </Stack>
             </PostPayment>
           </UserWrapper>
           <DescArea
+            name="desc"
             className="desc-area"
             placeholder="What do you want to talk about?"
             onChange={handleChangeValue}
@@ -134,11 +149,7 @@ const PostUpdateModal = ({ user }) => {
 
           {post.image && (
             <PhotoWrapper>
-              <Photo
-                style={isLoaded ? {} : { display: "none" }}
-                onLoad={() => setIsLoaded(true)}
-                src={post.image}
-              />
+              <Photo style={isLoaded ? {} : { display: "none" }} onLoad={() => setIsLoaded(true)} src={post.image} />
               <RemovePhotoButton onClick={handleRemovePhoto}>
                 <Icon icon="fluent:delete-16-regular" />
                 <span>Remove</span>
@@ -146,35 +157,57 @@ const PostUpdateModal = ({ user }) => {
             </PhotoWrapper>
           )}
         </Content>
-        <Actions>
+        <Stack sx={{ p: 2 }} spacing={1}>
           {!post.image && (
-            <UploadButtonWrapper>
-              <UploadButton htmlFor="upload-btn">
-                <input
-                  id="upload-btn"
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  onChange={handleUpload}
-                />
-                <Icon icon="carbon:image" />
-              </UploadButton>
-            </UploadButtonWrapper>
+            <>
+              <LoadingButton
+                sx={outlinedButtonStyle}
+                size="large"
+                variant="outlined"
+                htmlFor="upload-btn"
+                component="label"
+                fullWidth
+                startIcon={<Icon icon="carbon:image" />}
+              ></LoadingButton>
+              <input id="upload-btn" type="file" hidden accept="image/*" onChange={handleUpload} />
+            </>
           )}
 
-          <PostButtonWrapper>
-            <PostButton
-              disabled={post.desc.length === 0 || !post.image ? "disabled" : null}
-              onClick={onSubmit}
-            >
-              Post
-            </PostButton>
-          </PostButtonWrapper>
-        </Actions>
-        {isPosting && <LoadingSection />}
+          <LoadingButton
+            loading={isPosting}
+            sx={containedButtonStyle}
+            variant="contained"
+            disabled={post.desc.length === 0 || !post.image ? true : false}
+            onClick={onSubmit}
+            fullWidth
+          >
+            Post
+          </LoadingButton>
+        </Stack>
       </Container>
     </Modal>
   );
 };
+
+const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+    />
+  );
+});
 
 export default PostUpdateModal;

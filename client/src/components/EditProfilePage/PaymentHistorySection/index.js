@@ -1,7 +1,6 @@
 import { Icon } from "@iconify/react";
 import React, { useEffect, useState } from "react";
 import {
-  DownloadButton,
   NameUser,
   PaymentDetail,
   PaymentHistoryContainer,
@@ -14,6 +13,7 @@ import { authState$ } from "redux/selectors";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import LoadingSection from "components/LoadingSection";
+import { IconButton, Typography } from "@mui/material";
 
 export default function PaymentHistory() {
   const [payments, setPayments] = useState([]);
@@ -39,7 +39,7 @@ export default function PaymentHistory() {
       <PaymentHistoryContainer>
         {isLoading ? (
           <LoadingSection />
-        ) : (
+        ) : payments.length ? (
           payments.map((payment) => (
             <PaymentItem
               key={payment._id}
@@ -47,6 +47,10 @@ export default function PaymentHistory() {
               payment={payment}
             />
           ))
+        ) : (
+          <Typography sx={{ color: "text.secondary" }} variant="h6" align="center">
+            There are no payments
+          </Typography>
         )}
       </PaymentHistoryContainer>
     </>
@@ -56,17 +60,11 @@ export default function PaymentHistory() {
 const PaymentItem = ({ type, payment }) => {
   return (
     <PaymentItemContainer>
-      <PaymentPhotoWrapper>
+      <PaymentPhotoWrapper to={`/post/${payment.postId._id}`}>
         <Photo src={payment.postId.image.url} alt="photo" />
       </PaymentPhotoWrapper>
       <PaymentDetail type={type}>
-        <NameUser
-          to={
-            type === "received"
-              ? `/profile/${payment.userId._id}`
-              : `/profile/${payment.posterId._id}`
-          }
-        >
+        <NameUser to={type === "received" ? `/profile/${payment.userId._id}` : `/profile/${payment.posterId._id}`}>
           @{type === "received" ? payment.userId.name : payment.posterId.name}
         </NameUser>
         <div className="payment-type">{type}</div>
@@ -74,9 +72,9 @@ const PaymentItem = ({ type, payment }) => {
         <div className="payment-date">{moment(payment.createdAt).format("ll")}</div>
       </PaymentDetail>
 
-      <DownloadButton>
+      <IconButton aria-label="download">
         <Icon icon="fluent:arrow-download-16-filled" />
-      </DownloadButton>
+      </IconButton>
     </PaymentItemContainer>
   );
 };

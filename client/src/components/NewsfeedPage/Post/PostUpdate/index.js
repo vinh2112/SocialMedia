@@ -3,7 +3,7 @@ import { Container, AvatarLink, Avatar, OverLay, DescSection } from "./PostUpdat
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "redux/actions";
 import { authState$ } from "redux/selectors";
-import DefaultAvatar from "images/DefaultAvatar.png";
+import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 
 const PostUpdate = () => {
   const dispatch = useDispatch();

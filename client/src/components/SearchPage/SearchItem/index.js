@@ -10,7 +10,7 @@ const SearchItem = ({ post, index, showModal }) => {
 
   return (
     <SearchItemContainer onClick={handleShowModal}>
-      <img src={post.image.watermark} alt="" style={{ height: heightRef.current }} />
+      <img loading="lazy" src={post.image.watermark} alt="" style={{ height: heightRef.current }} />
 
       <OverLay>
         <WatchButton>Watch Now</WatchButton>
