@@ -9,13 +9,13 @@ export function* showBoxComment(action) {
 
 export function* createComment(action) {
   try {
-    const res = yield call(api.CommentAPI.createComment, action.payload);
+    yield call(api.CommentAPI.createComment, action.payload);
     // yield put(actions.createComment.createCommentSuccess(res.data));
 
     yield call(sendNotification, {
-      receiverId: action.payload.receiverId,
-      type: 1,
-      targetId: res.data.userId._id,
+      receivers: [action.payload.receiverId],
+      type: "comment",
+      targetId: action.payload.postId,
     });
   } catch (error) {
     return error.response;
@@ -26,6 +26,12 @@ export function* createReply(action) {
   try {
     const res = yield call(api.CommentAPI.createReplyComment, action.payload);
     yield put(actions.createReply.createReplySuccess(res.data));
+
+    yield call(sendNotification, {
+      receivers: [action.payload.receiverId],
+      type: "comment",
+      targetId: action.payload.postId,
+    });
   } catch (error) {
     return error;
   }

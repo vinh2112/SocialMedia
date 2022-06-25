@@ -143,8 +143,6 @@ export const Title = styled.div`
 `;
 
 export const Detail = styled.div`
-  display: flex;
-  align-items: center;
   font-size: 14px;
   font-weight: 700;
   max-width: 140px;
@@ -152,11 +150,6 @@ export const Detail = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  /* ${DetailItem}:nth-child(1) &,
-  ${DetailItem}:nth-child(2) & {
-    height: 24px;
-  } */
 `;
 
 export const ButtonWrapper = styled.div`

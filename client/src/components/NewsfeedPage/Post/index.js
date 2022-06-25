@@ -31,6 +31,12 @@ const Posts = ({ direction }) => {
     };
   }, [userId]);
 
+  const handleNext = () => {
+    if (!isLoading) {
+      setPage(page + 1);
+    }
+  };
+
   return (
     <Container direction={direction}>
       {userId ? [userId === currentUser?._id && <PostUpdate key="0" />] : [currentUser && <PostUpdate key="1" />]}
@@ -40,12 +46,7 @@ const Posts = ({ direction }) => {
         <span></span>
       </PostTopTitle>
 
-      <InfiniteScroll
-        dataLength={data.length}
-        next={() => setPage(page + 1)}
-        hasMore={true}
-        scrollableTarget="scroll-node"
-      >
+      <InfiniteScroll dataLength={data.length} next={handleNext} hasMore={true} scrollableTarget="scroll-node">
         {data.map((post, i) => (
           <PostItem post={post} key={i} />
         ))}

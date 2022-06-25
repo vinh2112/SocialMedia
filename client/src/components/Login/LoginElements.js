@@ -60,7 +60,15 @@ export const LoginContainer = styled.div`
 
       & > .login__heading {
         font-size: 48px;
-        font-weight: 700;
+        font-weight: 500;
+
+        & > span {
+          margin-left: 20px;
+        }
+
+        & > span > img {
+          width: 200px;
+        }
       }
 
       & > .login__content-1 {

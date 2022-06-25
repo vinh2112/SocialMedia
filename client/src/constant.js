@@ -23,6 +23,7 @@ export const INIT_STATE = {
   },
   notifications: {
     data: [],
+    isLoading: false,
   },
   modal: {
     isShow: false,

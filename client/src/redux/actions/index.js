@@ -15,7 +15,7 @@ import {
   deletePost,
 } from "./posts";
 import { showBoxComment, fetchComments, createComment, deleteComment, createReply, deleteReply } from "./comments";
-import { fetchNotifications } from "./notifications";
+import { fetchNotifications, createNotification } from "./notifications";
 import { toast } from "./toast";
 
 export const getType = (reduxAction) => {
@@ -50,6 +50,7 @@ export {
   createReply,
   deleteReply,
   fetchNotifications,
+  createNotification,
   fetchDataAdmin,
   handleReportAdmin,
 };

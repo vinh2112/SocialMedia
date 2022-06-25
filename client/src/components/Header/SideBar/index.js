@@ -40,12 +40,12 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
     <OverLay isOpen={isOpen} onClick={handleSideBar}>
       <Container className="side-bar" isOpen={isOpen}>
         <Top className="md">
-          {user.currentUser ? (
-            <MenuItemLink to={`/profile/${user.currentUser._id}`}>
+          {user ? (
+            <MenuItemLink to={`/profile/${user._id}`}>
               <UserInfo>
-                <Avatar src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar} />
+                <Avatar src={user.avatar ? user.avatar : DefaultAvatar} />
                 <User>
-                  <UserName>@{user.currentUser.name}</UserName>
+                  <UserName>@{user.name}</UserName>
                   <div className="side-bar__view">View your profile</div>
                 </User>
               </UserInfo>
@@ -59,7 +59,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
 
         <Separate className="md" />
 
-        {user?.currentUser?.isAdmin && (
+        {user?.isAdmin && (
           <MenuItemLink to="/administrator/dashboard">
             <MenuIcon>
               {/* <Icon icon="eos-icons:admin-outlined" /> */}
@@ -70,7 +70,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
           </MenuItemLink>
         )}
 
-        {user.currentUser && (
+        {user && (
           <MenuItemLink to="/messages">
             <MenuIcon>
               {/* <Icon icon="ant-design:message-outlined" /> */}
@@ -92,7 +92,7 @@ const SideBar = ({ isOpen, handleSideBar, user }) => {
           <ToggleSwitch idCheckBox="switchSideBar" />
         </MenuItem>
 
-        {user.currentUser ? (
+        {user ? (
           <>
             <MenuItemLink to="/setting/info">
               <MenuIcon>

@@ -14,6 +14,7 @@ import { watchUser } from "./auth";
 import * as actions from "../actions";
 import { createComment, createReply, showBoxComment } from "./comments";
 import { fetchDataAdmin, handleReportAdmin } from "./admin";
+import { fetchNotifications, sendNotification } from "./notifications";
 
 function* mySaga() {
   yield fork(watchUser);
@@ -37,6 +38,11 @@ function* mySaga() {
   yield takeLatest(actions.createComment.createCommentRequest, createComment);
   yield takeLatest(actions.createReply.createReplyRequest, createReply);
   // End comment section
+
+  // Notification section
+  yield takeLatest(actions.fetchNotifications.fetchNotificationsRequest, fetchNotifications);
+  yield takeLatest(actions.createNotification.createNotificationRequest, sendNotification);
+  // End notification section
 
   // Admin section
   yield takeLatest(actions.fetchDataAdmin.fetchDataAdminRequest, fetchDataAdmin);

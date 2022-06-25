@@ -70,9 +70,8 @@ export const AdminMenuItem = styled(NavLink)`
 
   & > span {
     margin-left: 8px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
-    text-transform: uppercase;
     letter-spacing: 1px;
   }
 

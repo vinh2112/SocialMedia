@@ -1,14 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 // import { useHistory } from "react-router-dom";
-import {
-  ActionContainer,
-  LikeAction,
-  CommentAction,
-  MoreAction,
-  ActionMenu,
-  MenuItem,
-  Title,
-} from "./ListActionElements";
+import { ActionContainer, LikeAction, CommentAction, MoreAction, ActionMenu, MenuItem, Title } from "./ListActionElements";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";

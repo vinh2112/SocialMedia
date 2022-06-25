@@ -11,7 +11,7 @@ export default function SearchList({ posts, showModal, next, isLoading }) {
         <StackGrid columnWidth={875 / 5} monitorImagesLoaded={true} duration={0} gutterWidth={10} gutterHeight={10}>
           {posts.length !== 0
             ? posts.map((post, index) => <SearchItem key={index} post={post} index={index} showModal={showModal} />)
-            : [...Array(2)].map((item, index) => <LoadingItem key={index} />)}
+            : !isLoading && <div>Không có hình ảnh</div>}
           {isLoading && [...Array(3)].map((item, index) => <LoadingItem key={index} />)}
         </StackGrid>
       </InfiniteScroll>

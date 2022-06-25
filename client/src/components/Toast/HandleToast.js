@@ -30,7 +30,7 @@ export default function handleToast({ message = "", type = "", duration = 2000 }
         </div>
         <div class="toast__message">${message}</div>
         <div class="toast__close">
-            <span class="iconify" data-icon="eva:close-fill"></span>
+          <span class="iconify" data-icon="ep:close-bold"></span>
         </div>     
     `;
     main.appendChild(toast);

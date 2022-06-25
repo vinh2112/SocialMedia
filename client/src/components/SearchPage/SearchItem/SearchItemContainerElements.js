@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const SearchItemContainer = styled.div`
   position: relative;
   width: 100%;
-  border-radius: 10px;
   overflow: hidden;
 
   & > img {

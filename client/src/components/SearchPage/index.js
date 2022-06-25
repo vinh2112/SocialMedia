@@ -7,11 +7,11 @@ import * as actions from "redux/actions";
 import { postState$ } from "redux/selectors";
 import Modal from "components/Modal";
 import { useLocation } from "react-router-dom";
+import { KeywordAPI } from "api";
 
 const SearchContainer = styled.div`
   max-width: var(--max-width);
   width: 100%;
-  padding: 54px 16px 0;
   margin: 0 auto;
 
   @media (max-width: 700px) {
@@ -22,6 +22,7 @@ const SearchContainer = styled.div`
 export default function SearchSection() {
   const searchQuery = new URLSearchParams(useLocation().search).get("query") || "";
   const [index, setIndex] = useState(null);
+  const [keywords, setKeywords] = useState([]);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState(searchQuery || "");
   const prevQuery = React.useRef("");
@@ -30,8 +31,29 @@ export default function SearchSection() {
   const { data, isLoading } = useSelector(postState$);
 
   useEffect(() => {
+    setPage(1);
     setQuery(searchQuery);
-  }, [searchQuery]);
+
+    return () => {
+      dispatch(actions.resetPosts());
+    };
+  }, [searchQuery, dispatch]);
+
+  useEffect(() => {
+    const getKeywords = async () => {
+      try {
+        const res = await KeywordAPI.getKeywords();
+
+        if (res.status === 200) {
+          setKeywords(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getKeywords();
+  }, []);
 
   useEffect(() => {
     if (prevQuery.current === query) {
@@ -61,18 +83,20 @@ export default function SearchSection() {
     }
   };
 
-  const handleNext = React.useCallback(() => {
-    prevQuery.current = query;
-    setPage(page + 1);
-  }, [page, query]);
+  const handleNext = () => {
+    if (!isLoading) {
+      prevQuery.current = query;
+      setPage(page + 1);
+    }
+  };
 
   return (
-    <SearchContainer>
-      <SearchHeader query={query} onSubmit={handleSearch} />
-      <SearchList posts={data} showModal={handleModal} next={handleNext} isLoading={isLoading} />
-      {(index || index === 0) && isShowModal && (
-        <Modal post={data[index]} isShow={isShowModal} closeModal={handleModal} />
-      )}
-    </SearchContainer>
+    <>
+      <SearchHeader query={query} onSubmit={handleSearch} keywords={keywords} />
+      <SearchContainer>
+        <SearchList posts={data} showModal={handleModal} next={handleNext} isLoading={isLoading} />
+        {(index || index === 0) && isShowModal && <Modal post={data[index]} isShow={isShowModal} closeModal={handleModal} />}
+      </SearchContainer>
+    </>
   );
 }

@@ -10,6 +10,7 @@ import NotificationAPI from "./notifications";
 import ConversationAPI from "./conversations";
 import MessageAPI from "./messages";
 import MomoAPI from "./momo";
+import KeywordAPI from "./keywords";
 
 export {
   AuthAPI,
@@ -23,5 +24,6 @@ export {
   NotificationAPI,
   ConversationAPI,
   MessageAPI,
+  KeywordAPI,
   MomoAPI,
 };

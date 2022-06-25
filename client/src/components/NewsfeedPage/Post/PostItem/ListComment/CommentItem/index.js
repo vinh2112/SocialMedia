@@ -95,10 +95,7 @@ const CommentItem = ({ comment, post, socket }) => {
       <RightSide>
         <CommentContainer>
           <CommentWrapper>
-            <CommentContent
-              ref={currentReply}
-              className={commentId === comment._id ? "post__comment replying" : "post__comment"}
-            >
+            <CommentContent ref={currentReply} className={commentId === comment._id ? "post__comment replying" : "post__comment"}>
               <Name to={`/profile/${comment.userId._id}`} className="name__author">
                 @{comment.userId.name}
               </Name>
@@ -109,14 +106,13 @@ const CommentItem = ({ comment, post, socket }) => {
               <ReplyButton onClick={handleReply}>Reply</ReplyButton>
               <Time>{moment(comment.createdAt).fromNow()}</Time>
               <ReplyCount>
-                {comment.reply.length === 0
-                  ? null
-                  : comment.reply.length + [comment.reply.length > 1 ? " replies" : " reply"]}
+                {comment.reply.length === 0 ? null : comment.reply.length + [comment.reply.length > 1 ? " replies" : " reply"]}
               </ReplyCount>
             </BottomComment>
           </CommentWrapper>
 
-          {currentUser && (currentUser._id === comment.userId._id || currentUser._id === post.userId._id) && (
+          {((currentUser && (currentUser._id === comment.userId._id || currentUser._id === post.userId._id)) ||
+            currentUser?.isAdmin) && (
             <ButtonWrapper ref={menuNode}>
               {isDeleting ? (
                 <CircularProgress size={20} color="inherit" />
@@ -151,7 +147,7 @@ const CommentItem = ({ comment, post, socket }) => {
               ))}
             </ReplyWrapper>
 
-            <BoxComment isReply={true} comment={comment} socket={socket} />
+            <BoxComment isReply={true} post={post} comment={comment} socket={socket} />
           </>
         ) : null}
 

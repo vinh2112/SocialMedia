@@ -15,7 +15,7 @@ export const AccountContainer = styled.aside`
 
 export const AccountWrapper = styled.div`
   position: sticky;
-  top: 50px;
+  top: 56px;
   border-radius: 5px;
   overflow: hidden;
   box-shadow: var(--box-shadow);

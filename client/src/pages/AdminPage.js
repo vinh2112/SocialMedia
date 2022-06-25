@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import Dashboard from "components/Administrator/Dashboard";
 import LoadingSection from "components/LoadingSection";
 import * as actions from "redux/actions";
+import UserSection from "components/Administrator/Users";
 
 const AdminContainer = styled.div`
   display: flex;
@@ -69,7 +70,9 @@ export default function AdminPage() {
                 <Route path="/administrator/dashboard">
                   <Dashboard />
                 </Route>
-                <Route path="/administrator/users">users</Route>
+                <Route path="/administrator/users">
+                  <UserSection />
+                </Route>
                 <Route path="/administrator/posts">posts</Route>
                 <Route path="/administrator/keywords">keywords</Route>
                 <Route path="/administrator/reports">

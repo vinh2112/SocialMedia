@@ -1,7 +1,5 @@
 import { SocketContext } from "context/socketContext";
 import React, { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { authState$ } from "redux/selectors";
 import {
   CustomSkeleton,
   ListOnlineUser,
@@ -14,9 +12,8 @@ import {
 import SimpleBarReact from "simplebar-react";
 import { Box } from "@mui/material";
 
-export default function OnlineUserSection() {
+export default function OnlineUserSection({ currentUser }) {
   const [listOnlineUsers, setListOnlineUsers] = React.useState([]);
-  const { currentUser } = useSelector(authState$);
   const socket = useContext(SocketContext);
   const reloadRef = React.useRef(null);
 

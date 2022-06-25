@@ -19,7 +19,7 @@ export const ModalForm = styled.div`
   background: ${({ theme }) => theme.primary};
   overflow: hidden;
 
-  @media (max-width: 800px) {
+  @media (max-width: 820px) {
     flex-direction: column;
   }
 
@@ -41,7 +41,7 @@ export const ModalPhotoWrapper = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.1);
 
-  @media (max-width: 800px) {
+  @media (max-width: 820px) {
     width: 100%;
     height: auto;
     padding: 0;
@@ -50,9 +50,10 @@ export const ModalPhotoWrapper = styled.div`
   & > .modal__categories {
     position: absolute;
     bottom: 14px;
-    right: 10px;
+    left: 10px;
     display: flex;
-    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    flex-direction: row;
     gap: 10px;
 
     & > a {
@@ -72,18 +73,16 @@ export const ModalPhotoWrapper = styled.div`
 
 export const ModalPhoto = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80%;
   /* margin: 20px; */
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 60%;
+  background-size: contain;
 
-  @media (max-width: 1280px) {
-    background-size: 80%;
-  }
-
-  @media (max-width: 800px) {
-    height: 400px;
+  @media (max-width: 820px) {
+    height: 100%;
+    max-height: 500px;
+    background-size: cover;
   }
 
   @media (max-width: 512px) {
@@ -100,7 +99,7 @@ export const ModalContentContainer = styled.div`
     width: 350px;
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 820px) {
     width: 100%;
   }
 `;
@@ -109,8 +108,8 @@ export const ModalContentWrapper = styled.div`
   overflow: hidden;
   overflow-y: auto;
 
-  @media (max-width: 800px) {
-    height: calc(80vh - 300px - 60px);
+  @media (max-width: 820px) {
+    height: calc(80vh - 300px);
   }
 
   @media (max-width: 512px) {

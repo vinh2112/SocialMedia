@@ -24,7 +24,7 @@ import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
 import NotificationSection from "./NotificationSection";
 import * as api from "api";
 import * as action from "redux/actions";
-import PhotoosLogo from "assets/images/Photoos.png";
+import PhotoosLogo from "assets/images/Photoos.svg";
 
 const Header = ({ toggle, isAdmin }) => {
   let initialState = {
@@ -34,8 +34,8 @@ const Header = ({ toggle, isAdmin }) => {
   const [isOpen, setIsOpen] = useState(initialState);
   const domNode = useRef();
   const notiNode = useRef();
-  const user = useSelector(authState$);
-  const notification = useSelector(notificationState$);
+  const { currentUser } = useSelector(authState$);
+  const { data, isLoading } = useSelector(notificationState$);
   const dispatch = useDispatch();
 
   const handleSideBar = (e) => {
@@ -43,36 +43,32 @@ const Header = ({ toggle, isAdmin }) => {
   };
 
   const handleNotifyPopup = async () => {
-    if (isOpen.notify && countNotifications(notification.data) !== 0) {
+    setIsOpen({ sideBar: false, notify: !isOpen.notify });
+
+    if (isOpen.notify && countNotifications(data) !== 0) {
       await api.NotificationAPI.seenNotifications()
         .then((res) => {
           dispatch(action.fetchNotifications.fetchNotificationsSuccess(res.data));
         })
         .catch((err) => console.log(err));
     }
-
-    setIsOpen({ sideBar: false, notify: !isOpen.notify });
   };
 
   const countNotifications = (data) => {
-    const unseenNoti = data.filter((noti) => !noti.seen);
+    const unseenNoti = data.filter((noti) => !noti.seen.some((user) => user === currentUser?._id));
 
     return unseenNoti.length;
   };
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      if (user.currentUser) {
-        await api.NotificationAPI.fetchNotifications()
-          .then((res) => {
-            dispatch(action.fetchNotifications.fetchNotificationsSuccess(res.data));
-          })
-          .catch((err) => console.log(err));
+      if (currentUser && !data.length && !isLoading) {
+        dispatch(action.fetchNotifications.fetchNotificationsRequest());
       }
     };
 
     fetchNotifications();
-  }, [dispatch, user]);
+  }, [dispatch, currentUser, data, isLoading]);
 
   useEffect(() => {
     let handleOutSide = (e) => {
@@ -105,11 +101,11 @@ const Header = ({ toggle, isAdmin }) => {
         </HeaderLeft>
 
         <HeaderRight>
-          {user.currentUser ? (
+          {currentUser ? (
             <>
-              <RoundButtonLink to={`/profile/${user.currentUser._id}`}>
-                <Avatar src={user.currentUser.avatar ? user.currentUser.avatar : DefaultAvatar} alt="Photo" />
-                <UserName>@{user.currentUser.name}</UserName>
+              <RoundButtonLink to={`/profile/${currentUser._id}`}>
+                <Avatar src={currentUser.avatar ? currentUser.avatar : DefaultAvatar} alt="Photo" />
+                <UserName>@{currentUser.name}</UserName>
                 <span className="tooltip">Your page</span>
               </RoundButtonLink>
             </>
@@ -132,18 +128,16 @@ const Header = ({ toggle, isAdmin }) => {
             <span className="tooltip">Explore</span>
           </RoundActionButton>
 
-          {user.currentUser && (
+          {currentUser && (
             <NotificationContainer ref={notiNode}>
               <RoundLabelButton htmlFor="notify-checkbox" className="mg-r fs-14" onClick={handleNotifyPopup}>
                 <Icon icon="codicon:bell" />
                 <span className="tooltip">Notification</span>
-                {countNotifications(notification.data) !== 0 && (
-                  <span className="badge">{countNotifications(notification.data)}</span>
-                )}
+                {countNotifications(data) !== 0 && <span className="badge">{countNotifications(data)}</span>}
               </RoundLabelButton>
               <input type="checkbox" id="notify-checkbox" hidden />
 
-              <NotificationSection isOpen={isOpen.notify} notifications={notification.data} />
+              <NotificationSection isOpen={isOpen.notify} notifications={data} userId={currentUser?._id} />
             </NotificationContainer>
           )}
 
@@ -154,7 +148,7 @@ const Header = ({ toggle, isAdmin }) => {
             </RoundLabelButton>
             {/* <input type="checkbox" id="activeCheckBox"></input> */}
 
-            <SideBar isOpen={isOpen.sideBar} handleSideBar={handleSideBar} user={user} />
+            <SideBar isOpen={isOpen.sideBar} handleSideBar={handleSideBar} user={currentUser} />
           </SideBarContainer>
         </HeaderRight>
       </HeaderWrapper>

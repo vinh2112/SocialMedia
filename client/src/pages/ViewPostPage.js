@@ -27,6 +27,12 @@ export default function ViewPostPage() {
     scrollNode.scrollTop = 0;
   }, [data]);
 
+  React.useEffect(() => {
+    return () => {
+      dispatch(actions.resetPosts());
+    };
+  }, [dispatch]);
+
   return (
     <>
       <Header />

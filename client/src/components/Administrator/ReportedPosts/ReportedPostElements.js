@@ -182,7 +182,7 @@ export const ReportChartContainer = styled.div`
   max-width: 400px;
   height: fit-content;
   padding: 20px 0 30px;
-  border-radius: 20px;
+  border-radius: var(--border-radius-admin);
   background-color: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
 `;

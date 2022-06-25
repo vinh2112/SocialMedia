@@ -103,8 +103,8 @@ export function* reactPost(action) {
       yield put(actions.reactPost.reactPostSuccess(res.data));
 
       yield call(sendNotification, {
-        receiverId: res.data.userId._id,
-        type: 0,
+        receivers: [res.data.userId._id],
+        type: "react",
         targetId: res.data._id,
       });
     }
@@ -119,8 +119,8 @@ export function* interactUser(action) {
     yield put(actions.interactUser.interactUserSuccess(res.data));
 
     yield call(sendNotification, {
-      receiverId: res.data._id,
-      type: 2,
+      receivers: [res.data._id],
+      type: "profile",
       targetId: res.data._id,
     });
   } catch (error) {

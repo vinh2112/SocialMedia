@@ -1,9 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-    html {
+    /* html {
         scroll-behavior: smooth;
-    }
+    } */
 
     .simplebar-scrollbar::before {
         background-color: ${({ theme }) => theme.subTextColor} !important;

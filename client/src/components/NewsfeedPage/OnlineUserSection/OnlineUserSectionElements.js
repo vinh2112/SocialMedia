@@ -35,7 +35,7 @@ export const OnlineUserItemContainer = styled(Link)`
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ theme }) => theme.hoverColor};
+    background-color: ${({ theme }) => theme.contrastColor};
   }
 
   & > span {

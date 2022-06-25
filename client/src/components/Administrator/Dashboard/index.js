@@ -10,16 +10,7 @@ import {
   DashboardChartContainer,
   DashboardTemp,
 } from "./DashboardElements";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { adminState$ } from "redux/selectors";
 import { useSelector } from "react-redux";
@@ -66,7 +57,7 @@ export default function Dashboard() {
 
         <DashboardChart chartData={data.userChart} />
 
-        <DashboardTemp>Something</DashboardTemp>
+        <DashboardTemp></DashboardTemp>
       </DashboardContainer>
     </>
   );

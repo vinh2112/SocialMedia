@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "redux/actions";
 import { authState$ } from "redux/selectors";
 import { useHistory } from "react-router-dom";
+import PhotoosLogo from "assets/images/Photoos.svg";
 
 const initialData = {
   email: "",
@@ -119,7 +120,12 @@ const Login = () => {
     <LoginContainer>
       <div className="login__body">
         <div className="login__container-left">
-          <div className="login__heading">Sign in to Photoos</div>
+          <div className="login__heading">
+            Sign in to
+            <span>
+              <img src={PhotoosLogo} alt="photoos logo" />
+            </span>
+          </div>
           <div className="login__content-1">If you don't have an account</div>
           <div className="login__content-2">
             You can <a href="/register">Register here!</a>
@@ -241,17 +247,12 @@ const Login = () => {
               size="large"
               fullWidth
             >
-              Log in
+              Sign in
             </LoadingButton>
 
             <Typography sx={{ mt: "10px" }} align="center" variant="body2" component="div">
               Don't have an account?{" "}
-              <Link
-                ref={nodeRef}
-                href="/register"
-                sx={{ color: "var(--primary-color)", fontWeight: "700" }}
-                underline="none"
-              >
+              <Link ref={nodeRef} href="/register" sx={{ color: "var(--primary-color)", fontWeight: "700" }} underline="none">
                 Register
               </Link>
             </Typography>

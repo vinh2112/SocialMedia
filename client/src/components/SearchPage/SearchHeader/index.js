@@ -1,10 +1,10 @@
 import React from "react";
-import { Container } from "./SearchHeaderElements";
+import { Container, KeywordItemLink, SearchWrapper } from "./SearchHeaderElements";
 import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import { autoCompleteStyle, textFieldStyle } from "styles/muiCustom";
 import { Icon } from "@iconify/react";
 
-export default function SearchHeader({ query, onSubmit }) {
+export default function SearchHeader({ query, onSubmit, keywords }) {
   const [searchOptions, setSearchOptions] = React.useState([]);
   const [searchTerm, setSearchTerm] = React.useState(query || "");
   const typingTimeoutRef = React.useRef(null);
@@ -53,35 +53,46 @@ export default function SearchHeader({ query, onSubmit }) {
 
   return (
     <Container>
-      <Autocomplete
-        sx={autoCompleteStyle}
-        size="small"
-        freeSolo
-        disablePortal
-        inputValue={searchTerm}
-        onInputChange={handleSearchChange}
-        groupBy={(option) => option.type}
-        getOptionLabel={(option) => option.label}
-        options={searchOptions}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            sx={{ ...textFieldStyle, ...params.sx }}
-            placeholder="Search ..."
-            InputProps={{
-              ...params.InputProps,
-              startAdornment: (
-                <InputAdornment sx={{ ml: 1 }} position="start">
-                  <Icon style={{ fontSize: "20px" }} icon="eva:search-outline" />
-                </InputAdornment>
-              ),
-            }}
-          />
-        )}
-        fullWidth
-      />
-
-      <div>list keywords</div>
+      <SearchWrapper>
+        <h1 className="search__header-heading">Stunning free images & royalty free stock</h1>
+        <div className="search__header-content">
+          Over 2.6 million+ high quality stock images, videos and music shared by our talented community.
+        </div>
+        <Autocomplete
+          sx={{ ...autoCompleteStyle }}
+          freeSolo
+          disablePortal
+          inputValue={searchTerm}
+          onInputChange={handleSearchChange}
+          groupBy={(option) => option.type}
+          getOptionLabel={(option) => option.label}
+          options={searchOptions}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              sx={{ ...textFieldStyle, bgcolor: "background.paper", borderRadius: "4px" }}
+              placeholder="Search ..."
+              InputProps={{
+                ...params.InputProps,
+                startAdornment: (
+                  <InputAdornment sx={{ ml: 1 }} position="start">
+                    <Icon style={{ fontSize: "20px" }} icon="eva:search-outline" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+          fullWidth
+        />
+        <div className="search__header-keywords">
+          <span>Popular keywords:</span>{" "}
+          {keywords?.map((item) => (
+            <KeywordItemLink key={item._id} to={`/search?query=${item.keyword}`} onClick={() => onSubmit(item.keyword)}>
+              #{item.keyword}
+            </KeywordItemLink>
+          ))}
+        </div>
+      </SearchWrapper>
     </Container>
   );
 }

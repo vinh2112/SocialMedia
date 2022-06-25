@@ -61,22 +61,12 @@ function App() {
     scrollRef.current.getScrollElement().addEventListener("scroll", showScrollToTop);
   }, []);
 
-  // const handleLoggedIn = () => {
-  //   const TOKEN = localStorage.getItem("access_token");
-  //   if (TOKEN) return true;
-  //   return false;
-  // };
-
   const scrollToTop = () => {
     scrollRef.current.getScrollElement().scrollTop = 0;
   };
 
   return (
-    <SimpleBarReact
-      style={{ height: "100vh" }}
-      scrollableNodeProps={{ id: "scroll-node" }}
-      ref={scrollRef}
-    >
+    <SimpleBarReact style={{ height: "100vh" }} scrollableNodeProps={{ id: "scroll-node" }} ref={scrollRef}>
       <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
         <BrowserRouter>
           <MuiThemeProvider theme={theme === "light" ? muiLightTheme : muiDarkTheme}>
@@ -89,9 +79,6 @@ function App() {
                   <Route path="/login" component={LoginPage} />
                   <Route path="/register" component={SignupPage} />
                   <Route path="/search" component={SearchPage} />
-                  {/* <Route path="/login">
-                  {handleLoggedIn() ? <Redirect to="/" /> : <NotFoundPage />}
-                </Route> */}
                   <Route path="/setting" component={EditProfilePage} />
                   <Redirect from="/detail/" to="/" exact />
                   <Route path="/profile/:userId" component={ProfilePage} />

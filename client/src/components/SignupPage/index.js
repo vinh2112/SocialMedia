@@ -23,6 +23,7 @@ import { UserAPI } from "api";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actions from "redux/actions";
+import PhotoosLogo from "assets/images/Photoos.svg";
 
 const errorInitial = {
   email: "",
@@ -160,7 +161,10 @@ const SignupSection = () => {
     <SignupContainer>
       <Box className="signup__form">
         <Typography sx={{ mb: "16px" }} align="center" variant="h4">
-          Sign up to Photoos
+          Sign up to
+          <span style={{ marginLeft: "20px" }}>
+            <img style={{ width: "120px" }} src={PhotoosLogo} alt="photoos logo" />
+          </span>
         </Typography>
 
         <GoogleLogin
@@ -240,14 +244,7 @@ const SignupSection = () => {
                 <Typography variant="subtitle2" component="div">
                   Last name
                 </Typography>
-                <TextField
-                  name="lastName"
-                  value={data.lastName}
-                  sx={textFieldStyle}
-                  size="small"
-                  variant="outlined"
-                  fullWidth
-                />
+                <TextField name="lastName" value={data.lastName} sx={textFieldStyle} size="small" variant="outlined" fullWidth />
               </FormControl>
             </Stack>
 
@@ -330,12 +327,11 @@ const SignupSection = () => {
 
         <Typography sx={{ mt: "10px" }} variant="body2" component="div">
           Already have an account?{" "}
-          <Link ref={nodeRef} href="/login" sx={{ color: "var(--primary-color)", fontWeight: "500" }} underline="none">
-            Log in
+          <Link ref={nodeRef} href="/login" sx={{ color: "var(--primary-color)", fontWeight: "700" }} underline="none">
+            Sign in
           </Link>
         </Typography>
       </Box>
-      <div className="signup__content-right" />
     </SignupContainer>
   );
 };

@@ -5,6 +5,9 @@ export const DashboardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-gap: 25px 10px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
 
   @media (max-width: 700px) {
     grid-gap: 10px;
@@ -13,7 +16,8 @@ export const DashboardContainer = styled.div`
 
 export const DashboardTitle = styled.h3`
   color: ${({ theme }) => theme.subTextColor};
-  margin-bottom: 20px;
+  max-width: 1280px;
+  margin: 0 auto 20px;
   font-weight: 500;
   letter-spacing: 1px;
 `;
@@ -24,9 +28,9 @@ export const DashboardCardContainer = styled(Link)`
   align-items: center;
   width: 100%;
   max-width: 350px;
-  padding: 24px 0px 24px 16px;
+  padding: 24px 0px 24px 20px;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: var(--border-radius-admin);
   background-color: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
   text-decoration: none;
@@ -101,7 +105,7 @@ export const DashboardChartContainer = styled.div`
   width: 100%;
   padding: 20px 16px 20px 16px;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: var(--border-radius-admin);
   background-color: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
 `;
@@ -114,7 +118,7 @@ export const DashboardTemp = styled.div`
   width: 100%;
   padding: 20px 16px 20px 16px;
   margin: 0 auto;
-  border-radius: 20px;
+  border-radius: var(--border-radius-admin);
   background-color: ${({ theme }) => theme.primary};
   box-shadow: var(--box-shadow);
 `;

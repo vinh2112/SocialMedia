@@ -44,7 +44,7 @@ const NewsFeed = () => {
       <PostList direction="left" />
       <NewsFeedRight>
         <PostChart />
-        {currentUser && <OnlineUserSection />}
+        {currentUser && <OnlineUserSection currentUser={currentUser} />}
       </NewsFeedRight>
       {currentUser && <PostUpdateModal user={currentUser} />}
     </NewsFeedContainer>

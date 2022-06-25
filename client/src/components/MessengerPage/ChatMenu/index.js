@@ -61,7 +61,7 @@ export default function ChatMenu({ onFindConv, conversations, currentUser, setCu
   };
 
   return (
-    <ChatMenuContainer>
+    <ChatMenuContainer isSearching={isSearching}>
       <ChatMenuWrapper isSearching={isSearching}>
         <ChatMenuTop>
           <div className="chat-title">Chat</div>

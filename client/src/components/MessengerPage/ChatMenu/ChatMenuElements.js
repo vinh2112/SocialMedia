@@ -7,6 +7,7 @@ export const ChatMenuContainer = styled.div`
   width: 320px;
   height: 100%;
   border-right: 1px solid ${({ theme }) => theme.borderColor};
+  transition: all 0.1s ease;
   overflow: hidden;
 
   @media (max-width: 1024px) {
@@ -14,7 +15,7 @@ export const ChatMenuContainer = styled.div`
   }
 
   @media (max-width: 700px) {
-    width: 83px;
+    width: ${({ isSearching }) => (isSearching ? "280px" : "83px")};
   }
 `;
 
@@ -41,6 +42,12 @@ export const ChatMenuTop = styled.div`
 
   @media (max-width: 1024px) {
     padding: 12px 16px 8px;
+  }
+
+  @media (max-width: 700px) {
+    & > .chat-title {
+      display: none;
+    }
   }
 `;
 

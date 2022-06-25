@@ -18,9 +18,9 @@ export const ToastContainer = styled.div`
     align-items: center;
     height: 50px;
     min-width: 250px;
-    border-radius: 5px;
-    border-left: 4px solid;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    border-left: 6px solid;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
     background-color: ${({ theme }) => theme.toastColor};
     overflow: hidden;
   }
@@ -32,20 +32,24 @@ export const ToastContainer = styled.div`
   .toast__message {
     flex: 1;
     padding: 0 14px 0 0px;
-    font-size: 14px;
-    font-weight: 500;
-    color: ${({ theme }) => theme.subTextColor};
+    font-size: 12px;
+    font-weight: 700;
+    max-width: 170px;
+    color: ${({ theme }) => theme.textColor};
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .toast__icon {
     display: flex;
     align-items: center;
     padding: 0 12px;
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .toast__close {
-    padding: 0 10px;
+    padding: 0 6px;
     align-self: stretch;
     display: flex;
     align-items: center;

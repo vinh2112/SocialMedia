@@ -16,7 +16,7 @@ import * as actions from "redux/actions";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 
-export default function NotificationSection({ isOpen, notifications }) {
+export default function NotificationSection({ isOpen, notifications, userId }) {
   const socket = useContext(SocketContext);
   const dispatch = useDispatch();
 
@@ -32,42 +32,46 @@ export default function NotificationSection({ isOpen, notifications }) {
       <div className="notify-title">Notification</div>
       <ListNotification>
         {notifications.map((noti) => (
-          <NotificationItem key={noti._id} notification={noti} />
+          <NotificationItem key={noti._id} notification={noti} userId={userId} />
         ))}
       </ListNotification>
     </NotificationContainer>
   );
 }
 
-const NotificationItem = ({ notification }) => {
-  const displayText = (type) => {
-    let action;
+const NotificationItem = ({ notification, userId }) => {
+  const displaySenders = (senders) => {
+    const { length } = senders;
 
-    if (type === 0) {
-      action = "liked your post";
-    } else if (type === 1) {
-      action = "commented your post";
-    } else if (type === 2) {
-      action = "followed your profile";
+    if (length > 1) {
+      if (length === 2) {
+        return <span className="notify-sender">{senders[0].fullName || senders[0].name} and 1 person </span>;
+      } else {
+        return (
+          <span className="notify-sender">
+            {senders[0].fullName || senders[0].name} and {length} people
+          </span>
+        );
+      }
     }
 
-    return `just ${action}.`;
+    return <span className="notify-sender">{senders[0].fullName || senders[0].name} </span>;
   };
 
   return (
     <NotificationItemContainer>
-      <NotifyWrapper to="#">
+      <NotifyWrapper to={notification.targetLink}>
         <NotifyAvatarWrapper>
-          <NotifyAvatar src={notification.senderId.avatar} alt="notify-avatar" />
+          <NotifyAvatar src={notification.senders[0].avatar} alt="notify-avatar" />
         </NotifyAvatarWrapper>
 
         <NotifyContent>
-          <NotifyText seen={notification.seen}>
-            <span className="notify-sender">{notification.senderId.fullName || notification.senderId.name}</span>{" "}
-            {displayText(notification.type)}
+          <NotifyText seen={notification.seen.some((id) => id === userId)}>
+            {displaySenders(notification.senders)}
+            {notification.content}
           </NotifyText>
 
-          <NotifyTime seen={notification.seen}>{moment(notification.createdAt).fromNow()}</NotifyTime>
+          <NotifyTime seen={notification.seen.some((id) => id === userId)}>{moment(notification.updatedAt).fromNow()}</NotifyTime>
         </NotifyContent>
       </NotifyWrapper>
     </NotificationItemContainer>

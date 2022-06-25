@@ -81,6 +81,13 @@ const PostItem = ({ post }) => {
           if (isPaid.data) {
             await PostAPI.downloadPost(post._id).then((res) => {
               saveAs(res.data.url, `${res.data.public_id}.png`);
+              dispatch(
+                actions.createNotification.createNotificationRequest({
+                  receivers: [post.userId._id],
+                  type: "download",
+                  targetId: post._id,
+                })
+              );
             });
           } else {
             history.push(`/checkout/${post._id}`, { post });
@@ -97,6 +104,13 @@ const PostItem = ({ post }) => {
     } else {
       await PostAPI.downloadPost(post._id).then((res) => {
         saveAs(res.data.url, `${res.data.public_id}.png`);
+        dispatch(
+          actions.createNotification.createNotificationRequest({
+            receivers: [post.userId._id],
+            type: "download",
+            targetId: post._id,
+          })
+        );
       });
     }
   };

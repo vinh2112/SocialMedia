@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Signup from "assets/images/signup.svg";
 
 export const SignupContainer = styled.div`
   position: relative;
@@ -45,16 +44,5 @@ export const SignupContainer = styled.div`
     max-width: 400px;
     margin: 0 auto;
     z-index: 1;
-  }
-
-  & > .signup__content-right {
-    flex: 1;
-    height: 100%;
-    background: url(${Signup}) center no-repeat;
-    background-size: 400px;
-
-    @media (max-width: 1024px) {
-      display: none;
-    }
   }
 `;
