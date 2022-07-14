@@ -1,7 +1,9 @@
 import AWS from "../configs/aws.js";
 import axios from "axios";
 
-const rekognition = new AWS.Rekognition();
+const rekognition = new AWS.Rekognition({
+  apiVersion: "2016-06-27",
+});
 
 export default async function detectImage(url) {
   try {

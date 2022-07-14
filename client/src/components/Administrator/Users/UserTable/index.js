@@ -184,7 +184,11 @@ const EnhancedTableToolbar = ({ userSelected }) => {
           </Tooltip>
         </>
       )}
-      <MailModal open={open.mail} onClose={() => setOpen({ ...open, mail: !open.mail })} />
+      <MailModal
+        open={open.mail}
+        onClose={() => setOpen({ ...open, mail: !open.mail })}
+        receivers={userSelected.map((user) => user.email)}
+      />
 
       <NotiModal
         open={open.noti}

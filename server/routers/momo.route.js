@@ -10,7 +10,7 @@ dotenv.config();
 const router = express.Router();
 
 router.post("/momo", async (req, res) => {
-  const { postId, price } = req.body;
+  const { url, price } = req.body;
 
   var partnerCode = process.env.MOMO_PARTNER_CODE;
   var accessKey = process.env.MOMO_ACCESS_KEY;
@@ -18,8 +18,8 @@ router.post("/momo", async (req, res) => {
   var requestId = partnerCode + new Date().getTime();
   var orderId = requestId;
   var orderInfo = "MoMo";
-  var redirectUrl = process.env.CLIENT_BASE_URL + `/checkout/${postId}`;
-  var ipnUrl = process.env.CLIENT_BASE_URL;
+  var redirectUrl = url;
+  var ipnUrl = url;
   var amount = Math.ceil(price * 23000);
   var requestType = "captureWallet";
   var extraData = "";

@@ -5,7 +5,7 @@ import AdminPage from "pages/AdminPage";
 import EditProfilePage from "pages/EditProfilePage";
 import MessengerPage from "pages/MessengerPage";
 import NotFoundPage from "pages/NotFoundPage";
-import PaypalPage from "pages/PaypalPage";
+import CheckoutPay from "pages/CheckoutPage";
 import ProfilePage from "pages/ProfilePage";
 import SearchPage from "pages/SearchPage";
 import SignupPage from "pages/SignupPage";
@@ -24,6 +24,7 @@ import { GlobalStyles } from "./styles/global";
 import { darkTheme, lightTheme } from "./styles/theme";
 import SimpleBarReact from "simplebar-react";
 import ScrollToTop from "components/ScrollToTop";
+import PayPage from "pages/PayPage";
 
 const muiDarkTheme = createTheme({
   palette: {
@@ -82,7 +83,8 @@ function App() {
                   <Route path="/setting" component={EditProfilePage} />
                   <Redirect from="/detail/" to="/" exact />
                   <Route path="/profile/:userId" component={ProfilePage} />
-                  <Route path="/checkout/:postId" component={PaypalPage} />
+                  <Route path="/checkout/:postId" component={CheckoutPay} />
+                  <Route path="/pay" component={PayPage} />
                   <Route path="/administrator" component={AdminPage} />
                   <Route path="/messages" component={MessengerPage} />
                   <Route path="/post/:id" component={ViewPostPage} />

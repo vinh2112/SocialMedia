@@ -11,6 +11,7 @@ import {
   Detail,
   ButtonWrapper,
   AvatarUser,
+  BalanceLink,
   // CustomAvatar,
   // CustomAvatarGroup,
 } from "./AccountInfoElements";
@@ -146,6 +147,17 @@ export default function UserInfo() {
             </>
           )}
         </Details>
+
+        {profile?._id === currentUser?._id && (
+          <div className="account__balance-wrapper">
+            <div className="account__balance">
+              <span>Balance:</span>
+              <div className="balance">${currentUser?.wallet}</div>
+            </div>
+
+            <BalanceLink to="/pay">More</BalanceLink>
+          </div>
+        )}
       </AccountInfo>
     </>
   );

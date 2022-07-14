@@ -135,7 +135,7 @@ export const checkEmail = async (req, res) => {
       return res.status(400).json({ msg: "Email format is incorrect." });
 
     const user = await UserModel.findOne({ email });
-    if (!user) return res.status(200).json(false);
+    if (!user) return res.status(200).json({ status: "fail" });
     else {
       const pinCode = randomstring.generate({ length: 4, charset: "numeric" });
       PINs.push({
@@ -158,7 +158,7 @@ export const checkEmail = async (req, res) => {
 
       await MailService.sendMail("Photoos", email, "Recover Photoos's password", content)
         .then((result) => {
-          return res.status(200).json(result);
+          return res.status(200).json({ status: "success" });
         })
         .catch((error) => {
           return res.status(500).json(error);
@@ -176,9 +176,9 @@ export const checkPinCode = async (req, res) => {
     const isCorrect = PINs.some((obj) => obj.email === email && obj.pin === pin);
 
     if (!isCorrect) {
-      return res.status(200).json(false);
+      return res.status(200).json({ status: "fail" });
     } else {
-      return res.status(200).json(true);
+      return res.status(200).json({ status: "success" });
     }
   } catch (error) {
     return res.status(500).json({ msg: error.message });
@@ -207,16 +207,7 @@ export const register = async (req, res) => {
 
     await newUser.save();
 
-    // Create Token to Authentication/Authorization
-    const accessToken = createAccessToken({ id: newUser._id });
-    const refreshToken = createRefreshToken({ id: newUser._id });
-
-    res.cookie("refreshtoken", refreshToken, {
-      httpOnly: true,
-      path: "/user/refresh_token",
-    });
-
-    return res.status(200).json({ accessToken });
+    return res.status(200).json({ status: "success" });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }
@@ -235,7 +226,7 @@ export const searchUsers = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const { fullName, name, avatar, city, from, desc, password } = req.body;
+  const { fullName, name, avatar, city, from, desc, password, wallet } = req.body;
   // Check Password and Hash Password
   var newPassword;
   if (password) {
@@ -256,6 +247,7 @@ export const updateUser = async (req, res) => {
       city: city,
       from: from,
       desc: desc,
+      $inc: { wallet: wallet },
     });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
@@ -410,7 +402,7 @@ export const changePassword = async (req, res) => {
     return res.status(500).json({ msg: error.message });
   }
 
-  return res.status(200).json("Updated user");
+  return res.status(200).json({ status: "success" });
 };
 
 // -------- Create Token Function ------------

@@ -7,6 +7,7 @@ import { UserModel } from "../models/user.model.js";
 import { CommentModel } from "../models/comment.model.js";
 import { watermarkImage } from "../utils/cloudinary.js";
 import detectImage from "../utils/aws.js";
+import { KeywordModel } from "../models/keyword.model.js";
 
 const realUsers = [
   "6145e281d0de2256d6a23b2e",
@@ -106,6 +107,13 @@ export const fakePosts = async (req, res) => {
           category: postURL.tags,
           desc,
         });
+
+        KeywordModel.insertMany(
+          postURL.tags.map((tag) => {
+            return { keyword: tag };
+          }),
+          { ordered: false }
+        ).catch((error) => console.log(error));
       })
     );
 
@@ -142,7 +150,7 @@ async function handlePostImages(loopCount) {
       ...(await axios.get(url).then((res) => {
         return Promise.all(
           res.data.hits.map((post) => {
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
               cloudinary.v2.uploader.upload(post.largeImageURL, { folder: "Image" }, async (err, result) => {
                 if (err) throw err;
 
@@ -195,7 +203,7 @@ export const fakeLikeOfPost = async (req, res) => {
     for (const post of posts) {
       const users = await UserModel.aggregate([
         { $match: { _id: { $ne: post.userId.toString() } } },
-        { $sample: { size: Math.random() * 50 + 20 } },
+        { $sample: { size: Math.random() * 50 + 30 } },
       ]);
 
       const listUsersId = users.map((user) => user._id);
@@ -229,25 +237,29 @@ export const fakeCommentOfPost = async (req, res) => {
         comments = [...comments, ...listComments];
       });
 
-    const posts = await PostModel.find();
+    const posts = await PostModel.find().lean();
 
     for (const post of posts) {
-      let listNewComment = [];
+      const commentsOfPost = await CommentModel.find({ postId: post._id }).lean();
 
-      const users = await UserModel.aggregate([{ $sample: { size: Math.floor(Math.random() * 2 + 1) } }]);
+      if (commentsOfPost.length < 10) {
+        let listNewComment = [];
 
-      const listUsersId = users.map((user) => user._id);
+        const users = await UserModel.aggregate([{ $sample: { size: Math.floor(Math.random() * 1 + 1) } }]);
 
-      for (const userId of listUsersId) {
-        listNewComment.push({
-          postId: post._id,
-          userId: userId,
-          comment: comments[Math.floor(Math.random() * (comments.length - 1))],
-        });
+        const listUsersId = users.map((user) => user._id);
+
+        for (const userId of listUsersId) {
+          listNewComment.push({
+            postId: post._id,
+            userId: userId,
+            comment: comments[Math.floor(Math.random() * (comments.length - 1))],
+          });
+        }
+
+        await CommentModel.insertMany(listNewComment);
       }
 
-      await CommentModel.insertMany(listNewComment);
-      const commentsOfPost = await CommentModel.find({ postId: post._id });
       const commentCount = commentsOfPost.reduce((count, currItem) => {
         return (count += 1 + currItem.reply.length);
       }, 0);
@@ -256,6 +268,49 @@ export const fakeCommentOfPost = async (req, res) => {
     }
 
     return res.json("done");
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
+};
+
+export const updateUserInfo = async (req, res) => {
+  try {
+    const users = await UserModel.find().lean();
+
+    for await (const user of users) {
+      const postsOfUser = await PostModel.find({ userId: user._id }).lean();
+
+      const likeCount = postsOfUser.reduce((total, item) => {
+        return (total += item.likes.length);
+      }, 0);
+
+      const postCount = postsOfUser.length;
+
+      await UserModel.findByIdAndUpdate(user._id, { $set: { likeCount, postCount } });
+    }
+
+    return res.json("done");
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
+};
+
+export const updateKeyword = async (req, res) => {
+  try {
+    const posts = await PostModel.find().lean();
+
+    const keywords = posts.reduce((arrKeywords, currItem) => {
+      return [...arrKeywords, ...currItem.category];
+    }, []);
+
+    KeywordModel.insertMany(
+      keywords.map((keyword) => {
+        return { keyword: keyword };
+      }),
+      { ordered: false }
+    ).catch((error) => console.log(error));
+
+    return res.json(keywords);
   } catch (error) {
     return res.status(500).json({ msg: error });
   }

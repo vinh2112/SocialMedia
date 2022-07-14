@@ -30,8 +30,8 @@ const schema = new mongoose.Schema(
       default: false,
     },
     price: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
     },
     commentCount: {
       type: Number,

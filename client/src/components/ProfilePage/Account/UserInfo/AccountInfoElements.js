@@ -64,6 +64,31 @@ export const AccountInfo = styled.div`
   width: 100%;
   padding: 0 16px 16px;
 
+  & > .account__balance-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 280px;
+    margin: 20px 0 0;
+    border-radius: 5px;
+    border: 2px solid ${({ theme }) => theme.borderColor};
+    padding: 12px 10px;
+
+    & > .account__balance {
+      display: flex;
+      gap: 10px;
+
+      & > span {
+        color: ${({ theme }) => theme.subTextColor};
+      }
+
+      & > .balance {
+        color: var(--success-color);
+      }
+    }
+  }
+
   @media (max-width: 1024px) {
     padding: 0;
     margin-left: 20px;
@@ -198,6 +223,11 @@ export const Button = styled.button`
   & .iconify {
     font-size: 18px;
   }
+`;
+
+export const BalanceLink = styled(Link)`
+  color: var(--primary-color);
+  text-decoration: none;
 `;
 
 export const CustomAvatar = styled(Avatar)``;

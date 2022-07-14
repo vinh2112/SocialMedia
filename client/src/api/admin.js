@@ -16,6 +16,16 @@ const AdminAPI = {
       return error.response;
     }
   },
+  sendMail: async (payload) => {
+    try {
+      const TOKEN = localStorage.getItem("access_token");
+
+      const res = await axios.post(`${BASE_URL}/api/dashboard/send-mail`, payload, { headers: { Authorization: TOKEN } });
+      return res;
+    } catch (error) {
+      return error.response;
+    }
+  },
 };
 
 export default AdminAPI;

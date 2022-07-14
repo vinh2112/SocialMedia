@@ -9,20 +9,19 @@ import {
   ContentTop,
   CreatedDate,
   CustomButton,
-  CustomInputAdornment,
-  CustomInputLabel,
-  CustomOutlinedInput,
   Desc,
   DescWrapper,
 } from "./ModalContentElements";
 import moment from "moment";
 import { LoadingButton } from "@mui/lab";
-import { FormControl, Stack, Switch } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { PostAPI } from "api";
 import * as actions from "redux/actions";
 import DefaultAvatar from "assets/images/DefaultAvatar.jpg";
+import { checkBoxStyle, textButtonStyle, textFieldStyle } from "styles/muiCustom";
+import NumberFormat from "react-number-format";
 
 export default function ModalContent({ post }) {
   const [newPost, setNewPost] = useState(null);
@@ -103,16 +102,22 @@ export default function ModalContent({ post }) {
 
         {post.userId._id === currentUser?._id &&
           (isOnEdit ? (
-            <Stack spacing={1} direction="row" alignItems="flex-end">
-              <CustomButton size="small" variant="string" onClick={() => setIsOnEdit(!isOnEdit)}>
-                Cancel
-              </CustomButton>
-              <LoadingButton
+            <Stack sx={{ height: "fit-content" }} spacing={2} direction="row">
+              <Button
+                sx={textButtonStyle}
+                className="btn-default"
                 size="small"
-                sx={{ height: 30 }}
+                variant="text"
+                onClick={() => setIsOnEdit(!isOnEdit)}
+              >
+                Cancel
+              </Button>
+              <LoadingButton
+                sx={textButtonStyle}
+                // className="btn-primary"
+                size="small"
                 loading={loading}
-                variant="outlined"
-                color="success"
+                variant="text"
                 onClick={handleSubmit}
               >
                 Update
@@ -129,29 +134,46 @@ export default function ModalContent({ post }) {
       <DescWrapper>
         {isOnEdit ? (
           <Stack spacing={1} direction="row">
-            <textarea name="desc" onChange={handleChangeValue} value={newPost.desc} />
+            <TextField
+              sx={{ ...textFieldStyle, height: "100%" }}
+              multiline
+              minRows={2}
+              name="desc"
+              onChange={handleChangeValue}
+              value={newPost.desc}
+              fullWidth
+            ></TextField>
 
-            <Stack spacing={1} alignItems="center" direction="column">
-              <Switch
-                checked={newPost.isPaymentRequired}
-                name="isPaymentRequired"
-                onChange={handleChangeValue}
-                size="small"
-                color="primary"
+            <Stack alignItems="center">
+              <FormControlLabel
+                sx={{ userSelect: "none" }}
+                control={
+                  <Checkbox
+                    checked={newPost.isPaymentRequired}
+                    name="isPaymentRequired"
+                    onChange={handleChangeValue}
+                    size="small"
+                    sx={checkBoxStyle}
+                  />
+                }
+                label={
+                  <Typography variant="caption" component="div">
+                    Fee
+                  </Typography>
+                }
               />
-              <FormControl>
-                <CustomInputLabel htmlFor="outlined-adornment-amount">Price</CustomInputLabel>
-                <CustomOutlinedInput
-                  id="outlined-adornment-amount"
-                  name="price"
-                  value={newPost.price}
-                  disabled={!newPost.isPaymentRequired}
-                  onChange={handleChangeValue}
-                  startAdornment={<CustomInputAdornment position="start">$</CustomInputAdornment>}
-                  label="Price"
-                  sx={{ width: 100, height: 40 }}
-                />
-              </FormControl>
+              <TextField
+                sx={{ ...textFieldStyle, width: "100px" }}
+                size="small"
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                  inputComponent: NumberFormatCustom,
+                }}
+                name="price"
+                value={newPost.price}
+                disabled={!newPost.isPaymentRequired}
+                onChange={handleChangeValue}
+              ></TextField>
             </Stack>
           </Stack>
         ) : (
@@ -161,3 +183,24 @@ export default function ModalContent({ post }) {
     </Container>
   );
 }
+
+const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+    />
+  );
+});

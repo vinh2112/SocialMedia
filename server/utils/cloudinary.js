@@ -9,7 +9,7 @@ export const watermarkImage = async (ORIGINAL_IMAGE) => {
     const [image, logo] = await Promise.all([Jimp.read(ORIGINAL_IMAGE), Jimp.read(LOGO)]);
 
     image.resize(image.bitmap.width / 2, Jimp.AUTO);
-    logo.resize(logo.bitmap.width / 4, Jimp.AUTO);
+    logo.resize(image.bitmap.width / 8, Jimp.AUTO);
 
     const X = 10;
     const Y = 10;

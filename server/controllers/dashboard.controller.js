@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model.js";
 import { ReportModel } from "../models/report.model.js";
 import { KeywordModel } from "../models/keyword.model.js";
 import { CommentModel } from "../models/comment.model.js";
+import MailService from "../services/mail.service.js";
 
 export const getTotal = async (req, res) => {
   try {
@@ -117,3 +118,17 @@ async function getReportData() {
     reportDataChart: [totalReports, deletedReports, refusedReports],
   };
 }
+
+export const sendMail = async (req, res) => {
+  try {
+    const { emails, subject, content } = req.body;
+
+    emails.forEach((email) => {
+      MailService.sendMail(req.userId, email, subject, content);
+    });
+
+    return res.status(200).json({ isSuccess: true });
+  } catch (error) {
+    return res.status(500).json({ msg: error });
+  }
+};

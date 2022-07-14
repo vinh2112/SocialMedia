@@ -52,7 +52,7 @@ async function getNotificationsByUserId(receiver) {
         path: "senders",
         select: "fullName name email avatar",
       })
-      .sort("-updatedAt")
+      .sort("-updatedAt -createdAt")
       .lean();
 
     return { notifications };

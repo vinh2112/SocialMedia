@@ -1,243 +1,211 @@
+import React, { useContext } from "react";
+import {
+  PackageItemButton,
+  PayButton,
+  PayButtonContainer,
+  PayContainer,
+  PayInformation,
+  PayMethod,
+  PayPackage,
+} from "./PayElements";
 import { Icon } from "@iconify/react";
-import { PayPalButtons } from "@paypal/react-paypal-js";
-import { AuthAPI, MomoAPI, PaymentAPI, PostAPI } from "api";
-import LoadingSection from "components/LoadingSection";
-import { ThemeContext } from "context/themeContext";
-import { saveAs } from "file-saver";
 import Momo from "assets/images/Momo.png";
 import Paypal from "assets/images/Paypal.png";
 import VNPAY from "assets/images/VNPAY.png";
 import ZaloPay from "assets/images/ZaloPay.png";
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { ThemeContext } from "context/themeContext";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import { AuthAPI, MomoAPI, UserAPI } from "api";
+import { useDispatch } from "react-redux";
+import * as reduxActions from "redux/actions";
 import { useHistory, useLocation } from "react-router-dom";
-import * as actions from "redux/actions";
-import { authState$ } from "redux/selectors";
-import {
-  BottomSection,
-  EWalletContainer,
-  OrderContainer,
-  PayButtonContainer,
-  PaymentContainer,
-  PaymentLeftSide,
-  PaymentOptionContainer,
-  PaymentRightSide,
-  TopSection,
-  UserBlockContainer,
-} from "./PaypalElement";
 
-const PaySection = ({ post }) => {
-  const [loading, setLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [paymentType, setPaymentType] = useState(1);
-  const [ewallet, setEwallet] = useState("paypal");
-  const { currentUser } = useSelector(authState$);
+const ewallets = [
+  {
+    id: 1,
+    name: "Paypal",
+    type: "paypal",
+    image: Paypal,
+  },
+  {
+    id: 2,
+    name: "Momo",
+    type: "momo",
+    image: Momo,
+  },
+  {
+    id: 3,
+    name: "ZaloPay",
+    type: "zalopay",
+    image: ZaloPay,
+  },
+  {
+    id: 4,
+    name: "VnPay",
+    type: "vnpay",
+    image: VNPAY,
+  },
+];
+
+const packages = [
+  {
+    id: 1,
+    name: "$5",
+    price: 5,
+  },
+  {
+    id: 2,
+    name: "$10",
+    price: 10,
+  },
+  {
+    id: 3,
+    name: "$20",
+    price: 20,
+  },
+  {
+    id: 4,
+    name: "$50",
+    price: 50,
+  },
+  {
+    id: 5,
+    name: "$100",
+    price: 100,
+  },
+];
+
+const PaySection = () => {
+  const [selectedPackage, setSelectedPackage] = React.useState(null);
+  const [ewallet, setEwallet] = React.useState("paypal");
   const dispatch = useDispatch();
   const history = useHistory();
 
   const search = useLocation().search;
   const query = new URLSearchParams(search).toString();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const confirmMomoPayment = async () => {
       if (query) {
-        setLoading(true);
-        await MomoAPI.confirmMomoPayment(query).then((res) => {
+        await MomoAPI.confirmMomoPayment(query).then(async (res) => {
           if (res.data.isSuccess) {
             dispatch(
-              actions.toast.showToast({
+              reduxActions.toast.showToast({
                 message: "Your order is completed",
                 type: "success",
               })
             );
-            setIsSuccess(res.data.isSuccess);
+
+            const res = await UserAPI.updateUser({ wallet: new URLSearchParams(search).get("amount") / 23000 });
+            if (res.status === 200) {
+              const newUser = await AuthAPI.getUserInfo();
+              dispatch(reduxActions.getCurrentUser(newUser.data));
+              dispatch(
+                reduxActions.toast.showToast({
+                  message: "Please check your wallet",
+                  type: "success",
+                })
+              );
+              history.push("/");
+            }
           }
         });
-
-        await PaymentAPI.createPayment({
-          postId: post._id,
-          postBody: {
-            price: post.price,
-            isSuccess: true,
-            posterId: post.userId,
-            type: 2,
-          },
-        });
-
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
       }
     };
 
     confirmMomoPayment();
-  }, [query, dispatch, post]);
-
-  const handlePaymentType = (type) => {
-    setPaymentType(type);
-
-    if (type === 1) {
-      setEwallet("paypal");
-    }
-  };
+  }, [query, dispatch, history, search]);
 
   const handleChangeEWallet = (ewallet) => {
     setEwallet(ewallet);
   };
 
-  const handleApprove = React.useCallback(async () => {
-    setLoading(true);
-    await PaymentAPI.createPayment({
-      postId: post._id,
-      postBody: {
-        price: post.price,
-        isSuccess: true,
-        posterId: post.userId,
-        type: paymentType,
-      },
-    });
+  const onApprove = async (data, actions) => {
+    try {
+      let wallet = packages.find((item) => item.id === selectedPackage).price;
 
-    if (paymentType === 1) {
-      await AuthAPI.getUserInfo().then((res) => {
-        dispatch(actions.getCurrentUser(res.data));
-      });
+      const res = await UserAPI.updateUser({ wallet });
+      if (res.status === 200) {
+        const newUser = await AuthAPI.getUserInfo();
+        dispatch(reduxActions.getCurrentUser(newUser.data));
+        dispatch(
+          reduxActions.toast.showToast({
+            message: "Please check your wallet",
+            type: "success",
+          })
+        );
+        history.push("/");
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-
-    setIsSuccess(true);
-
-    dispatch(
-      actions.toast.showToast({
-        message: "Your order is completed",
-        type: "success",
-      })
-    );
-
-    setLoading(false);
-  }, [post, paymentType, dispatch]);
+    return actions.order.capture();
+  };
 
   const handleMomoCheckout = async () => {
-    setLoading(true);
-    await MomoAPI.getPayUrl({ postId: post._id, price: post.price }).then((res) => {
+    await MomoAPI.getPayUrl({
+      url: window.location.href,
+      price: packages.find((item) => item.id === selectedPackage).price,
+    }).then((res) => {
       window.location.href = res.data;
     });
   };
 
-  const handleDownload = async () => {
-    await PostAPI.downloadPost(post._id).then((res) => {
-      saveAs(res.data.url, `${res.data.public_id}.png`);
-      history.push("/");
-    });
-  };
-
   return (
-    <>
-      <PaymentContainer>
-        <PaymentLeftSide>
-          <TopSection>
-            <img src={post.image.watermark} alt="payment" />
-          </TopSection>
+    <PayContainer>
+      <PayInformation className="pay__container">
+        <div className="pay-information__title">Information</div>
+        <div className="pay-information__info">
+          <div className="pay-information__item">
+            <span>ID: </span> 1234567489
+          </div>
+          <div className="pay-information__item">
+            <span>Name: </span> Vương Quốc Vinh
+          </div>
+          <div className="pay-information__item">
+            <span>Wallet: </span> $1234
+          </div>
+        </div>
+      </PayInformation>
 
-          <BottomSection>
-            <div className="payment__options">
-              <PaymentOptionItem name="payment__option" value={1} onChange={handlePaymentType} checked={true}>
-                <div className="payment__option-content_title">Photoos Wallet</div>
-                <div
-                  className={`payment__option-content_body ${currentUser && currentUser.wallet > 0 ? "green" : "red"}`}
-                >
-                  ${currentUser && currentUser.wallet}
-                </div>
-              </PaymentOptionItem>
+      <PayPackage className="pay__container">
+        <div className="pay-package__title">Select Package</div>
+        <div className="pay-package__packages">
+          {packages.map((item) => (
+            <label className="pay-package__item" key={item.id} onChange={() => setSelectedPackage(item.id)}>
+              {item.name}
+              <input hidden type="radio" name="package" />
+              <PackageItemButton className="pay-package__button" isShow={selectedPackage === item.id ? true : false}>
+                {item.id === selectedPackage ? <Icon icon="ep:select" /> : <Icon icon="fluent:select-all-off-24-regular" />}
+              </PackageItemButton>
+            </label>
+          ))}
+        </div>
+      </PayPackage>
 
-              <PaymentOptionItem name="payment__option" value={2} onChange={handlePaymentType}>
-                <div className="payment__option-content_title">E-Wallet</div>
-                <div className="payment__option-content_body">(Paypal, Momo, ZaloPay,...)</div>
-              </PaymentOptionItem>
+      {selectedPackage && (
+        <>
+          <PayMethod className="pay__container">
+            <div className="pay-method__title">Select Payment Method</div>
+            <div className="pay-method__methods">
+              {ewallets.map((item) => (
+                <label className="pay-method__item" key={item.id} onChange={() => handleChangeEWallet(item.type)}>
+                  <input hidden type="radio" name="ewallet" defaultChecked={item.type === "paypal" ? true : false} />
+                  <span className="method__item-selected">
+                    <Icon icon="ep:select" />
+                  </span>
+                  <img src={item.image} alt="" />
+                  <div className="method__item-name">{item.name}</div>
+                </label>
+              ))}
             </div>
+          </PayMethod>
 
-            {paymentType === 2 && (
-              <>
-                <span className="divider" />
-                <div className="payment__options-list_Ewallet">
-                  <EWalletItem
-                    backgroundImage={Paypal}
-                    name="ewallet-option"
-                    value="paypal"
-                    onChange={handleChangeEWallet}
-                    checked={true}
-                  />
-                  <EWalletItem
-                    backgroundImage={Momo}
-                    name="ewallet-option"
-                    value="momo"
-                    onChange={handleChangeEWallet}
-                  />
-                  <EWalletItem
-                    backgroundImage={ZaloPay}
-                    name="ewallet-option"
-                    value="zalopay"
-                    onChange={handleChangeEWallet}
-                  />
-                  <EWalletItem
-                    backgroundImage={VNPAY}
-                    name="ewallet-option"
-                    value="vnpay"
-                    onChange={handleChangeEWallet}
-                  />
-                </div>
-              </>
-            )}
-          </BottomSection>
-        </PaymentLeftSide>
-        <PaymentRightSide>
-          <OrderContainer>
-            <div className="order-title">Your Order</div>
-
-            <div className="order__detail">
-              <div className="order__detail-item">
-                <div className="order__detail-item_title">Author</div>
-                <UserBlock user={post.userId} />
-              </div>
-
-              <div className="order__detail-item">
-                <div className="order__detail-item_title">You</div>
-                {currentUser && <UserBlock user={currentUser} />}
-              </div>
-
-              <div className="order__detail-item flex">
-                <div className="order__detail-item_title">Method</div>
-                <div className="order__detail-item_subTitle">{paymentType === 1 ? "Photoos Wallet" : "E-wallet"}</div>
-              </div>
-
-              <div className="order__detail-item flex">
-                <div className="order__detail-item_title">Price</div>
-                <div className="order__detail-price">${post.price}</div>
-              </div>
-            </div>
-
-            <span className="order__detail-line" />
-
-            {loading ? (
-              <div>
-                <LoadingSection />
-              </div>
-            ) : isSuccess ? (
-              <PayButtonContainer
-                onClick={handleDownload}
-                className="download"
-                variant="contained"
-                startIcon={<Icon icon="fluent:arrow-download-16-filled" />}
-                fullWidth
-              >
-                Download
-              </PayButtonContainer>
-            ) : paymentType === 1 ? (
-              <PayButtonContainer onClick={handleApprove} variant="contained" fullWidth>
-                Check out
-              </PayButtonContainer>
-            ) : ewallet === "paypal" ? (
-              <PaypalCheckoutButton post={post} handleAppove={handleApprove} />
+          <PayButton className="pay__container">
+            {ewallet === "paypal" ? (
+              <PaypalCheckoutButton packageItem={packages.find((item) => item.id === selectedPackage)} onApprove={onApprove} />
             ) : ewallet === "momo" ? (
-              <PayButtonContainer onClick={handleMomoCheckout} className="momo" variant="contained" fullWidth>
+              <PayButtonContainer className="momo" variant="contained" fullWidth onClick={handleMomoCheckout}>
                 Check out
               </PayButtonContainer>
             ) : ewallet === "zalopay" ? (
@@ -251,48 +219,14 @@ const PaySection = ({ post }) => {
                 </PayButtonContainer>
               )
             )}
-          </OrderContainer>
-        </PaymentRightSide>
-      </PaymentContainer>
-    </>
+          </PayButton>
+        </>
+      )}
+    </PayContainer>
   );
 };
 
-const UserBlock = ({ user }) => {
-  return (
-    <UserBlockContainer>
-      <img src={user.avatar} alt="avatar" />
-      <div className="user__block-info">
-        <div className="user__block-info_name">{user?.fullName}</div>
-        <div className="user__block-info_nickname">@{user.name}</div>
-      </div>
-    </UserBlockContainer>
-  );
-};
-
-const PaymentOptionItem = (props) => {
-  return (
-    <PaymentOptionContainer onChange={() => props.onChange(props.value)}>
-      <input type="radio" hidden name={props.name} defaultChecked={props.checked} />
-      <div className="payment__option-radio" />
-      <div className="payment__option-content">{props.children}</div>
-    </PaymentOptionContainer>
-  );
-};
-
-const EWalletItem = (props) => {
-  return (
-    <EWalletContainer
-      style={{ backgroundImage: `url(${props.backgroundImage})` }}
-      onChange={() => props.onChange(props.value)}
-    >
-      <input type="radio" hidden name={props.name} defaultChecked={props.checked} />
-      <span className="overlay" />
-    </EWalletContainer>
-  );
-};
-
-const PaypalCheckoutButton = ({ post, handleAppove, setLoading }) => {
+const PaypalCheckoutButton = ({ packageItem, onApprove }) => {
   const { theme } = useContext(ThemeContext);
 
   return (
@@ -308,18 +242,15 @@ const PaypalCheckoutButton = ({ post, handleAppove, setLoading }) => {
         return actions.order.create({
           purchase_units: [
             {
-              description: `Buy ${post.userId.fullName}'s photo`,
+              description: `Buy ${packageItem.name} package`,
               amount: {
-                value: post.price,
+                value: packageItem.price,
               },
             },
           ],
         });
       }}
-      onApprove={async (data, actions) => {
-        await actions.order.capture();
-        handleAppove();
-      }}
+      onApprove={(data, actions) => onApprove(data, actions)}
     />
   );
 };
