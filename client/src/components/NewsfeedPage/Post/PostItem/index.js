@@ -18,7 +18,7 @@ import {
 import moment from "moment";
 import { saveAs } from "file-saver";
 import { PaymentAPI } from "api";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import { authState$ } from "redux/selectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +30,7 @@ import PostReportModal from "./PostReportModal";
 import { Link } from "react-router-dom";
 import { checkBoxStyle, textButtonStyle, textFieldStyle } from "styles/muiCustom";
 import NumberFormat from "react-number-format";
+import Modal from "components/Modal";
 
 // const getFirstLetter = (name) => {
 //   return name.charAt(0).toUpperCase();
@@ -41,10 +42,12 @@ const PostItem = ({ post }) => {
   const [isOnEdit, setIsOnEdit] = useState(false);
   const [isReporting, setIsReporting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
   const { currentUser } = useSelector(authState$);
   const boxComment = useRef();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   useEffect(() => {
     if (post) {
@@ -54,6 +57,14 @@ const PostItem = ({ post }) => {
       setNewPost(null);
     };
   }, [post]);
+
+  const handleModal = () => {
+    if (isShowModal) {
+      setIsShowModal(false);
+    } else {
+      setIsShowModal(true);
+    }
+  };
 
   const handleShowComment = () => {
     if (!isShowComment) {
@@ -261,7 +272,15 @@ const PostItem = ({ post }) => {
               )}
             </Description>
           </PostAuthor>
-          <Link style={{ display: "flex" }} to={`/post/${post._id}`}>
+          <Link
+            style={{ display: "flex" }}
+            to={`/post/${post._id}`}
+            onClick={() => {
+              if (id) {
+                handleModal();
+              }
+            }}
+          >
             <PostImage loading="lazy" src={post.image.watermark} alt="" />
           </Link>
         </PostTop>
@@ -275,6 +294,7 @@ const PostItem = ({ post }) => {
         {isShowComment && <ListComment boxComment={boxComment} post={post} />}
       </PostContainer>
       {isReporting && <PostReportModal handleClose={setIsReporting} open={isReporting} postId={post._id} />}
+      {id && isShowModal && <Modal post={post} isShow={isShowModal} closeModal={handleModal} />}
     </>
   );
 };

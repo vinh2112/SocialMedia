@@ -4,6 +4,7 @@ import https from "https";
 import dotenv from "dotenv";
 import queryString from "query-string";
 import { verifyToken } from "../middlewares/auth.js";
+import axios from "axios";
 
 dotenv.config();
 
@@ -11,6 +12,10 @@ const router = express.Router();
 
 router.post("/momo", async (req, res) => {
   const { url, price } = req.body;
+
+  const vndRate = await axios
+    .get("https://api.fastforex.io/fetch-multi?from=USD&to=VND&api_key=demo")
+    .then((res) => res.data.results.VND);
 
   var partnerCode = process.env.MOMO_PARTNER_CODE;
   var accessKey = process.env.MOMO_ACCESS_KEY;
@@ -20,7 +25,7 @@ router.post("/momo", async (req, res) => {
   var orderInfo = "MoMo";
   var redirectUrl = url;
   var ipnUrl = url;
-  var amount = Math.ceil(price * 23000);
+  var amount = Math.ceil(price * vndRate) || Math.ceil(price * 23000);
   var requestType = "captureWallet";
   var extraData = "";
 

@@ -29,6 +29,7 @@ export function* logoutSaga() {
     socket?.emit("logoutUser");
     // socket?.emit("sendOnlineUsers");
     yield put(actions.logout.logoutSuccess());
+    yield put(actions.resetNoti());
   } catch (err) {
     console.log(err);
   }

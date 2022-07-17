@@ -26,6 +26,8 @@ export const showModal = createAction("SHOW_MODAL");
 
 export const hideModal = createAction("HIDE_MODAL");
 
+export const resetNoti = createAction("RESET_NOTI");
+
 export {
   toast,
   login,

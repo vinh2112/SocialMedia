@@ -294,19 +294,24 @@ export const deletePost = async (req, res) => {
     const post = await PostModel.findById(req.params.postId);
     const public_id = post.image.public_id;
     if (post.userId.toString() === req.userId) {
-      await post.deleteOne().then(() => {
-        deleteImageCloudinary(public_id);
-        ReportModel.deleteMany({ reportedPostId: req.params.postId });
-        CommentModel.deleteMany({ postId: req.params.postId });
+      await post.deleteOne().then(async () => {
+        await Promise.all([
+          deleteImageCloudinary(public_id),
+          ReportModel.deleteMany({ reportedPostId: req.params.postId }),
+          CommentModel.deleteMany({ postId: req.params.postId }),
 
-        UserService.updateCountOfUser(req.userId, -1, -post.likes.length);
-
-        return res.status(200).json({ msg: "Delete Post Successfully." });
+          UserService.updateCountOfUser(req.userId, -1, -post.likes.length),
+        ])
+          .then(() => {
+            return res.status(200).json({ msg: "Delete Post Successfully." });
+          })
+          .catch(() => {
+            return res.status(500).json({ msg: "Error" });
+          });
       });
     } else {
       return res.status(403).json({ msg: "You can delete only your post." });
     }
-    return res.status(500).json({ msg: "Delete Failed" });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }

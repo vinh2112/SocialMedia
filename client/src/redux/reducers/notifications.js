@@ -1,5 +1,5 @@
 import { INIT_STATE } from "constant";
-import { fetchNotifications, getType } from "redux/actions";
+import { fetchNotifications, getType, resetNoti } from "redux/actions";
 
 export default function notificationReducers(state = INIT_STATE.notifications, action) {
   switch (action.type) {
@@ -7,12 +7,18 @@ export default function notificationReducers(state = INIT_STATE.notifications, a
       return {
         ...state,
         isLoading: true,
+        data: [],
       };
     case getType(fetchNotifications.fetchNotificationsSuccess):
       return {
         ...state,
         isLoading: false,
         data: [...action.payload],
+      };
+    case getType(resetNoti):
+      return {
+        ...state,
+        data: [],
       };
     default:
       return {

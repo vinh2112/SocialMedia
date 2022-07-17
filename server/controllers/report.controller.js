@@ -69,13 +69,9 @@ export const deleteReportedPost = async (req, res) => {
         .catch((err) => {
           return res.status(500).json({ msg: err.message });
         });
+    } else {
+      return res.status(500).json({ msg: "Report not found!" });
     }
-    // await PostModel.findById("6266526610c2bdb553f4ca50").then((data) => {
-    //   //DeleteOne
-    //   return res.status(200).json(data);
-    // });
-
-    return res.status(500).json({ msg: "Report not found!" });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
   }

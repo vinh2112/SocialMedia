@@ -66,18 +66,19 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
     setIsOpen(false);
   };
 
-  // const handleDeletePost = () => {
-  //   if (currentUser) {
-  //     dispatch(actions.deletePost.deletePostRequest(post._id));
-  //   } else {
-  //     dispatch(
-  //       actions.toast.showToast({
-  //         message: "Please Login",
-  //         type: "warning",
-  //       })
-  //     );
-  //   }
-  // };
+  const handleDeletePost = () => {
+    if (currentUser) {
+      dispatch(actions.deletePost.deletePostRequest(post._id));
+    } else {
+      dispatch(
+        actions.toast.showToast({
+          message: "Please Login",
+          type: "warning",
+        })
+      );
+    }
+    handleCloseDialog();
+  };
 
   return (
     <ActionContainer>
@@ -145,7 +146,7 @@ const ListAction = ({ showComment, post, downloadImage, handleEdit, handleReport
                   <Button sx={textButtonStyle} className="btn-default" onClick={handleCloseDialog}>
                     Cancel
                   </Button>
-                  <Button sx={{ ...containedButtonStyle, width: "100px" }} onClick={handleCloseDialog}>
+                  <Button sx={{ ...containedButtonStyle, width: "100px" }} onClick={handleDeletePost}>
                     Agree
                   </Button>
                 </DialogActions>

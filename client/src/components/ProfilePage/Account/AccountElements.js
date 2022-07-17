@@ -41,6 +41,7 @@ export const ProfileLoadingContainer = styled.div`
     width: 100%;
     height: 150px;
     margin-bottom: 20px;
+    padding-left: 0;
   }
 `;
 
