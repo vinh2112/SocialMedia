@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { postState$ } from "redux/selectors";
 import {
   CustomCard,
@@ -9,25 +10,27 @@ import {
   PostChartWrapper,
   PostTopTitle,
 } from "./PostChartElements";
-import Modal from "components/Modal";
+// import Modal from "components/Modal";
 
 export default function PostChart() {
-  const [index, setIndex] = useState(null);
-  const [isShowModal, setIsShowModal] = useState(false);
+  // const [index, setIndex] = useState(null);
+  // const [isShowModal, setIsShowModal] = useState(false);
   const { topLiked } = useSelector(postState$);
+  const history = useHistory();
 
   const handleViewPost = (index) => {
-    setIndex(index);
-    handleModal();
+    // setIndex(index);
+    // handleModal();
+    history.push(`post/${topLiked[index]._id}`);
   };
 
-  const handleModal = () => {
-    if (isShowModal) {
-      setIsShowModal(false);
-    } else {
-      setIsShowModal(true);
-    }
-  };
+  // const handleModal = () => {
+  //   if (isShowModal) {
+  //     setIsShowModal(false);
+  //   } else {
+  //     setIsShowModal(true);
+  //   }
+  // };
 
   return (
     <>
@@ -50,9 +53,9 @@ export default function PostChart() {
             : [...Array(3)].map((item, index) => <PostChartItemLoading key={index} />)}
         </PostChartWrapper>
       </PostChartContainer>
-      {(index || index === 0) && isShowModal && (
+      {/* {(index || index === 0) && isShowModal && (
         <Modal post={topLiked[index]} isShow={isShowModal} closeModal={handleModal} />
-      )}
+      )} */}
     </>
   );
 }
